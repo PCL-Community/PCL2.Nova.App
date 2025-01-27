@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@plugin "daisyui";
+
+@plugin "daisyui/theme" {
+    name: "pcl-nova-light";
+    default: true;
+    prefersdark: false;
+    color-scheme: light;
+
+    --color-primary: hsl(253, 100%, 61%);
+    --color-primary-content: black;
+
+    --color-secondary: hsl(287, 76%, 50%);
+
+    --color-base-100: white;
+    --color-base-200: hsl(0, 0%, 90%);
+    --color-base-300: hsl(0, 0%, 80%);
+}
+
+@plugin "daisyui/theme" {
+    name: "pcl-nova-dark";
+    default: false;
+    prefersdark: true;
+    color-scheme: dark;
+
+    --color-primary: hsl(253, 100%, 61%);
+
+    --color-secondary: hsl(287, 76%, 50%);
+}
+
+* {
+    user-select: none;
+}
