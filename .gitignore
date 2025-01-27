@@ -22,3 +22,9 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+
+# Yarn 文件和 Rustup
+yarn.lock
+rustup-init.exe
+rustup.exe
