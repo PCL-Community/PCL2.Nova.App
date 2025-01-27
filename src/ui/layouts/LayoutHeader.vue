@@ -15,13 +15,16 @@
 
 <template>
     <header
-        class="w-full h-14 bg-linear-to-r from-primary from-5% to-secondary to-95% flex justify-between items-center px-4"
+        class="w-full h-14 bg-linear-to-r from-primary from-5% to-secondary to-95% flex justify-between gap-4 items-center px-4 pl-0"
         data-tauri-drag-region>
         <!-- Title Align=Left -->
         <!-- TODO: Dynamic Title Content -->
-        <section class="text-xl font-semibold text-white flex gap-2 items-center">
-            PCL II
-            <span class="badge px-1.5 rounded-sm translate-y-[1px]">Nova</span>
+        <section class="text-xl font-semibold text-white flex gap-0 mr-4 items-center float-left">
+            <svg xmlns="http://www.w3.org/2000/svg" class="scale-75 scale-x-85 w-[80px] h-[30px] flex">
+                <path fill="none" stroke="currentColor" stroke-width="3" x="26" y="29"
+                        d="M26,29 v-25 h5 a7,7 180 0 1 0,14 h-5 M61,6.5 a10,11.5 180 1 0 0,18 M68,2.5 v24.5 h12"/>
+            </svg>
+            <span class="badge px-1.5 rounded-sm translate-y-[1px] mr-2 ml-2">Nova</span>
             <!-- <span class="badge badge-warning text-black px-1.5 rounded-sm translate-y-[1px]">Beta</span> -->
             <span class="badge badge-warning text-black px-1.5 rounded-sm translate-y-[1px]">Dev</span>
         </section>
