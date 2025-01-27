@@ -1,4 +1,4 @@
-<img src="./public/PCLNova.Dev.png" alt="Logo" width="360" align="left">
+<img src="./public/PCLNova.Dev.png" alt="Logo" height="360" align="left">
 
 # PCL II Nova：下一代 PCL 启动器
 
@@ -11,5 +11,5 @@
 请确保安装 Node 18+ 和 Rust 1.85.0+\
 Clone 到本地之后运行 `pnpm i` 和 `pnpm tauri build` 即可编译
 
-加入 PCL II Nova 交流 1 群，与开发者面对面交流，获取最新资讯：
-https://qm.qq.com/q/nwBlYWMhHM
+加入 PCL II Nova 交流 1 群，与开发者面对面交流，获取\
+最新资讯：https://qm.qq.com/q/nwBlYWMhHM
