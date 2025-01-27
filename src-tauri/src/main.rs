@@ -1,6 +1,8 @@
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+use std::env;
 
 fn main() {
-    pcl2_nova_app_lib::run()
+    let args: Vec<String> = env::args().collect();
+    pcl2_nova_app_lib::run();
 }

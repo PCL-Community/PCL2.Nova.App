@@ -9,3 +9,8 @@
 支持 Windows、macOS 和 Linux，带来全新的体验。
 
 </div>
+
+
+Node 18+ 
+
+Rust 1.85.0+ 
