@@ -8,19 +8,19 @@
     prefersdark: false;
     color-scheme: light;
 
-    --color-primary: hsl(253, 100%, 61%);
+    --color-primary: hsl(219, 76%, 50%);
     --color-primary-content: black;
 
-    --color-secondary: hsl(287, 76%, 50%);
+    --color-secondary: hsl(185, 70%, 51%);
 
-    --color-base-100: white;
+    --color-base-300: white;
     --color-base-200: hsl(0, 0%, 95%);
-    --color-base-300: hsl(0, 0%, 90%);
+    --color-base-100: hsl(0, 0%, 90%);
 
     --color-radiobtn-text: white;
     --color-radiobtn-atext: black;
 
-    --color-launchbtn-bg: #0001;
+    --color-btn-hover: #0001;
 }
 
 @plugin "daisyui/theme" {
@@ -29,16 +29,15 @@
     prefersdark: true;
     color-scheme: dark;
 
-    --color-primary: hsl(253, 100%, 61%);
+    --color-primary: hsl(219, 75%, 42%);
 
-    --color-secondary: hsl(287, 76%, 50%);
-
+    --color-secondary: hsl(185, 70%, 42%);
     --color-info: hsl(207, 100%, 50%);
 
     --color-radiobtn-text: #f8f8f8;
     --color-radiobtn-atext: white;
 
-    --color-launchbtn-bg: #0007;
+    --color-btn-hover: #0007;
 }
 
 * {

@@ -4,7 +4,7 @@ version = 4
 
 [[package]]
 name = "PCL2_Nova_App"
-version = "3.0.0"
+version = "0.1.0-nightly.2"
 dependencies = [
  "dirs-next",
  "serde",

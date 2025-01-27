@@ -23,8 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
-
-# Yarn 文件和 Rustup
+# user-specifc:wuliaodexiaoluo
+# yarn 文件和 rustup
 yarn.lock
 rustup-init.exe
 rustup.exe
