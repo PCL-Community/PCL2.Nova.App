@@ -1,4 +1,4 @@
-<img src="./public/PCLNova.Dev.png" alt="Logo" width="320" align="left">
+<img src="./public/PCLNova.Dev.png" alt="Logo" width="360" align="left">
 
 得益于 PCL2 最新的二次开发授权协议，隆重向您介绍下一代 PCL 启动器：PCL II Nova！
 
