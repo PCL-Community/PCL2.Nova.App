@@ -1,8 +1,8 @@
 <img src="./public/PCLNova.Dev.png" alt="Logo" height="360" align="left">
 
-# PCL II Nova：下一代 PCL 启动器
+# PCL II Nova
 
-基于官方版 PCL2 的完全重构\
+下一代 PCL 启动器，基于官方版 PCL2 的完全重构\
 采用 Web 技术（Vue，TypeScript）和内存安全的 Rust 全新构建\
 这，就是 PCL II Nova！
 
