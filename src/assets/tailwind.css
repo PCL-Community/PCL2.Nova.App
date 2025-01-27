@@ -14,8 +14,13 @@
     --color-secondary: hsl(287, 76%, 50%);
 
     --color-base-100: white;
-    --color-base-200: hsl(0, 0%, 90%);
-    --color-base-300: hsl(0, 0%, 80%);
+    --color-base-200: hsl(0, 0%, 95%);
+    --color-base-300: hsl(0, 0%, 90%);
+
+    --color-radiobtn-text: white;
+    --color-radiobtn-atext: black;
+
+    --color-launchbtn-bg: #0001;
 }
 
 @plugin "daisyui/theme" {
@@ -27,6 +32,13 @@
     --color-primary: hsl(253, 100%, 61%);
 
     --color-secondary: hsl(287, 76%, 50%);
+
+    --color-info: hsl(207, 100%, 50%);
+
+    --color-radiobtn-text: #f8f8f8;
+    --color-radiobtn-atext: white;
+
+    --color-launchbtn-bg: #0007;
 }
 
 * {

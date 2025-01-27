@@ -3,6 +3,18 @@
 version = 4
 
 [[package]]
+name = "PCL2_Nova_App"
+version = "3.0.0"
+dependencies = [
+ "dirs-next",
+ "serde",
+ "serde_json",
+ "tauri",
+ "tauri-build",
+ "tauri-plugin-opener",
+]
+
+[[package]]
 name = "addr2line"
 version = "0.24.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2543,18 +2555,6 @@ name = "pathdiff"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "df94ce210e5bc13cb6651479fa48d14f601d9858cfe0467f43ae157023b938d3"
-
-[[package]]
-name = "pcl2-nova-app"
-version = "3.0.0"
-dependencies = [
- "dirs-next",
- "serde",
- "serde_json",
- "tauri",
- "tauri-build",
- "tauri-plugin-opener",
-]
 
 [[package]]
 name = "percent-encoding"

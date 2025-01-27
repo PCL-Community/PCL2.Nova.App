@@ -1,4 +1,6 @@
 {
     "tabWidth": 4,
-    "vueIndentScriptAndStyle": true
+    "vueIndentScriptAndStyle": true,
+    "printWidth": 140,
+    "bracketSameLine": true
 }
