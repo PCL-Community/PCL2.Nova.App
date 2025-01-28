@@ -1,15 +1,17 @@
-name: Build and Test Tauri App
+name: 'publish'
 
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
+    tags:
+      - 'v*'
 
 jobs:
-  build-and-test:
+  build-and-publish:
+    permissions:
+      contents: write
     strategy:
       fail-fast: false
       matrix:
@@ -22,7 +24,7 @@ jobs:
             args: ''
           - platform: 'windows-latest'
             args: ''
-    
+
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v4
@@ -52,5 +54,13 @@ jobs:
       - name: install frontend dependencies
         run: pnpm install
 
-      - name: build
-        run: pnpm tauri build
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: ${{ env.COMMIT_MESSAGE }}
+          releaseName: 'App ${{ env.COMMIT_MESSAGE }}'
+          releaseBody: 'See the assets to download this version and install.'
+          releaseDraft: true
+          prerelease: false
+          args: ${{ matrix.args }}
