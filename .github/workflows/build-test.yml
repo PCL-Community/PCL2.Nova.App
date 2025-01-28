@@ -55,10 +55,8 @@ jobs:
       - name: install frontend dependencies
         run: pnpm install
 
-      - name: Build Tauri app
-        uses: tauri-apps/tauri-action@v0
-        with:
-          args: ${{ matrix.args }}
+      - name: build
+        run: pnpm tauri build
       
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
