@@ -3,11 +3,12 @@
 </script>
 
 <template>
-    <main class="h-[calc(100vh-calc(var(--spacing)*14))] flex">
+    <section class="h-[calc(100vh-calc(var(--spacing)*14))] flex">
         <LayoutLeft class="basis-1/3" />
-    </main>
+        <section class="basis-2/3 relative">
+            <RouterView />
+        </section>
+    </section>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

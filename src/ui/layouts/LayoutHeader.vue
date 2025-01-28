@@ -20,22 +20,18 @@
         <!-- Title Align=Left -->
         <!-- TODO: Dynamic Title Content -->
         <section class="text-xl font-semibold text-white flex gap-0 mr-4 items-center float-left">
-            <svg xmlns="http://www.w3.org/2000/svg" class="scale-75 scale-x-85 w-[80px] h-[30px] flex">
-                <path
-                    fill="none"
-                    stroke="currentColor"
-                    stroke-width="3"
-                    x="26"
-                    y="29"
-                    d="M26,29 v-25 h5 a7,7 180 0 1 0,14 h-5 M61,6.5 a10,11.5 180 1 0 0,18 M68,2.5 v24.5 h12" />
-            </svg>
-            <span class="badge px-1.5 rounded-sm translate-y-[1px] mr-2 ml-2">Nova</span>
+            <!-- <svg xmlns="http://www.w3.org/2000/svg" class="scale-75 scale-x-85 w-[110px] h-[30px] flex">
+                <path fill="none" stroke="currentColor" stroke-width="3" x="26" y="29"
+                        d="M26,29 v-25 h5 a7,7 180 0 1 0,14 h-5 M61,6.5 a10,11.5 180 1 0 0,18 M68,2.5 v24.5 h12 M98,2 v27 M107,2 v27"/>
+            </svg> -->
+            <span class="ml-6 mr-1 text-2xl tracking-wide">PCL II</span>
+            <span class="badge px-1.5 rounded-sm mx-2">Nova</span>
             <!-- <span class="badge badge-warning text-black px-1.5 rounded-sm translate-y-[1px]">Beta</span> -->
-            <span class="badge badge-warning text-black px-1.5 rounded-sm translate-y-[1px]">Dev</span>
+            <span class="badge badge-warning text-black px-1.5 rounded-sm">Dev</span>
         </section>
         <!-- NavigateButtons Align=Center -->
         <section class="flex gap-4 mr-4">
-            <CompRadioButton :checked="$route.path === '/'" text="主页" @click="handleNavigate(`/`)">
+            <CompRadioButton :checked="['/', '/firework'].includes($route.path)" text="主页" @click="handleNavigate(`/`)">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" class="scale-75">
                     <path
                         fill="currentColor"

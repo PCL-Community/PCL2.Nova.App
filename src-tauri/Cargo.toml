@@ -1,6 +1,6 @@
 [package]
 name = "Plain_Craft_Launcher_2_Nova"
-version = "0.1.0-nightly.2"
+version = "0.1.1"
 description = "A cross-platform Minecraft Launcher, rewrite from PCL"
 authors = ["PCL-Community"]
 edition = "2024"

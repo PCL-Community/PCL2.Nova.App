@@ -1,4 +1,10 @@
+@font-face {
+    font-family: PCL;
+    src: url("/font.ttf");
+}
+
 * {
+    font-family: PCL;
     user-select: none;
 }
 
