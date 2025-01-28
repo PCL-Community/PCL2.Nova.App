@@ -27,7 +27,13 @@ jobs:
         run: pnpm install
 
       - name: Set up Rust environment
-        uses: dtolnay/rust-toolchain@stable
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: Install Rust nightly components
+        run: rustup component add rust-src --toolchain nightly
+
+      - name: Set up nightly Cargo
+        run: rustup override set nightly
 
       - name: Rust cache
         uses: swatinem/rust-cache@v2
