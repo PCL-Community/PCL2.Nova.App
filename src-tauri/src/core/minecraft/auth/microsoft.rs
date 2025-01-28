@@ -1,18 +1,39 @@
 #[allow(dead_code)]
 const CLIENT_ID: &str = "";
 
-pub async fn device_auth() -> Result<String, String> {
-    let request_uri= "https://login.microsoftonline.com/consumers/oauth2/v2.0/devicecode".to_string();
-    let request_body= [("clientid", CLIENT_ID), ("scope","XboxLive.signin%20offline_access")];
-    let http_client = reqwest::Client::new();
-    let request = http_client.post(request_uri)
-                                    .form(&request_body)
-                                    .header(reqwest::header::CONTENT_TYPE, "application/x-www-form-urlencoded");
-    let response = request.send().await.unwrap();
-    if response.status() != reqwest::StatusCode::OK {
-        return Err("Invalid request.".to_string());
+use serde::Deserialize;
+
+use crate::core::utils::net::{ HttpClient};
+
+#[derive(Deserialize, Debug)] 
+pub struct CodePair {
+    pub user_code: Option<String>,
+    pub device_code: Option<String>,
+    pub interval: Option<u32>,
+    pub error: Option<String>
+}
+
+pub async fn device_auth() -> Result<CodePair,String> {
+    let request_uri= "https://login.microsoftonline.com/consumers/oauth2/v2.0/devicecode";
+    let request_body = format!("client_id={}&scope=xbox.signin%20offlice_access",CLIENT_ID);
+    let client = HttpClient::new();
+    match client.post(&request_uri,&request_body).await {
+        Ok(response) => {
+            match serde_json::from_str::<CodePair>(&response.body) {
+                Ok(data) => return Ok(data),
+                Err(err) => {
+                    return Err(format!("Json 解析出错{}",err));
+                },
+            };
+            
+        },
+        Err(response) => {
+            return Err("Failed to get CodePair".to_string());
+        },
     }
-    return Ok(response.text().await.unwrap());
+    
+    
+    
 }
 
 pub async fn user_auth(device_code: &String, interval: Option<u64>) -> Result<String, String> {

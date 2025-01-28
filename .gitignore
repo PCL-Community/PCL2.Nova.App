@@ -29,6 +29,3 @@ pnpm-lock.yaml
 yarn.lock
 
 # user-specifc:wuliaodexiaoluo
-# yarn 文件和 rustup
-rustup-init.exe
-rustup.exe
