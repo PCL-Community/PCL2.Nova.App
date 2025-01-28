@@ -1,5 +1,5 @@
 [package]
-name = "PCL2_Nova_App"
+name = "Plain Craft Launcher 2 Nova"
 version = "0.1.0-nightly.2"
 description = "A cross-platform Minecraft Launcher, rewrite from PCL"
 authors = ["PCL-Community"]
