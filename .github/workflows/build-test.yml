@@ -55,13 +55,7 @@ jobs:
       - name: install frontend dependencies
         run: pnpm install
 
-      - name: build
-        run: pnpm tauri build
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
+      - name: Build Tauri app
+        uses: tauri-apps/tauri-action@v0
         with:
-          name: ${{ runner.os }} build
-          path: src-tauri/target/release/bundle/
-          if-no-files-found: error
-          retention-days: 5
+          args: ${{ matrix.args }}
