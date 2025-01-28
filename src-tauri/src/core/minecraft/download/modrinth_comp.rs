@@ -1,8 +1,9 @@
 use std::string;
 
-use reqwest;
+use reqwest::{self, Body};
 use serde::Deserialize;
 use serde_json;
+use crate::core::utils::net
 
 #[derive(Deserialize, Debug)]
 struct ProjectJson {
@@ -55,12 +56,11 @@ pub struct ModrinthProject {
 pub async fn get_project_byid(
     project_id: &str,
 ) -> Result<ModrinthProject, Box<dyn std::error::Error>> {
-    let url = format!("https://api.modrinth.com/v2/project/{}", project_id);
-    let client = reqwest::Client::new();
-    let request = client.get(&url);
-    let response = request.send().await.unwrap();
+    let client = net::HttpClient::new();
+    if let Ok(response) = client.get(&format!("https://api.modrinth.com/v2/project/{}", project_id)).await{
+        let res: ProjectJson = serde_json::from_str(&response.body)?;
 
-    let response: ProjectJson = serde_json::from_str(&response.text().await.unwrap())?;
+    }
 
     Ok(())
 }
