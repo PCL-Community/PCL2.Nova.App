@@ -1,6 +1,6 @@
 {
     "$schema": "https://schema.tauri.app/config/2",
-    "productName": "Plain Craft Launcher 2 - Nova",
+    "productName": "Plain Craft Launcher 2 Nova [Dev]",
     "version": "0.1.1",
     "identifier": "nova.pcl2.app",
     "build": {
