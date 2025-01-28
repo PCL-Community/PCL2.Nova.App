@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ModEventBus from "./ModEventBus.ts";
+import { ModEventBus } from "./ModEventBus.ts";
 
 const router = createRouter({
     history: createWebHistory(),
@@ -7,15 +7,15 @@ const router = createRouter({
         {
             path: "/",
             name: "FrmHome",
-            component: () => import("../app/FrmHome.vue")
+            component: () => import("../app/FrmHome.vue"),
         },
         {
             path: "/settings",
             name: "FrmSettings",
             component: () => import("../app/FrmSettings.vue"),
-            children: []
-        }
-    ]
+            children: [],
+        },
+    ],
 });
 
 ModEventBus.on("router:push", async (path: string) => {
