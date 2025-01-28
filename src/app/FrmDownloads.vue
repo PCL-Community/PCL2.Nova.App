@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import LayoutLeft from "../ui/layouts/settings/LayoutLeft.vue";
+    import LayoutLeft from "../ui/layouts/downloads/LayoutLeft.vue";
 </script>
 
 <template>

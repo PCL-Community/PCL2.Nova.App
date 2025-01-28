@@ -40,7 +40,7 @@
 </script>
 
 <template>
-    <section class="w-full h-full bg-base-300/70 py-8 flex flex-col justify-around items-center">
+    <section class="w-full h-full bg-base-300/90 py-8 flex flex-col justify-around items-center">
         <div data-area="selector">
             <section class="w-full flex justify-center gap-8" v-if="comp_config.is_multi_login">
                 <CompRadioButton
