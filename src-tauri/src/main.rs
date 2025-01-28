@@ -3,6 +3,6 @@
 use std::env;
 
 fn main() {
-    let args: Vec<String> = env::args().collect();
+    let _args: Vec<String> = env::args().collect();
     pcl2_nova_app_lib::run();
 }
