@@ -18,7 +18,10 @@ class EventBus {
         if (handler) {
             // 移除指定的事件处理器
             const handlers = this.events.get(event)!;
-            this.events.set(event, handlers.filter(h => h !== handler));
+            this.events.set(
+                event,
+                handlers.filter((h) => h !== handler)
+            );
         } else {
             // 移除所有该事件的处理器
             this.events.delete(event);
@@ -29,11 +32,11 @@ class EventBus {
     emit<T = any>(event: string, payload?: T): void {
         const handlers = this.events.get(event);
         if (handlers) {
-            handlers.forEach(handler => handler(payload ?? {}));
+            handlers.forEach((handler) => handler(payload ?? {}));
         }
     }
 }
 
 // 实例化 EventBus
-const eventBus = new EventBus();
-export default eventBus;
+const ModEventBus = new EventBus();
+export { ModEventBus };
