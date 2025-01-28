@@ -3,7 +3,7 @@ use std::string;
 use reqwest::{self, Body};
 use serde::Deserialize;
 use serde_json;
-use crate::core::utils::net
+use crate::core::utils::net;
 
 #[derive(Deserialize, Debug)]
 struct ProjectJson {
