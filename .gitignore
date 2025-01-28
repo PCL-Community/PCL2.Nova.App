@@ -23,8 +23,12 @@ dist-ssr
 *.sln
 *.sw?
 
+# Lockfiles
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
 # user-specifc:wuliaodexiaoluo
 # yarn 文件和 rustup
-yarn.lock
 rustup-init.exe
 rustup.exe
