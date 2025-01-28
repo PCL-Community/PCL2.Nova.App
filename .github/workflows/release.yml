@@ -43,7 +43,7 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: install Rust stable
+      - name: install Rust
         uses: dtolnay/rust-toolchain@nightly
         with:
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
