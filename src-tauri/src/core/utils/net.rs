@@ -1,6 +1,5 @@
-use reqwest::{Client, Response};
+use reqwest::Client;
 use reqwest::header::HeaderMap;
-use serde::{Deserialize, Serialize};
 use std::error::Error;
 
 pub struct HttpClient {
@@ -8,8 +7,8 @@ pub struct HttpClient {
 }
 
 pub struct HttpResponse {
-    body: String,
-    header: HeaderMap,
+    pub body: String,
+    pub header: HeaderMap,
 }
 
 impl HttpClient {
