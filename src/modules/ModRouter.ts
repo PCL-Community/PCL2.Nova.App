@@ -133,19 +133,39 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const main = (<HTMLElement>document.body.querySelector("div#app")).querySelector("main");
-    const isSameParent = to.fullPath.split("/")[1] === from.fullPath.split("/")[1];
-    if (main && !isSameParent) {
-        main.classList.add("fadeout");
-        setTimeout(next, 150);
+    const main = (<HTMLElement> document.body.querySelector("div#app")).querySelector("main");
+    const toHome = to.fullPath.split("/")[1] === "";
+    const fromHome = from.fullPath.split("/")[1] === "";
+    if(main && !(toHome && fromHome) && main.querySelector("section") ) {
+        const element = (<HTMLElement> main.querySelector("section")).querySelector("section");
+        console.log(element);
+        if(element && fromHome) {
+            const layout = element.querySelector("section");
+            if(layout)
+                layout.classList.add("homefadeout");
+            element.classList.add("fadeout")
+            setTimeout(next, 300);
+        } else {
+            next();
+        }
     } else {
         next();
     }
 });
 
-router.afterEach(() => {
+router.afterEach((to, from) => {
     const main = (<HTMLElement>document.body.querySelector("div#app")).querySelector("main");
-    if (main) main.classList.remove("fadeout");
+    const toHome = to.fullPath.split("/")[1] === "";
+    const fromHome = from.fullPath.split("/")[1] === "";
+    if(main && !(toHome && fromHome) && main.querySelector("section")) {
+        const element = (<HTMLElement> main.querySelector("section")).querySelector("section");
+        if(element && fromHome) {
+            element.classList.remove("fadeout");
+            const layout = element.querySelector("section");
+            if(layout)
+                layout.classList.remove("homefadeout");
+        }
+    }
 });
 
 ModEventBus.on("router:push", async (path: string) => {

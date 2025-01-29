@@ -8,15 +8,88 @@
     user-select: none;
 }
 
-body div#app main {
-    transition: all 0.15s ease-in-out;
-    opacity: 100%;
-    transform: translateX(0%);
+@keyframes fadein-frame {
+    from {
+        flex-basis: 14.2857%;
+    }
+    to {
+        flex-basis: 50%;
+    }
 }
 
-body div#app main.fadeout {
+@keyframes fadeout-frame {
+    from {
+        flex-basis: 50%;
+    }
+    to {
+        flex-basis: 14.2857%;
+    }
+}
+
+@keyframes fadein-home {
+    0% {
+        opacity: 0%;
+        scale: 0%;
+        position: absolute;
+    }
+    50% {
+        opacity: 0%;
+        scale: 30%;
+        position: absolute;
+    }
+    100% {
+        opacity: 100%;
+        scale: 100%;
+        position: relative;
+    }
+}
+
+@keyframes fadeout-home {
+    0% {
+        opacity: 100%;
+        scale: 100%;
+    }
+    50% {
+        opacity: 0%;
+        scale: 50%;
+        position: absolute;
+    }
+    100% {
+        opacity: 0%;
+        scale: 0%;
+        position: absolute;
+    }
+}
+
+body div#app main section section.fadein {
+    opacity: 100%;
+    animation: fadein-frame 0.3s;
+    animation-timing-function: ease-in-out;
+    animation-range: all;
+    flex-basis: 50%;
+}
+body div#app main section section.fadeout {
+    opacity: 100%;
+    animation: fadeout-frame 0.3s;
+    animation-timing-function: ease-in-out;
+    animation-range: all;
+    flex-basis: calc(1/7 * 100%);
+}
+body div#app main section section section.homefadein {
+    animation: fadein-home 0.3s;
+    animation-timing-function: ease-in-out;
+    animation-range: all;
+    position: relative;
+    opacity: 100%;
+    scale: 100%;
+}
+body div#app main section section section.homefadeout {
+    animation: fadeout-home 0.3s;
+    animation-timing-function: ease-in-out;
+    animation-range: all;
+    position: absolute;
     opacity: 0%;
-    transform: translateX(-100%);
+    scale: 0%;
 }
 
 *::-webkit-scrollbar {
