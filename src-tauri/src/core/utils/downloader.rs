@@ -179,7 +179,6 @@ impl Downloader {
         progress: Arc<Mutex<DownloadProgress>>,
     ) -> io::Result<()> {
         let mut file = File::options().create(true).append(true).open(temp_path)?;
-
         let mut response = client
             .get(url)
             .header(header::RANGE, format!("bytes={}-{}", start, end))
@@ -188,11 +187,12 @@ impl Downloader {
             .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
 
 
-        while let Ok(Some(chunk)) = response.chunk().await {
+        while let Some(chunk) = response.chunk().await.map_err(|e| io::Error::new(io::ErrorKind::Other, e))? {
             file.write_all(&chunk)?;
 
             let mut prog = progress.lock().unwrap();
             prog.downloaded_bytes += chunk.len() as u64;
+            println!("{}", prog.downloaded_bytes);
         }
 
         Ok(())

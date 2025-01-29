@@ -1,6 +1,6 @@
 use std::{path::PathBuf, time::Duration};
 
-use pcl2_nova_app_lib::core::utils::downloader::{DownloadConfig,Downloader,DownloadProgress};
+use pcl2_nova_app_lib::core::utils::downloader::{DownloadConfig,Downloader};
 
 
 #[test]
@@ -13,5 +13,5 @@ fn test_downloader(){
         timeout: Duration::from_millis(30_000),
         max_threads: 8
     }).unwrap();
-    dl.start();
+    let _ = tokio::runtime::Runtime::new().unwrap().block_on(dl.start());
 }
