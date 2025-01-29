@@ -1,6 +1,5 @@
-use reqwest::{Client, StatusCode};
 use reqwest::header::HeaderMap;
-use tauri::http::response;
+use reqwest::{Client, StatusCode};
 use std::error::Error;
 
 pub struct HttpClient {
@@ -25,7 +24,11 @@ impl HttpClient {
         let header = response.headers().clone();
         let status = response.status().clone();
         let body = response.text().await?;
-        Ok(HttpResponse {status , body, header })
+        Ok(HttpResponse {
+            status,
+            body,
+            header,
+        })
     }
 
     pub async fn post(&self, url: &str, data: &str) -> Result<HttpResponse, Box<dyn Error>> {
@@ -33,6 +36,10 @@ impl HttpClient {
         let header = response.headers().clone();
         let status = response.status().clone();
         let body = response.text().await?;
-        Ok(HttpResponse {status , body, header })
+        Ok(HttpResponse {
+            status,
+            body,
+            header,
+        })
     }
 }
