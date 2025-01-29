@@ -1,7 +1,7 @@
 {
     "name": "pcl2-nova-app",
     "private": true,
-    "version": "0.1.1",
+    "version": "0.1.2",
     "type": "module",
     "scripts": {
         "dev": "vite",
@@ -12,7 +12,9 @@
     "dependencies": {
         "@tauri-apps/api": "^2",
         "@tauri-apps/plugin-opener": "^2",
-        "vue": "^3.5.13"
+        "vue": "^3.5.13",
+        "chalk": "^5.4.1",
+        "inquirer": "^12.3.3"
     },
     "devDependencies": {
         "@tailwindcss/postcss": "^4.0.0",
