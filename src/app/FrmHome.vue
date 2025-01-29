@@ -1,14 +1,14 @@
 <script lang="ts" setup>
-    
-    import LayoutHomeLeft from "../ui/layouts/Home/LayoutHomeLeft.vue";
+    import LayoutLeft from "../ui/layouts/home/LayoutLeft.vue";
 </script>
 
 <template>
-    <main class="h-[calc(100vh-calc(var(--spacing)*14))] flex">
-        <LayoutHomeLeft class="basis-1/3" />
-    </main>
+    <section class="h-[calc(100vh-calc(var(--spacing)*14))] flex">
+        <LayoutLeft class="basis-1/3" />
+        <section class="basis-2/3 relative">
+            <RouterView />
+        </section>
+    </section>
 </template>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

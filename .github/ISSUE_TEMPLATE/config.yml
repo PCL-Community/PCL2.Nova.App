@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 提问 / 讨论
+    url: https://github.com/PCL-Community/PCL2.Nova.App/discussions/new
+    about: 我想问问或谈谈关于社区版的事情...
+  - name: 主页预设请求 / 反馈
+    url: https://github.com/PCL-Community/PCL2.Nova.App/discussions/categories/自定义主页
+    about: 提交与预设的主页（设置 → 个性化 → 主页预设）中的具体内容相关的请求或反馈

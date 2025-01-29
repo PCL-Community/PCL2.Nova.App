@@ -1,6 +1,6 @@
 [package]
-name = "PCL2_Nova_App"
-version = "0.1.0-nightly.2"
+name = "Plain_Craft_Launcher_2_Nova"
+version = "0.1.1"
 description = "A cross-platform Minecraft Launcher, rewrite from PCL"
 authors = ["PCL-Community"]
 edition = "2024"
@@ -24,4 +24,3 @@ tauri-plugin-opener = "2"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 reqwest = "0.12.12"
-

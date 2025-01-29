@@ -4,15 +4,7 @@
 
 <template>
     <LayoutHeader />
-    <RouterView />
+    <main>
+        <RouterView />
+    </main>
 </template>
-
-<style lang="scss">
-@font-face {
-    font-family: PCL;
-    src: url('/font.ttf');
-}
-body {
-    font-family: PCL
-}
-</style>
