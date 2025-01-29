@@ -119,7 +119,6 @@ impl Downloader {
         let mut handles = vec![];
 
         for i in 0..self.config.max_threads {
-            println!("创建线程 {}",i.to_string());
             let start = i as u64 * chunk_size;
             let end = if i == self.config.max_threads - 1 {
                 total_size - 1
@@ -192,7 +191,6 @@ impl Downloader {
 
             let mut prog = progress.lock().unwrap();
             prog.downloaded_bytes += chunk.len() as u64;
-            println!("{}", prog.downloaded_bytes);
         }
 
         Ok(())
