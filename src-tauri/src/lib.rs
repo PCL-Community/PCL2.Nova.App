@@ -14,4 +14,4 @@ pub fn run() {
 }
 
 //modules
-mod core;
+pub mod core;
