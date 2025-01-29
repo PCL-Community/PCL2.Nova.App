@@ -1,28 +1,32 @@
-use std::string;
+
+use std::error::Error;
 
 use serde::{Deserialize, Serialize};
+use serde_json;
+
+use crate::core::utils::net;
 
 #[derive(Serialize, Deserialize, Debug)]
-struct VersionManifestOverall {
-    latest: VersionManifestLatest,
-    versions: Vec<VersionManifest>,
+pub struct VersionManifestOverall {
+    pub latest: VersionManifestLatest,
+    pub versions: Vec<VersionManifest>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct VersionManifestLatest {
-    release: String,
-    snapshot: String,
+pub struct VersionManifestLatest {
+    pub release: String,
+    pub snapshot: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-struct VersionManifest {
-    id: String,
+pub struct VersionManifest {
+    pub id: String,
     #[serde(rename = "type")]
-    version_type: VersionType,
-    url: String,
-    time: String,
+    pub version_type: VersionType,
+    pub url: String,
+    pub time: String,
     #[serde(rename = "releaseTime")]
-    release_time: String,
+    pub release_time: String,
 }
 
 #[derive(Debug, PartialEq, Eq, Serialize, Deserialize)]
@@ -40,13 +44,13 @@ pub enum VersionType {
 
 impl VersionType {
 
-    fn from_str(s: &str) -> Result<Self, String> {
+    fn from_str(s: &str) -> Result<Self, Box<dyn Error>> {
         match s {
             "old_alpha" => Ok(VersionType::OldAlpha),
             "old_beta" => Ok(VersionType::OldBeta),
             "snapshot" => Ok(VersionType::Snapshot),
             "release" => Ok(VersionType::Release),
-            _ => Err(format!("Unknown version type: {}", s)),
+            _ => Err(format!("Unknown minecraft version type: {}", s).into()),
         }
     }
 
@@ -58,4 +62,11 @@ impl VersionType {
             VersionType::Release => "release".to_string(),
         }
     }
+}
+
+pub async fn get_manifest_version_list() -> Result<VersionManifestOverall, Box<dyn Error>> {
+    let client = net::HttpClient::new();
+    let response =  client.get("https://launchermeta.mojang.com/mc/game/version_manifest.json").await.unwrap();
+    let list: VersionManifestOverall = serde_json::from_str(&response.body).unwrap();
+    Ok(list)
 }
