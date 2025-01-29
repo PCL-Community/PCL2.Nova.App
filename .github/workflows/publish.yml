@@ -1,13 +1,13 @@
-name: 'publish'
+name: 'Publish App'
 
 on:
   push:
     branches:
-      - release
-      - beta
-      - dev
+      - build/dev
+      - build/beta
+      - build/release
 
-# This workflow will trigger on each push to the `release` branch to create or update a GitHub release, build your app, and upload the artifacts to the release.
+# This workflow will trigger on each push to the build branchs to create or update a GitHub release, build your app, and upload the artifacts to the release.
 
 jobs:
   publish-tauri:

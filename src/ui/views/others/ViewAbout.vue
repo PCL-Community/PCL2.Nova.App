@@ -1,6 +1,12 @@
 <script setup lang="ts">
+    import CompButton from "../../components/CompButton.vue";
     import CompCard from "../../components/CompCard.vue";
     import CompListItem from "../../components/CompListItem.vue";
+    import metadata from "../../../metadata.json"
+
+    const $jsWindow = window;
+
+    const { channel, version } = metadata;
 </script>
 
 <template>
@@ -13,8 +19,8 @@
                 <div class="flex">
                     <CompListItem
                         text="Plain Craft Launcher II: Nova"
-                        desp="当前版本：0.1.0-nightly.2（Dev 渠道）"
-                        imgSrc="/PCLNova.Dev.png" />
+                        :desp="`当前版本：${version}（${channel} 渠道）`"
+                        :imgSrc="`/PCLNova.${channel}.png`" />
                 </div>
             </section>
         </CompCard>
@@ -25,42 +31,13 @@
         </CompCard>
         <CompCard title="版权" can-swap is-swapped>
             <article class="w-full px-4 flex flex-col gap-2">
-                <p>
-                    PCL2.Nova.App 开源项目（以下简称 Nova 开源项目）及其<b>官方</b>衍生程序
-                    <br />均遵循 GNU General Public License 3.0 (GPLv3) 协议开源，并在此基础上附加以下条款：
-                </p>
-                <ul>
-                    1. 基于 Nova 开源项目做小修改时，可以不对修改后的代码开源，但需要明确在软件内提供指向 Nova
-                    开源项目的链接（末尾附），并添加 Nova开源项目原作者的署名。
-                </ul>
-                <ul>
-                    2. 基于 Nova 开源项目做大量修改，或者进行二次开发时，需要对修改后的代码开源，但不一定需要使用 GPLv3
-                    许可证。同时，需要明确在软件内提供指向 Nova 开源项目的链接（末尾附），并添加 Nova 开源项目原作者的署名。
-                </ul>
-                <ul>
-                    3. 如果选择在 GitHub 上开源代码，对 Nova 开源项目仓库的 Fork 可以 视为 “指向 Nova 开源项目的链接”。
-                </ul>
-                <ul>
-                    4. 无论修改体量如何，不应当制作 Nova
-                    开源项目中需要赞助才能获取的功能，或与其相似的功能。项目作者建议您在计划开发此类内容前先询 问作者以确认是否触及此条款。
-                </ul>
-                <ul>
-                    5. 修改之后的版本不得用于商业用途，无论是否开源。
-                </ul>
-                <ul>
-                    6. 不得以任何方式让原作者为您或您的使用做任何担保。
-                </ul>
-                <ul>
-                    7.
-                    修改之后的版本如果开源，需要包含此附加协议，并不得修改其条款细则。新项目使用的协议不同时可修改位于附加许可证开头的协议说明。
-                </ul>
-                <br />
-                <hr />
-                <br />
-                <p>
-                    附：Nova 开源项目链接为
-                    <kbd class="kbd kbd-sm -translate-y-0.25 select-text!">https://github.com/PCL-Community/PCL2.Nova.App</kbd>
-                </p>
+                <p>PCL2.Nova.App 开源项目及其官方衍生程序均遵循 GNU General Public License 3.0 (GPLv3)<br />协议开源。</p>
+                <section class="mt-2 flex gap-4">
+                    <CompButton class="w-36" @click="$jsWindow.open('https://github.com/PCL-Community/PCL2.Nova.App')"
+                        >查看源代码</CompButton
+                    >
+                    <CompButton class="w-36" @click="$jsWindow.open('https://www.gnu.org/licenses/gpl-3.0.html')">查看许可证</CompButton>
+                </section>
             </article>
         </CompCard>
         <CompCard title="开源项目使用说明" can-swap is-swapped>

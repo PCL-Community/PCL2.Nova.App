@@ -3,10 +3,12 @@
     import CompRadioButton from "../components/CompRadioButton.vue";
     import { ModEventBus } from "../../modules/ModEventBus.ts";
     import { useRoute } from "vue-router";
+    import metadata from "../../metadata.json"
 
     const AppWindow = getCurrentWindow();
-
     const $route = useRoute();
+
+    const { channel } = metadata;
 
     const handleNavigate = (path: string) => {
         ModEventBus.emit("router:push", path);
@@ -27,7 +29,7 @@
             <span class="ml-6 mr-1 text-2xl tracking-wide">PCL II</span>
             <span class="badge px-1.5 rounded-sm mx-2">Nova</span>
             <!-- <span class="badge badge-warning text-black px-1.5 rounded-sm translate-y-[1px]">Beta</span> -->
-            <span class="badge badge-warning text-black px-1.5 rounded-sm">Dev</span>
+            <span class="badge badge-warning text-black px-1.5 rounded-sm" v-if="channel !== 'Stable'">{{ channel }}</span>
         </section>
         <!-- NavigateButtons Align=Center -->
         <section class="flex gap-4 mr-4">
