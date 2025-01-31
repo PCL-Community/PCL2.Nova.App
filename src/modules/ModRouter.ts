@@ -59,9 +59,14 @@ const router = createRouter({
                     component: () => import("../ui/views/downloads/ViewShaders.vue"),
                 },
                 {
-                    path: "favorite",
-                    name: "ViewDownloadsFavorite",
-                    component: () => import("../ui/views/downloads/ViewFavorite.vue"),
+                    path: "favorite/client",
+                    name: "ViewDownloadsFavoriteClient",
+                    component: () => import("../ui/views/downloads/ViewFavoriteClient.vue"),
+                },
+                {
+                    path: "favorite/extra",
+                    name: "ViewDownloadsFavoriteExtra",
+                    component: () => import("../ui/views/downloads/ViewFavoriteExtra.vue"),
                 },
             ],
         },
