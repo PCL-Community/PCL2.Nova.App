@@ -8,7 +8,7 @@
 </script>
 
 <template>
-    <section class="w-44 h-full bg-base-300/70 py-2 flex flex-col items-center">
+    <section class="w-full h-full bg-base-300/70 py-2 flex flex-col items-center">
         <CompMenuItem text="百宝箱" :checked="$route.name === 'ViewOthersTools'" @click="ModEventBus.emit('router:push', '/others/tools')">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" class="scale-97">
                 <path
