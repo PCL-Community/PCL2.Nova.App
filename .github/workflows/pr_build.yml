@@ -1,0 +1,46 @@
+name: 'Build App for Development'
+
+on:
+  push:
+    branches:
+      - dev
+      - beta
+      - release
+
+jobs:
+  build-app:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: setup node
+        uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+
+      - name: install Rust Nightly
+        uses: dtolnay/rust-toolchain@nightly
+
+      - name: install frontend dependencies
+        run: |
+          npm install -g pnpm
+          pnpm install 
+
+      - name: build
+        run: pnpm tauri build
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows Embedded App
+          path: src-tauri/target/release/Plain_Craft_Launcher_2_Nova.exe
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: upload
+        uses: actions/upload-artifact@v4
+        with:
+          name: Windows Bundled Installer
+          path: src-tauri/target/release/bundle/
+          if-no-files-found: error
+          retention-days: 7

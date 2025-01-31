@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import { ref } from "vue";
+    import { onMounted, ref } from "vue";
 
     const props = defineProps<{
         title?: string;
@@ -7,23 +7,35 @@
         isSwapped?: boolean;
     }>();
 
-    const yuncard = ref<HTMLDivElement>();
-    const isCardOpen = ref<boolean>(props.canSwap ? (props.isSwapped ? false : true) : true);
-    const toggleCard = () => {
-        if (!props.canSwap || yuncard.value == null) return;
-        isCardOpen.value = !isCardOpen.value;
+    const cardEl = ref<HTMLDivElement>();
+    const isCardOpen = ref<boolean>(props.canSwap ? !props.isSwapped : true);
+
+    const loadCardHeight = (forceFlow?: boolean) => {
+        if (cardEl.value == null) return;
         switch (isCardOpen.value) {
             case true:
-                yuncard.value.style.height = "auto";
-                const { height } = yuncard.value.getBoundingClientRect();
-                yuncard.value.style.height = "48px";
-                yuncard.value.offsetHeight; // force reflow
-                yuncard.value.style.height = `${height}px`;
+                cardEl.value.style.height = "auto";
+                const { height } = cardEl.value.getBoundingClientRect();
+                cardEl.value.style.height = "48px";
+                if (forceFlow) {
+                    cardEl.value.offsetHeight; // force reflow
+                }
+                cardEl.value.style.height = `${height}px`;
                 break;
             case false:
-                yuncard.value.style.height = "48px";
+                cardEl.value.style.height = "48px";
         }
     };
+
+    const toggleCard = () => {
+        if (!props.canSwap) return;
+        isCardOpen.value = !isCardOpen.value;
+        loadCardHeight(true);
+    };
+
+    onMounted(() => {
+        loadCardHeight();
+    });
 </script>
 
 <template>
@@ -32,7 +44,7 @@
         :class="{
             swapped: !isCardOpen,
         }"
-        ref="yuncard">
+        ref="cardEl">
         <div
             class="yun-card__top"
             :class="{
