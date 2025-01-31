@@ -1,13 +1,14 @@
 use std::{
     fs::{self, File},
-    io::{self, Error, Write},
+    io::{self, Error, ErrorKind, Write},
     path::{Path, PathBuf},
     sync::{Arc, Mutex},
-    time::Duration,
+    time::{Duration, Instant},
 };
 
 use reqwest::{Client, header};
 use tokio::task;
+use uuid::Uuid;
 
 /// 下载配置
 #[derive(Debug, Clone)]
@@ -29,7 +30,7 @@ pub struct DownloadProgress {
 }
 
 impl DownloadProgress {
-    pub fn is_finished(&self) -> bool{
+    pub fn is_finished(&self) -> bool {
         self.total_bytes == self.downloaded_bytes
     }
 }
@@ -43,13 +44,13 @@ pub struct Downloader {
 
 impl Downloader {
     pub fn new(config: DownloadConfig) -> io::Result<Self> {
-        // 创建临时目录
+        // 确保临时目录存在
         fs::create_dir_all(&config.temp_dir)?;
 
         let client = Client::builder()
             .timeout(config.timeout)
             .build()
-            .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+            .map_err(|e| Error::new(ErrorKind::Other, e))?;
 
         Ok(Self {
             client,
@@ -65,9 +66,8 @@ impl Downloader {
             .head(&self.config.url)
             .send()
             .await
-            .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+            .map_err(|e| Error::new(ErrorKind::Other, e))?;
 
-        // 检查是否支持断点续传
         let supports_resume = response
             .headers()
             .get(header::ACCEPT_RANGES)
@@ -165,6 +165,7 @@ impl Downloader {
             handles.push(handle);
         }
 
+        // 启动每个块线程
         for handle in handles {
             handle
                 .await
@@ -220,63 +221,96 @@ impl Downloader {
     }
 
     /// 获取下载进度
-    pub fn get_progress(&self) -> DownloadProgress {
-        self.progress.lock().unwrap().clone()
+    pub fn get_progress(&self) -> Result<DownloadProgress, ()> {
+        match self.progress.lock() {
+            Ok(progress) => Ok(progress.clone()),
+            Err(_) => Err(()),
+        }
     }
+}
+
+pub struct DownloadManagerConfig {
+    pub url: String,
+    pub dest: PathBuf,
+    pub max_threads: usize,
+    pub max_retries: usize,
+    pub timeout_secs: u64,
 }
 
 pub struct DownloadManager {
     downloaders: Vec<Arc<Downloader>>,
 }
 
-pub struct DownloadManagerConfig {
-    pub url: String,
-    pub dest: PathBuf,
-}
-
 impl DownloadManager {
-    pub fn new(configs: &Vec<DownloadManagerConfig>) -> Result<Self, Error> {
-        let mut dls: Vec<Arc<Downloader>> = Vec::new();
-        for i in configs.iter() {
-            let dl = Downloader::new(DownloadConfig {
-                url: i.url.to_string(),
-                output_path: i.dest.to_path_buf(),
-                temp_dir: dirs_next::cache_dir()
-                    .unwrap()
-                    .join("PCL-Nova")
-                    .join("cache")
-                    .join("download"),
-                max_retries: 3,
-                timeout: Duration::from_millis(30_000),
-                max_threads: 2,
-            });
-            match dl {
-                Ok(e) => dls.push(Arc::new(e)),
-                Err(e) => return Err(e),
-            }
+    pub fn new(configs: &[DownloadManagerConfig]) -> io::Result<Self> {
+        let mut downloaders = Vec::new();
+
+        for config in configs {
+            // 生成唯一临时目录
+            let temp_dir = dirs_next::cache_dir()
+                .unwrap_or_else(|| PathBuf::from(".cache"))
+                .join("PCL-Nova")
+                .join("cache")
+                .join("downloads")
+                .join(Uuid::new_v4().to_string());
+
+            let download_config = DownloadConfig {
+                url: config.url.clone(),
+                output_path: config.dest.clone(),
+                temp_dir,
+                max_retries: config.max_retries,
+                timeout: Duration::from_secs(config.timeout_secs),
+                max_threads: config.max_threads,
+            };
+
+            let downloader = Downloader::new(download_config)?;
+            downloaders.push(Arc::new(downloader));
         }
-        Ok(Self { downloaders: dls })
+
+        Ok(Self { downloaders })
     }
 
-    pub fn start(&self){
-        for downloader in self.downloaders.iter() {
-            let downloader = std::sync::Arc::clone(downloader);
-            tokio::spawn(async move {
-                downloader.start().await;
-            });
-        }
-    }
+    pub async fn download_all(&self) -> Vec<io::Result<()>> {
+        let mut handles = Vec::new();
 
-    pub fn wait_for_end(&self){
-        loop {
-            let mut _all_finished: bool = true;
-            for i in self.downloaders.iter(){
-                let i = std::sync::Arc::clone(i);
-                _all_finished = _all_finished && i.get_progress().is_finished();
-            }
-            if _all_finished {
-                break;
+        // 启动所有下载任务
+        for downloader in &self.downloaders {
+            let downloader = Arc::clone(downloader);
+            handles.push(tokio::spawn(async move {
+                // let start_time = Instant::now();
+                let result = downloader.start().await;
+
+                // 计算下载速度
+                /*
+                if let Ok(progress) = downloader.get_progress() {
+                    let duration = start_time.elapsed().as_secs_f64();
+                    let speed = if duration > 0.0 {
+                        progress.downloaded_bytes as f64 / duration
+                    } else {
+                        0.0
+                    }; // 下载速度的实现，目前咕咕咕
+                    /*println!(
+                        "Download {}: {} bytes at {:.2} bytes/s",
+                        if result.is_ok() { "completed" } else { "failed" },
+                        progress.downloaded_bytes,
+                        speed
+                    );*/
+                } */
+
+                result
+            }));
+        }
+
+        // 收集所有结果
+        let mut results = Vec::new();
+        for handle in handles {
+            match handle.await {
+                Ok(Ok(())) => results.push(Ok(())),
+                Ok(Err(e)) => results.push(Err(e)),
+                Err(e) => results.push(Err(Error::new(ErrorKind::Other, e))),
             }
         }
+
+        results
     }
 }
