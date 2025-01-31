@@ -3,7 +3,7 @@ const CLIENT_ID: &str = "";
 
 use serde::Deserialize;
 
-use crate::core::utils::net::{ HttpClient};
+use crate::core::utils::net::HttpClient;
 
 #[derive(Deserialize, Debug)] 
 pub struct CodePair {
