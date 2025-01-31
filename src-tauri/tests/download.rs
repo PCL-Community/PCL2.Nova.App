@@ -1,6 +1,6 @@
 use std::{path::PathBuf, time::Duration};
-
-use pcl2_nova_app_lib::core::utils::downloader::{DownloadConfig,Downloader};
+use tokio;
+use pcl2_nova_app_lib::core::utils::downloader::{DownloadConfig, DownloadManager, DownloadManagerConfig, Downloader};
 
 
 #[test]
@@ -14,4 +14,21 @@ fn test_downloader(){
         max_threads: 8
     }).unwrap();
     let _ = tokio::runtime::Runtime::new().unwrap().block_on(dl.start());
+}
+
+#[test]
+fn test_muiltdownload(){
+    let dls = vec![
+        DownloadManagerConfig{
+            url: String::from("https://libraries.minecraft.net/com/mojang/datafixerupper/8.0.16/datafixerupper-8.0.16.jar"),
+            dest: dirs_next::desktop_dir().unwrap()
+        },
+        DownloadManagerConfig{
+            url: String::from("https://libraries.minecraft.net/com/mojang/jtracy/1.0.29/jtracy-1.0.29.jar"),
+            dest: dirs_next::desktop_dir().unwrap()
+        }
+    ];
+    let dl = DownloadManager::new(&dls).unwrap();
+    dl.start();
+    dl.wait_for_end();
 }

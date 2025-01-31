@@ -64,6 +64,20 @@ impl VersionType {
     }
 }
 
+pub enum DownloadSource {
+    Mojang,
+    BMCLAPI
+}
+
+impl DownloadSource {
+    pub fn get_url(dsource:&Self ,url_path: &String) -> String{
+        match dsource {
+            Self::Mojang => "https://launchermeta.mojang.com/mc/game/".to_string() + url_path,
+            Self::BMCLAPI => "https://bmclapi2.bangbang93.com/mc/game/".to_string() + url_path
+        }
+    }
+}
+
 pub async fn get_manifest_version_list() -> Result<VersionManifestOverall, Box<dyn Error>> {
     let client = net::HttpClient::new();
     let response =  client.get("https://launchermeta.mojang.com/mc/game/version_manifest.json").await.unwrap();

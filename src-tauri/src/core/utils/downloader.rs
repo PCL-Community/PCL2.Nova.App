@@ -1,6 +1,6 @@
 use std::{
     fs::{self, File},
-    io::{self, Write},
+    io::{self, Error, Write},
     path::{Path, PathBuf},
     sync::{Arc, Mutex},
     time::Duration,
@@ -26,6 +26,12 @@ pub struct DownloadProgress {
     pub total_bytes: u64,
     pub downloaded_bytes: u64,
     pub speed: f64,
+}
+
+impl DownloadProgress {
+    pub fn is_finished(&self) -> bool{
+        self.total_bytes == self.downloaded_bytes
+    }
 }
 
 /// 下载器
@@ -185,8 +191,11 @@ impl Downloader {
             .await
             .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
 
-
-        while let Some(chunk) = response.chunk().await.map_err(|e| io::Error::new(io::ErrorKind::Other, e))? {
+        while let Some(chunk) = response
+            .chunk()
+            .await
+            .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?
+        {
             file.write_all(&chunk)?;
 
             let mut prog = progress.lock().unwrap();
@@ -213,5 +222,61 @@ impl Downloader {
     /// 获取下载进度
     pub fn get_progress(&self) -> DownloadProgress {
         self.progress.lock().unwrap().clone()
+    }
+}
+
+pub struct DownloadManager {
+    downloaders: Vec<Arc<Downloader>>,
+}
+
+pub struct DownloadManagerConfig {
+    pub url: String,
+    pub dest: PathBuf,
+}
+
+impl DownloadManager {
+    pub fn new(configs: &Vec<DownloadManagerConfig>) -> Result<Self, Error> {
+        let mut dls: Vec<Arc<Downloader>> = Vec::new();
+        for i in configs.iter() {
+            let dl = Downloader::new(DownloadConfig {
+                url: i.url.to_string(),
+                output_path: i.dest.to_path_buf(),
+                temp_dir: dirs_next::cache_dir()
+                    .unwrap()
+                    .join("PCL-Nova")
+                    .join("cache")
+                    .join("download"),
+                max_retries: 3,
+                timeout: Duration::from_millis(30_000),
+                max_threads: 2,
+            });
+            match dl {
+                Ok(e) => dls.push(Arc::new(e)),
+                Err(e) => return Err(e),
+            }
+        }
+        Ok(Self { downloaders: dls })
+    }
+
+    pub fn start(&self){
+        for downloader in self.downloaders.iter() {
+            let downloader = std::sync::Arc::clone(downloader);
+            tokio::spawn(async move {
+                downloader.start().await;
+            });
+        }
+    }
+
+    pub fn wait_for_end(&self){
+        loop {
+            let mut _all_finished: bool = true;
+            for i in self.downloaders.iter(){
+                let i = std::sync::Arc::clone(i);
+                _all_finished = _all_finished && i.get_progress().is_finished();
+            }
+            if _all_finished {
+                break;
+            }
+        }
     }
 }
