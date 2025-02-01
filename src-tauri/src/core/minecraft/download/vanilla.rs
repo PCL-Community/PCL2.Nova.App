@@ -1,10 +1,12 @@
 
 use std::error::Error;
+use std::fs;
 use std::path::PathBuf;
 use serde::{Deserialize, Serialize};
 use serde_json;
-
-use crate::core::utils::{net,downloader};
+use crate::core::utils::{net, downloader};
+use crate::core::minecraft::file_struct::{version_asset_struct};
+use crate::core::utils::downloader::DownloadManagerConfig;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct VersionManifestOverall {
@@ -57,7 +59,35 @@ impl VersionManifest {
             max_retries:5,
             timeout_secs:30,
         }];
-        println!("Downloading {:?}",self);
+        let dl = downloader::DownloadManager::new(&config).unwrap();
+        dl.download_all().await;
+
+        drop(dl);
+        drop(config);
+
+        // 读取 Json 文件中所需的 lib 下载
+        let v_asset:version_asset_struct::MinecraftVersion = serde_json::from_str(fs::read_to_string(dest.join(filename).to_str().unwrap()).unwrap().as_str())?;
+
+        let mut config:Vec<DownloadManagerConfig> = Vec::new();
+        config.push(DownloadManagerConfig{
+            url: v_asset.downloads.client.url,
+            dest: dest.join("client.jar"),
+            max_threads: 1,
+            max_retries: 3,
+            timeout_secs: 30,
+        });
+        for (_, library) in v_asset.libraries.iter().enumerate() {
+            if let Some(artifact) = &library.downloads.artifact {
+                let new_config = DownloadManagerConfig {
+                    url: artifact.url.clone(),
+                    dest: dest.join("libraries").join(&artifact.path),
+                    max_threads: 1,
+                    max_retries: 3,
+                    timeout_secs: 30,
+                };
+                config.push(new_config);
+            }
+        }
         let dl = downloader::DownloadManager::new(&config).unwrap();
         dl.download_all().await;
         Ok(())
