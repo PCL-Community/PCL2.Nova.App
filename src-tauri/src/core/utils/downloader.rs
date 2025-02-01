@@ -245,7 +245,7 @@ impl DownloadManager {
     pub fn new(configs: &[DownloadManagerConfig]) -> io::Result<Self> {
         let mut downloaders = Vec::new();
 
-        for config in configs {
+        for config in configs.iter() {
             // 生成唯一临时目录
             let temp_dir = dirs_next::cache_dir()
                 .unwrap_or_else(|| PathBuf::from(".cache"))

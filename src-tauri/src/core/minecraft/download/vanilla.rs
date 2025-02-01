@@ -55,7 +55,7 @@ impl VersionManifest {
         let config =vec![downloader::DownloadManagerConfig{
             url: self.url.clone(),
             dest: dest.join(filename),
-            max_threads:1,
+            max_threads:2,
             max_retries:5,
             timeout_secs:30,
         }];
@@ -65,27 +65,37 @@ impl VersionManifest {
         drop(dl);
         drop(config);
 
+        let filecontent = match fs::read_to_string(dest.join(filename).to_str().unwrap()) {
+            Ok(x) => x.to_string(),
+            Err(e) => return Err(Box::from(format!("Read file content failed: {}",e)))
+        };
+
         // 读取 Json 文件中所需的 lib 下载
-        let v_asset:version_asset_struct::MinecraftVersion = serde_json::from_str(fs::read_to_string(dest.join(filename).to_str().unwrap()).unwrap().as_str())?;
+        let v_asset:version_asset_struct::MinecraftVersion = match serde_json::from_str(filecontent.as_str()) {
+            Ok(x) => x,
+            Err(e) => return Err(Box::from(format!("Deserialize json file failed: {}",e)))
+        };
 
         let mut config:Vec<DownloadManagerConfig> = Vec::new();
         config.push(DownloadManagerConfig{
             url: v_asset.downloads.client.url,
             dest: dest.join("client.jar"),
-            max_threads: 1,
+            max_threads: 2,
             max_retries: 3,
             timeout_secs: 30,
         });
         for (_, library) in v_asset.libraries.iter().enumerate() {
             if let Some(artifact) = &library.downloads.artifact {
-                let new_config = DownloadManagerConfig {
-                    url: artifact.url.clone(),
-                    dest: dest.join("libraries").join(&artifact.path),
-                    max_threads: 1,
-                    max_retries: 3,
-                    timeout_secs: 30,
-                };
-                config.push(new_config);
+                if let Some(save_path) = artifact.path.clone() {
+                    let new_config = DownloadManagerConfig {
+                        url: artifact.url.clone(),
+                        dest: dest.join("libraries").join(save_path),
+                        max_threads: 2,
+                        max_retries: 3,
+                        timeout_secs: 30,
+                    };
+                    config.push(new_config);
+                }
             }
         }
         let dl = downloader::DownloadManager::new(&config).unwrap();

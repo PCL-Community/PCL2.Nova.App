@@ -23,35 +23,22 @@ pub struct MinecraftVersion {
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 pub struct Arguments {
-    pub game: Vec<GameArgument>,
-    pub jvm: Vec<JvmArgument>,
+    pub game: Vec<Argument>,
+    pub jvm: Vec<Argument>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GameArgument {
+pub enum Argument {
     Simple(String),
-    Conditional {
-        rules: Vec<Rule>,
-        value: GameArgumentValue,
-    },
+    Conditional { rules: Vec<Rule>, value: ValueData },
 }
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
-pub enum GameArgumentValue {
-    Single(String),
-    Multiple(Vec<String>),
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(untagged)]
-pub enum JvmArgument {
+pub enum ValueData {
     Simple(String),
-    Conditional {
-        rules: Vec<Rule>,
-        value: Vec<String>,
-    },
+    Conditional(Vec<String>),
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -80,7 +67,6 @@ pub struct AssetIndex {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Downloads {
     pub client: DownloadArtifact,
     pub client_mappings: DownloadArtifact,
@@ -89,12 +75,11 @@ pub struct Downloads {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct DownloadArtifact {
     pub sha1: String,
     pub size: i64,
     pub url: String,
-    pub path: String,
+    pub path: Option<String>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -105,7 +90,6 @@ pub struct JavaVersion {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Library {
     pub downloads: LibraryDownloads,
     pub name: String,
@@ -113,28 +97,25 @@ pub struct Library {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct LibraryDownloads {
     pub artifact: Option<DownloadArtifact>,
     pub classifiers: Option<HashMap<String, DownloadArtifact>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct Logging {
     pub client: LoggingClient,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct LoggingClient {
     pub argument: String,
     pub file: LoggingFile,
+    #[serde(rename = "type")]
     pub type_: String,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
 pub struct LoggingFile {
     pub id: String,
     pub sha1: String,
