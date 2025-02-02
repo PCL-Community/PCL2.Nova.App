@@ -11,7 +11,7 @@ pub struct Config {
 }
 
 impl Config {
-    pub fn new(config_path: String, config_type: ConfigType) -> Self {
+    pub const fn new(config_path: String, config_type: ConfigType) -> Self {
         Config { config_path, config_type }
     }
     pub fn get_key(&self, key: String) -> Result<String, String> {

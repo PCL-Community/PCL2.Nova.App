@@ -15,3 +15,6 @@ pub fn run() {
 
 //modules
 mod core;
+use core::config::{Config, ConfigType};
+
+pub static CONFIG_GLOBAL: Config = Config::new(String::new(), ConfigType::GLOBAL);
