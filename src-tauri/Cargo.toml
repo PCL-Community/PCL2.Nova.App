@@ -1,16 +1,13 @@
 [package]
 name = "Plain_Craft_Launcher_2_Nova"
-version = "0.1.2"
+version = "0.2.1"
 description = "A cross-platform Minecraft Launcher, rewrite from PCL"
 authors = ["PCL-Community"]
-edition = "2024"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [lib]
-# The `_lib` suffix may seem redundant but it is necessary
-# to make the lib name unique and wouldn't conflict with the bin name.
-# This seems to be only an issue on Windows, see https://github.com/rust-lang/cargo/issues/8519
 name = "pcl2_nova_app_lib"
 crate-type = ["staticlib", "cdylib", "rlib"]
 
@@ -25,4 +22,4 @@ serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 reqwest = "0.12.12"
 mmcll = { path = "./MMCLL/RustVersion" }
-
+anyhow = "1.0.95"
