@@ -1,5 +1,8 @@
-use std::{fs::OpenOptions, io::{Read, Write}};
+use std::{fs::OpenOptions, io::{Read, Write}, path::PathBuf};
 
+thread_local! {
+    pub static CONFIG_GLOBAL: Config = Config::new(dirs_next::config_dir().unwrap_or(PathBuf::new()).join("PCL2Nova").to_str().unwrap().to_string(), ConfigType::GLOBAL);
+}
 
 pub enum ConfigType {
     GLOBAL, LOCAL

@@ -1,0 +1,3 @@
+[submodule "src-tauri/MMCLL"]
+	path = src-tauri/MMCLL
+	url = https://github.com/xphost008/MMCLL.git
