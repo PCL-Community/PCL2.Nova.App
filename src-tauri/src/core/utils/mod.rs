@@ -1,2 +1,2 @@
-pub mod net;
 pub mod downloader;
+pub mod net;

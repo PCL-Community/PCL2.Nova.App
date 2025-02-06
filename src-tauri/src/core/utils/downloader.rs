@@ -6,7 +6,7 @@ use std::{
     time::{Duration, Instant},
 };
 
-use reqwest::{Client, header};
+use reqwest::{header, Client};
 use tokio::task;
 use uuid::Uuid;
 

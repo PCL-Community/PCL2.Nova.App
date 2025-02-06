@@ -1,10 +1,11 @@
-use std::{time::Duration};
+use pcl2_nova_app_lib::core::utils::downloader::{
+    DownloadConfig, DownloadManager, DownloadManagerConfig, Downloader,
+};
+use std::time::Duration;
 use tokio;
-use pcl2_nova_app_lib::core::utils::downloader::{DownloadConfig, DownloadManager, DownloadManagerConfig, Downloader};
-
 
 #[test]
-fn test_downloader(){
+fn test_downloader() {
     let dl = Downloader::new(DownloadConfig{
         url: String::from("https://piston-meta.mojang.com/v1/packages/0405359a694f22b6423f4d64bb828ea732db4d33/19.json"),
         output_path: dirs_next::desktop_dir().unwrap().join("test.json"),
@@ -17,7 +18,7 @@ fn test_downloader(){
 }
 
 #[test]
-fn test_muiltdownload(){
+fn test_muiltdownload() {
     let rt = tokio::runtime::Runtime::new().unwrap();
     rt.block_on(async {
         let dls = vec![
