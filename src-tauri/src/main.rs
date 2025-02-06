@@ -1,8 +1,9 @@
-// Prevents additional console window on Windows in release, DO NOT REMOVE!!
+// Windows 下不显示控制台
 #![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
-use std::env;
 
+mod core;
 fn main() {
-    let _args: Vec<String> = env::args().collect();
+    // TODO: 内存优化的 CLI 调用?
+    
     pcl2_nova_app_lib::run();
 }
