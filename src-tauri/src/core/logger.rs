@@ -1,7 +1,7 @@
 use std::fs::OpenOptions;
 use std::io::Write;
-use std::time::SystemTime;
 use std::path::PathBuf;
+use std::time::SystemTime;
 
 pub struct Logger {
     level: LogLevel,
@@ -24,7 +24,10 @@ impl Logger {
     fn log(&self, level: LogLevel, message: &str) {
         if level <= self.level {
             let timestamp = SystemTime::now();
-            let log_path: PathBuf = dirs_next::config_dir().unwrap().join("PCLNova").join("log.txt");
+            let log_path: PathBuf = dirs_next::config_dir()
+                .unwrap()
+                .join("PCLNova")
+                .join("log.txt");
             let mut log_file = OpenOptions::new()
                 .create(true)
                 .write(true)
