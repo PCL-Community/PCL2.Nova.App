@@ -1,4 +1,4 @@
-<img src="./public/PCLNova.Dev.png" alt="Logo" height="360" align="left">
+<img src="./public/Images/PCLNova.Dev.png" alt="Logo" height="360" align="left">
 
 # PCL II Nova
 
