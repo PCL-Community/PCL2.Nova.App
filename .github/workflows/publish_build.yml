@@ -1,9 +1,7 @@
 name: 'Publish App'
 
 on:
-  push:
-    branches:
-      - publish
+  workflow_dispatch:
 
 # This workflow will trigger on each push to the build branchs to create or update a GitHub release, build your app, and upload the artifacts to the release.
 
