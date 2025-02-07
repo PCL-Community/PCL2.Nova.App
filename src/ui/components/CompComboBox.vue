@@ -1,4 +1,6 @@
 <script setup lang="ts">
+    import { ref } from "vue";
+
     const props = defineProps<{
         label?: string;
         legend?: string;
@@ -7,6 +9,7 @@
     }>();
 
     const model = defineModel();
+    const selectRef = ref<HTMLSelectElement>();
 
     const update = (event: Event) => {
         console.log((<HTMLSelectElement>event.target).value);
@@ -15,12 +18,11 @@
 </script>
 
 <template>
-    <fieldset class="fieldset w-full">
-        <legend class="fieldset-legend ml-1" v-if="props.legend">{{ props.legend }}</legend>
-        <select class="input input-sm w-full" :placeholder="props.placeholder" @change="update">
+    <!-- TODO: 支持输入 -->
+    <fieldset class="fieldset relative">
+        <select class="input input-sm w-full cursor-pointer" ref="selectRef" :placeholder="props.placeholder" @change="update">
             <option v-for="option in props.options" :key="option" :value="option">{{ option }}</option>
         </select>
-        <p class="fieldset-label ml-1 text-error" v-if="props.label">{{ props.label }}</p>
     </fieldset>
 </template>
 

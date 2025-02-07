@@ -70,7 +70,7 @@ import CompComboBox from "../../components/CompComboBox.vue";
                             <img src="/Images/Icons/Quilt.png" class="w-4 translate-y-[1px]" />
                         </CompRadioButton>
                     </ul>
-                    <ul class="w-3/7 grid grid-cols-[1fr_1fr] gap-4">
+                    <ul class="mt-1 w-3/7 grid grid-cols-[1fr_1fr] gap-4">
                         <CompButton highlight>搜索</CompButton>
                         <CompButton>重置</CompButton>
                     </ul>

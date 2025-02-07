@@ -1,5 +1,6 @@
 <script setup lang="ts">
     const props = defineProps<{
+        id?: string;
         label?: string;
         legend?: string;
         placeholder?: string;
@@ -16,6 +17,7 @@
             type="text"
             class="input input-sm w-full"
             v-model="model"
+            :id="props.id"
             :placeholder="props.placeholder"
             @focusin="$emit('focusin')"
             @focusout="$emit('focusout')" />

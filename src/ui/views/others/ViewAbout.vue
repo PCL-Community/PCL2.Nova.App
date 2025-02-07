@@ -2,7 +2,7 @@
     import CompButton from "../../components/CompButton.vue";
     import CompCard from "../../components/CompCard.vue";
     import CompListItem from "../../components/CompListItem.vue";
-    import metadata from "../../../metadata.json"
+    import metadata from "../../../metadata.json";
 
     const $jsWindow = window;
 
@@ -31,11 +31,11 @@
         </CompCard>
         <CompCard title="版权" can-swap is-swapped>
             <article class="w-full px-4 flex flex-col gap-2">
-                <p>PCL2.Nova.App 开源项目及其官方衍生程序均遵循 GNU General Public License 3.0 (GPLv3)<br />协议开源。</p>
+                <p>PCL2.Nova.App 开源项目及其官方衍生程序均遵循 GNU General Public License 3.0 (GPLv3) 协议开源。</p>
                 <section class="mt-2 flex gap-4">
-                    <CompButton class="w-36" @click="$jsWindow.open('https://github.com/PCL-Community/PCL2.Nova.App')"
-                        >查看源代码</CompButton
-                    >
+                    <CompButton class="w-36" @click="$jsWindow.open('https://github.com/PCL-Community/PCL2.Nova.App')">
+                        查看源代码
+                    </CompButton>
                     <CompButton class="w-36" @click="$jsWindow.open('https://www.gnu.org/licenses/gpl-3.0.html')">查看许可证</CompButton>
                 </section>
             </article>
