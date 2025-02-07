@@ -2,6 +2,7 @@
     const props = defineProps<{
         text: string;
         checked: boolean;
+        noicon?: boolean;
         highlight?: boolean;
     }>();
 </script>
@@ -18,7 +19,7 @@
         }"
         class="btn h-auto py-1 rounded-full"
         role="button">
-        <section class="w-5 h-5 flex justify-center items-center">
+        <section class="w-5 h-5 flex justify-center items-center" v-if="!props.noicon">
             <slot></slot>
         </section>
         <span class="translate-x-[.5px] leading-4.5">{{ props.text }}</span>

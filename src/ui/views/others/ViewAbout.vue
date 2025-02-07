@@ -14,19 +14,19 @@
         <CompCard title="关于">
             <section class="w-full px-4 flex flex-col gap-2">
                 <div class="flex">
-                    <CompListItem text="凌云" desp="Plain Craft Launcher II: Nova 的作者！" imgSrc="/avatar/lingyun.png" />
+                    <CompListItem text="凌云" desp="Plain Craft Launcher II: Nova 的作者！" imgSrc="/Images/Heads/lingyun.png" />
                 </div>
                 <div class="flex">
                     <CompListItem
                         text="Plain Craft Launcher II: Nova"
                         :desp="`当前版本：${version}（${channel} 渠道）`"
-                        :imgSrc="`/PCLNova.${channel}.png`" />
+                        :imgSrc="`/Images/PCLNova.${channel}.png`" />
                 </div>
             </section>
         </CompCard>
         <CompCard title="鸣谢" can-swap>
             <section class="w-full px-4 flex flex-col gap-2">
-                <CompListItem text="龙腾猫跃" desp="Plain Craft Launcher II 的原作者！" imgSrc="/avatar/ltcatt.png" />
+                <CompListItem text="龙腾猫跃" desp="Plain Craft Launcher II 的原作者！" imgSrc="/Images/Heads/ltcatt.png" />
             </section>
         </CompCard>
         <CompCard title="版权" can-swap is-swapped>

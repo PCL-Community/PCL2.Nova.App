@@ -1,6 +1,6 @@
 @font-face {
     font-family: PCL;
-    src: url("/font.ttf");
+    src: url("/PCL-English.ttf");
 }
 
 * {
@@ -12,11 +12,20 @@ body div#app main {
     transition: all 0.15s ease-in-out;
     opacity: 100%;
     transform: translateX(0%);
+
+    &.fadeout {
+        opacity: 0%;
+        transform: translateX(-100%);
+    }
 }
 
-body div#app main.fadeout {
-    opacity: 0%;
-    transform: translateX(-100%);
+body div#app section.subrouter {
+    transition: all 0.15s ease-in-out;
+    opacity: 100%;
+
+    &.fadeout {
+        opacity: 0%;
+    }
 }
 
 *::-webkit-scrollbar {

@@ -28,4 +28,5 @@ package-lock.json
 pnpm-lock.yaml
 yarn.lock
 
-# user-specifc:wuliaodexiaoluo
+# Local Files
+taupd.js
