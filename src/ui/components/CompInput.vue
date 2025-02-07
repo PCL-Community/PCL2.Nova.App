@@ -1,6 +1,4 @@
 <script setup lang="ts">
-    import { watch } from "vue";
-
     const props = defineProps<{
         label?: string;
         legend?: string;

@@ -2,30 +2,13 @@
     import { ref } from "vue";
     import CompCard from "../../components/CompCard.vue";
     import CompInput from "../../components/CompInput.vue";
-    import CompRadioButton from "../../components/CompRadioButton.vue";
     import CompButton from "../../components/CompButton.vue";
-import CompComboBox from "../../components/CompComboBox.vue";
-import { versionFilter } from "../../../modules/ModUtils";
-
-    type TLoader = "forge" | "fabric" | "quilt" | "neoforge";
+    import CompComboBox from "../../components/CompComboBox.vue";
+    import { versionFilter } from "../../../modules/ModUtils";
 
     const refreshing = ref(false);
     const search = ref<string>("");
     const version = ref<string>("");
-    const loader = ref<TLoader[]>(["forge", "fabric", "quilt", "neoforge"]);
-
-    const setLoaderAll = () => {
-        loader.value = ["forge", "fabric", "quilt", "neoforge"];
-    };
-    const toggleLoader = (value: TLoader) => {
-        if (loader.value.length === 4) loader.value = [];
-        if (loader.value.includes(value)) {
-            loader.value = loader.value.filter((item) => item !== value);
-        } else {
-            loader.value.push(value);
-        }
-        if (loader.value.length === 0) setLoaderAll();
-    };
 </script>
 
 <template>
