@@ -4,7 +4,9 @@ use crate::core::utils::{downloader, net};
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::error::Error;
-use std::fs;
+use std::time::Duration;
+use std::{fs, thread};
+use std::ops::Not;
 use std::path::PathBuf;
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -83,7 +85,7 @@ impl VersionManifest {
         config.push(DownloadManagerConfig {
             url: v_asset.downloads.client.url,
             dest: dest.join("client.jar"),
-            max_threads: 2,
+            max_threads: 8,
             max_retries: 3,
             timeout_secs: 30,
         });
@@ -93,7 +95,7 @@ impl VersionManifest {
                     let new_config = DownloadManagerConfig {
                         url: artifact.url.clone(),
                         dest: dest.join("libraries").join(save_path),
-                        max_threads: 2,
+                        max_threads: 1,
                         max_retries: 3,
                         timeout_secs: 30,
                     };

@@ -3,7 +3,7 @@ use std::{
     io::{self, Error, ErrorKind, Write},
     path::{Path, PathBuf},
     sync::{Arc, Mutex},
-    time::{Duration, Instant},
+    time::Duration,
 };
 
 use reqwest::{header, Client};
@@ -227,6 +227,11 @@ impl Downloader {
             Err(_) => Err(()),
         }
     }
+
+    pub fn is_finished(&self) -> Result<bool, ()> {
+        let ps = self.get_progress().unwrap();
+        Ok(ps.downloaded_bytes == ps.total_bytes)
+    }
 }
 
 pub struct DownloadManagerConfig {
@@ -312,5 +317,13 @@ impl DownloadManager {
         }
 
         results
+    }
+
+    pub fn is_finished(&self) -> Result<bool, ()> {
+        let mut all_finished = true;
+        for item in self.downloaders.iter() {
+            all_finished = all_finished && item.is_finished().unwrap();
+        }
+        Ok(all_finished)
     }
 }
