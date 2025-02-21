@@ -1,2 +1,2 @@
-mod microsoft;
-mod xbox;
+pub mod microsoft;
+pub mod xbox;
