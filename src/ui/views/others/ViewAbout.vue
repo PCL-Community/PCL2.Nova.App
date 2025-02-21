@@ -2,7 +2,7 @@
     import CompButton from "../../components/CompButton.vue";
     import CompCard from "../../components/CompCard.vue";
     import CompListItem from "../../components/CompListItem.vue";
-    import metadata from "../../../metadata.json"
+    import metadata from "../../../metadata.json";
 
     const $jsWindow = window;
 
@@ -14,28 +14,28 @@
         <CompCard title="关于">
             <section class="w-full px-4 flex flex-col gap-2">
                 <div class="flex">
-                    <CompListItem text="凌云" desp="Plain Craft Launcher II: Nova 的作者！" imgSrc="/avatar/lingyun.png" />
+                    <CompListItem text="凌云" desp="Plain Craft Launcher II: Nova 的作者！" imgSrc="/Images/Heads/lingyun.png" />
                 </div>
                 <div class="flex">
                     <CompListItem
                         text="Plain Craft Launcher II: Nova"
                         :desp="`当前版本：${version}（${channel} 渠道）`"
-                        :imgSrc="`/PCLNova.${channel}.png`" />
+                        :imgSrc="`/Images/PCLNova.${channel}.png`" />
                 </div>
             </section>
         </CompCard>
         <CompCard title="鸣谢" can-swap>
             <section class="w-full px-4 flex flex-col gap-2">
-                <CompListItem text="龙腾猫跃" desp="Plain Craft Launcher II 的原作者！" imgSrc="/avatar/ltcatt.png" />
+                <CompListItem text="龙腾猫跃" desp="Plain Craft Launcher II 的原作者！" imgSrc="/Images/Heads/ltcatt.png" />
             </section>
         </CompCard>
         <CompCard title="版权" can-swap is-swapped>
             <article class="w-full px-4 flex flex-col gap-2">
-                <p>PCL2.Nova.App 开源项目及其官方衍生程序均遵循 GNU General Public License 3.0 (GPLv3)<br />协议开源。</p>
+                <p>PCL2.Nova.App 开源项目及其官方衍生程序均遵循 GNU General Public License 3.0 (GPLv3) 协议开源。</p>
                 <section class="mt-2 flex gap-4">
-                    <CompButton class="w-36" @click="$jsWindow.open('https://github.com/PCL-Community/PCL2.Nova.App')"
-                        >查看源代码</CompButton
-                    >
+                    <CompButton class="w-36" @click="$jsWindow.open('https://github.com/PCL-Community/PCL2.Nova.App')">
+                        查看源代码
+                    </CompButton>
                     <CompButton class="w-36" @click="$jsWindow.open('https://www.gnu.org/licenses/gpl-3.0.html')">查看许可证</CompButton>
                 </section>
             </article>

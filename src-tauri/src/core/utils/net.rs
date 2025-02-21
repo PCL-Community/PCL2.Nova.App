@@ -1,6 +1,7 @@
 use reqwest::header::HeaderMap;
 use reqwest::{Client, StatusCode};
 use std::error::Error;
+use tauri::http::response;
 
 pub struct HttpClient {
     client: Client,
