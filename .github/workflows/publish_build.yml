@@ -1,11 +1,7 @@
 name: 'Publish App'
 
 on:
-  push:
-    branches:
-      - build/dev
-      - build/beta
-      - build/release
+  workflow_dispatch:
 
 # This workflow will trigger on each push to the build branchs to create or update a GitHub release, build your app, and upload the artifacts to the release.
 
@@ -35,8 +31,8 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: install Rust Stable
-        uses: dtolnay/rust-toolchain@stable
+      - name: install Rust Nightly
+        uses: dtolnay/rust-toolchain@nightly
         with:
           # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
           targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}

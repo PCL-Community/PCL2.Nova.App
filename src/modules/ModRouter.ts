@@ -138,19 +138,25 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    const main = (<HTMLElement>document.body.querySelector("div#app")).querySelector("main");
     const isSameParent = to.fullPath.split("/")[1] === from.fullPath.split("/")[1];
-    if (main && !isSameParent) {
-        main.classList.add("fadeout");
+    if (!isSameParent) {
+        const main = (<HTMLElement>document.body.querySelector("div#app")).querySelector("main");
+        main?.classList.add("fadeout");
         setTimeout(next, 150);
     } else {
-        next();
+        const subrouter = (<HTMLElement>document.body.querySelector("div#app")).querySelector("section.subrouter");
+        subrouter?.classList.add("fadeout");
+        setTimeout(next, 150);
     }
 });
 
-router.afterEach(() => {
+router.afterEach((to, _from, _failure) => {
     const main = (<HTMLElement>document.body.querySelector("div#app")).querySelector("main");
-    if (main) main.classList.remove("fadeout");
+    main?.classList.remove("fadeout");
+    const subrouter = (<HTMLElement>document.body.querySelector("div#app")).querySelector("section.subrouter");
+    subrouter?.classList.remove("fadeout");
+    console.log("to.fullPath", to.fullPath);
+    ModEventBus.emit("router:done", to.fullPath);
 });
 
 ModEventBus.on("router:push", async (path: string) => {
