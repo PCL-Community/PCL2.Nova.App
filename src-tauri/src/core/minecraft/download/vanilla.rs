@@ -4,10 +4,10 @@ use crate::core::utils::{downloader, net};
 use serde::{Deserialize, Serialize};
 use serde_json;
 use std::error::Error;
-use std::time::Duration;
-use std::{fs, thread};
 use std::ops::Not;
 use std::path::PathBuf;
+use std::time::Duration;
+use std::{fs, thread};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct VersionManifestOverall {
