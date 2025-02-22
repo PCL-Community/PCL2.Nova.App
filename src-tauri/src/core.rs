@@ -1,2 +1,2 @@
-mod minecraft;
-mod utils;
+pub mod minecraft;
+pub mod utils;

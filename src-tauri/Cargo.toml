@@ -24,3 +24,5 @@ reqwest = "0.12"
 anyhow = "1.0"
 sysinfo = "0.33.1"
 regex = "1.11.1"
+uuid = { version = "1.12.1", features = ["v4"] }
+tokio = "1.43.0"
