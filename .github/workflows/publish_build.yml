@@ -15,12 +15,16 @@ jobs:
         include:
           - platform: 'macos-latest' # for Arm based macs (M1 and above).
             args: '--target aarch64-apple-darwin'
-          - platform: 'macos-latest' # for Intel based macs.
+          - platform: 'macos-13' # for Intel based macs.
             args: '--target x86_64-apple-darwin'
           - platform: 'ubuntu-22.04' # for Tauri v1 you could replace this with ubuntu-20.04.
-            args: ''
+            args: '--target x86_64-unknown-linux-gnu'
+          - platform: 'ubuntu-22.04-arm'
+            args: '--target aarch64-unknown-linux-gnu'
           - platform: 'windows-latest'
-            args: ''
+            args: '--target x86_64-pc-windows-msvc'
+          - platform: 'windows-arm'
+            args: '--target aarch64-pc-windows-msvc'
 
     runs-on: ${{ matrix.platform }}
     steps:
@@ -31,11 +35,41 @@ jobs:
         with:
           node-version: lts/*
 
-      - name: install Rust Nightly
+      - name: install Rust Nightly (MacOS x64)
         uses: dtolnay/rust-toolchain@nightly
+        if: matrix.platform == 'macos-13'
         with:
-          # Those targets are only used on macos runners so it's in an `if` to slightly speed up windows and linux builds.
-          targets: ${{ matrix.platform == 'macos-latest' && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
+          targets: 'x86_64-apple-darwin'
+          
+      - name: install Rust Nightly (MacOS ARM64)
+        uses: dtolnay/rust-toolchain@nightly
+        if: matrix.platform == 'macos-latest'
+        with:
+          targets: 'aarch64-apple-darwin'
+          
+      - name: install Rust Nightly (Windows x64)
+        uses: dtolnay/rust-toolchain@nightly
+        if: matrix.platform == 'windows-latest'
+        with:
+          targets: 'x86_64-pc-windows-msvc'
+          
+      - name: install Rust Nightly (Windows ARM64)
+        uses: dtolnay/rust-toolchain@nightly
+        if: matrix.platform == 'windows-arm'
+        with:
+          targets: 'aarch64-pc-windows-msvc'
+          
+      - name: install Rust Nightly (Linux x64)
+        uses: dtolnay/rust-toolchain@nightly
+        if: matrix.platform == 'ubuntu-22.04'
+        with:
+          targets: 'x86_64-unknown-linux-gnu'
+
+      - name: install Rust Nightly (Linux ARM64)
+        uses: dtolnay/rust-toolchain@nightly
+        if: matrix.platform == 'ubuntu-22.04-arm'
+        with:
+          targets: 'aarch64-unknown-linux-gnu'
 
       - name: install dependencies (ubuntu only)
         if: matrix.platform == 'ubuntu-22.04' # This must match the platform value defined above.
