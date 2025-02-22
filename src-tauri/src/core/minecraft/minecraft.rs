@@ -1,16 +1,24 @@
+use super::NovaError;
+use super::download::OnlineFetch;
+use crate::core::utils::net;
+use serde::{Deserialize, Deserializer, Serialize, de::Error};
 use std::collections::HashMap;
-use serde::{{de::{self, Error}}, Deserialize, Deserializer, Serialize};
 
+use std::path::PathBuf;
+use std::str::FromStr;
 use std::vec::Vec;
 
-
-
 pub trait Contains {
-    fn contains<T>(&self, str: &T) -> bool where T: ToString + ?Sized;
+    fn contains<T>(&self, str: &T) -> bool
+    where
+        T: ToString + ?Sized;
 }
 
 impl Contains for serde_json::Value {
-    fn contains<T>(&self, str: &T) -> bool where T: ToString + ?Sized {
+    fn contains<T>(&self, str: &T) -> bool
+    where
+        T: ToString + ?Sized,
+    {
         self.as_object().unwrap().contains_key(&str.to_string())
     }
 }
@@ -19,51 +27,165 @@ pub trait MinecraftPredicate {
     fn of(&self) -> bool;
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+pub struct VersionManifestOverall {
+    pub latest: VersionManifestLatest,
+    pub versions: Vec<VersionManifest>,
+}
+
+impl OnlineFetch for VersionManifestOverall {
+    async fn fetch() -> Result<Self, NovaError> {
+        let client = net::HttpClient::new();
+        match client
+            .get("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json")
+            .await
+        {
+            Ok(data) => {
+                let list: VersionManifestOverall = serde_json::from_str(&data.body).unwrap();
+                Ok(list)
+            }
+            Err(e) => Err(NovaError::msg(&e.to_string())),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct VersionManifestLatest {
+    pub release: String,
+    pub snapshot: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub struct VersionManifest {
+    pub id: String,
+    #[serde(rename = "type")]
+    pub version_type: VersionType,
+    pub url: String,
+    pub time: String,
+    #[serde(rename = "releaseTime")]
+    pub release_time: String,
+}
+
+#[derive(Serialize, Deserialize, Debug)]
+pub enum VersionType {
+    #[serde(rename = "old_alpha")]
+    OldAlpha,
+    #[serde(rename = "old_beta")]
+    OldBeta,
+    #[serde(rename = "snapshot")]
+    Snapshot,
+    #[serde(rename = "release")]
+    Release,
+}
+
+impl FromStr for VersionType {
+    type Err = NovaError;
+
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        match s {
+            "old_alpha" => Ok(VersionType::OldAlpha),
+            "old_beta" => Ok(VersionType::OldBeta),
+            "snapshot" => Ok(VersionType::Snapshot),
+            "release" => Ok(VersionType::Release),
+            _ => Err(NovaError::msg(&format!(
+                "Unknown minecraft version type: {}",
+                s
+            ))),
+        }
+    }
+}
+
+impl ToString for VersionType {
+    fn to_string(&self) -> String {
+        match self {
+            VersionType::OldAlpha => "old_alpha".to_string(),
+            VersionType::OldBeta => "old_beta".to_string(),
+            VersionType::Snapshot => "snapshot".to_string(),
+            VersionType::Release => "release".to_string(),
+        }
+    }
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum NativeString {
+    #[serde(rename = "natives-linux")]
+    NativesLinux,
+    #[serde(rename = "natives-osx")]
+    NativesOSX,
+    #[serde(rename = "natives-macos")]
+    NativesMacOS,
+    #[serde(rename = "natives-windows")]
+    NativesWindows,
+    #[serde(rename = "linux-x86_64")]
+    NativesLinux64,
+    #[serde(rename = "linux-aarch_64")]
+    NativesLinuxAarch64,
+    #[serde(rename = "natives-windows-x86")]
+    NativesWindows32,
+    #[serde(rename = "natives-macos-arm64")]
+    NativesMacOSArm64,
+    #[serde(rename = "natives-windows-arm64")]
+    NativesWindowsArm64,
+    #[serde(rename = "natives-macos-patch")]
+    NativesMacOSPatch,
+    #[serde(rename = "natives-windows-${arch}")]
+    NativesWindowsArch,
+}
+
 #[derive(Clone)]
-pub struct MinecraftAsset {
+pub struct Asset {
     pub path: String,
     pub hash: String,
-    pub size: u64
+    pub size: u64,
 }
 
 #[derive(Clone)]
-pub struct MinecraftAssetObjects {
-    pub vec: Vec<MinecraftAsset>
+pub struct AssetObjects {
+    pub vec: Vec<Asset>,
 }
 
-impl<'de> Deserialize<'de> for MinecraftAssetObjects {
+impl<'de> Deserialize<'de> for AssetObjects {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where D: Deserializer<'de>
+    where
+        D: Deserializer<'de>,
     {
         let raw_json = serde_json::Value::deserialize(deserializer)?;
-        let json: HashMap<String, serde_json::Value> = serde_json::from_value(raw_json).expect("Cannot deserialize object.");
-        let mut arr: Vec<MinecraftAsset> = vec![];
+        let json: HashMap<String, serde_json::Value> =
+            serde_json::from_value(raw_json).expect("Cannot deserialize object.");
+        let mut arr: Vec<Asset> = vec![];
         for (key, value) in json.iter() {
-            arr.push(MinecraftAsset { path: key.clone(), hash: value["hash"].to_string().replace('"', ""), size: value["size"].as_u64().unwrap_or(0) });
+            arr.push(Asset {
+                path: key.clone(),
+                hash: value["hash"].to_string().replace('"', ""),
+                size: value["size"].as_u64().unwrap_or(0),
+            });
         }
         return Ok(Self { vec: arr });
     }
 }
 
-impl MinecraftAssetObjects {
-    pub fn iter(&self) -> AssetObjectIterator { 
+impl AssetObjects {
+    pub fn iter(&self) -> AssetObjectIterator {
         return AssetObjectIterator::new(self);
     }
 }
 
 pub struct AssetObjectIterator {
-    value: MinecraftAssetObjects,
-    ptr: usize
+    value: AssetObjects,
+    ptr: usize,
 }
 
 impl AssetObjectIterator {
-    fn new(value: &MinecraftAssetObjects) -> Self {
-        Self { value: value.clone(), ptr: 0 }
+    fn new(value: &AssetObjects) -> Self {
+        Self {
+            value: value.clone(),
+            ptr: 0,
+        }
     }
 }
 
 impl Iterator for AssetObjectIterator {
-    type Item = MinecraftAsset;
+    type Item = Asset;
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ptr += 1;
@@ -74,59 +196,10 @@ impl Iterator for AssetObjectIterator {
     }
 }
 
-
-impl MinecraftPredicate for MinecraftAsset {
+impl MinecraftPredicate for Asset {
     fn of(&self) -> bool {
         return true;
     }
-}
-
-#[derive(Debug, Serialize, Deserialize)]
-#[serde(rename_all = "camelCase")]
-pub struct MinecraftOSRule {
-    pub action: String,
-    pub features: Option<HashMap<String, bool>>,
-    pub os: Option<HashMap<String, String>>
-}
-
-impl MinecraftPredicate for MinecraftOSRule {
-    fn of(&self) -> bool {
-        let allowed = self.action == "allowed";
-        if self.os.is_none() {
-            return allowed;
-        }
-        let current_os: String = 
-            if cfg!(target_os = "windows") {
-                "windows".to_string()
-            } else if cfg!(target_os = "linux") {
-                "linux".to_string()
-            } else if cfg!(target_os = "macos") {
-                "osx".to_string()
-            } else {
-                "unknown".to_string()
-            };
-        let target_os = self.os.clone().unwrap();
-        if target_os.contains_key("name") {
-            if target_os.contains_key("version") {
-                let target_os_version = target_os.get("version").unwrap().to_string();
-                while target_os_version.contains(r#"\\"#) {
-                    let _ = target_os_version.replace(r#"\\"#, "\\");
-                }
-                let current_os_version = sysinfo::System::os_version().unwrap();
-                return target_os_version == current_os_version;
-            }
-            return allowed ^ (current_os == target_os.get("name").unwrap().to_string());
-        } 
-        return false;
-    }
-}
-
-pub struct MinecraftLibrary {
-    name: String,
-    path: String,
-    url: String,
-    native: bool,
-    native_string: Option<String>
 }
 
 #[derive(Debug, Deserialize)]
@@ -183,16 +256,15 @@ impl MinecraftPredicate for Rule {
         if self.os.is_none() {
             return allowed;
         }
-        let current_os: String = 
-            if cfg!(target_os = "windows") {
-                "windows".to_string()
-            } else if cfg!(target_os = "linux") {
-                "linux".to_string()
-            } else if cfg!(target_os = "macos") {
-                "osx".to_string()
-            } else {
-                "unknown".to_string()
-            };
+        let current_os: String = if cfg!(target_os = "windows") {
+            "windows".to_string()
+        } else if cfg!(target_os = "linux") {
+            "linux".to_string()
+        } else if cfg!(target_os = "macos") {
+            "osx".to_string()
+        } else {
+            "unknown".to_string()
+        };
         let target_os = self.os.clone().unwrap();
         if target_os.contains_key("name") {
             if target_os.contains_key("version") {
@@ -204,7 +276,7 @@ impl MinecraftPredicate for Rule {
                 return target_os_version == current_os_version;
             }
             return allowed ^ (current_os == target_os.get("name").unwrap().to_string());
-        } 
+        }
         return false;
     }
 }
@@ -253,58 +325,113 @@ pub struct JavaVersion {
 pub struct Library {
     pub name: String,
     pub native: bool,
-    pub native_strings: Vec<String>,
+    pub native_strings: Vec<NativeString>,
     pub rules: Option<Vec<Rule>>,
-    pub downloads: HashMap<String, DownloadArtifact>
+    pub downloads: HashMap<String, DownloadArtifact>,
 }
 
 impl<'de> Deserialize<'de> for Library {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
-    where D: Deserializer<'de> 
+    where
+        D: Deserializer<'de>,
     {
         let raw_json = serde_json::Value::deserialize(deserializer)?;
-        let json: HashMap<String, serde_json::Value> = serde_json::from_value(raw_json).expect("Failed to deserialize MC Library Index.");
+        let json: HashMap<String, serde_json::Value> =
+            serde_json::from_value(raw_json).expect("Failed to deserialize MC Library Index.");
         let mut native = false;
-        let mut native_strings: Vec<String> = vec![];
+        let mut native_strings: Vec<NativeString> = vec![];
         let mut name: String = String::new();
         let mut rules: Option<Vec<Rule>> = None;
         if json.contains_key("rules") {
-            rules = Some(serde_json::from_value(json["rules"].clone()).expect("Failed to fetch rules."));
+            rules = Some(
+                serde_json::from_value(json["rules"].clone()).expect("Failed to fetch rules."),
+            );
         }
         for (key, value) in json.iter() {
             if key == "natives" {
                 native = true;
-                let raw_native_strings = value.as_array();
-                if let Some(rns) = raw_native_strings {
-                    for native_string in rns {
-                        native_strings.push(native_string.to_string().replace('"', ""));
-                    }
+                let raw_native_strings: HashMap<String, serde_json::Value> =
+                    serde_json::from_value(value.clone()).expect("Failed to fetch native strings.");
+                for (_key, native_string) in raw_native_strings {
+                    native_strings.push(
+                        serde_json::from_value(native_string)
+                            .expect("Failed to fetch native strings."),
+                    );
                 }
             } else if key == "name" {
                 name = value.to_string().replace('"', "");
                 let splited_name: Vec<_> = name.split(':').collect();
                 if splited_name.len() >= 4 {
-                    native_strings.push(splited_name[3].to_string());
+                    native_strings.push(
+                        serde_json::from_str(splited_name[3])
+                            .expect("Failed to fetch native strings."),
+                    );
                 }
             }
         }
         if native {
             if json["downloads"].contains("classifiers") {
-                let downloads: HashMap<String, DownloadArtifact> = serde_json::from_value(json["downloads"]["classifiers"].clone()).expect("Failed to fetch classifiers.");
-                return Ok(Self { name, native, native_strings, rules, downloads });
+                let downloads: HashMap<String, DownloadArtifact> =
+                    serde_json::from_value(json["downloads"]["classifiers"].clone())
+                        .expect("Failed to fetch classifiers.");
+                return Ok(Self {
+                    name,
+                    native,
+                    native_strings,
+                    rules,
+                    downloads,
+                });
             } else if json["downloads"].contains("artifact") {
-                let artifacts: DownloadArtifact = serde_json::from_value(json["downloads"]["artifact"].clone()).expect("Failed to fetch artifacts.");
+                let artifacts: DownloadArtifact =
+                    serde_json::from_value(json["downloads"]["artifact"].clone())
+                        .expect("Failed to fetch artifacts.");
                 let mut downloads: HashMap<String, DownloadArtifact> = HashMap::new();
-                downloads.insert(native_strings[0].clone(), artifacts);
-                return Ok(Self { name, native, native_strings, rules, downloads });
+                let native_string = serde_json::to_value(native_strings[0])
+                    .expect("Failed to fetch native strings.")
+                    .to_string()
+                    .replace('"', "");
+                downloads.insert(native_string, artifacts);
+                return Ok(Self {
+                    name,
+                    native,
+                    native_strings,
+                    rules,
+                    downloads,
+                });
             }
         } else if json["downloads"].contains("artifact") {
-            let artifacts: DownloadArtifact = serde_json::from_value(json["downloads"]["artifact"].clone()).expect("Failed to fetch artifacts.");
+            let artifacts: DownloadArtifact =
+                serde_json::from_value(json["downloads"]["artifact"].clone())
+                    .expect("Failed to fetch artifacts.");
             let mut downloads: HashMap<String, DownloadArtifact> = HashMap::new();
             downloads.insert("artifact".to_string(), artifacts);
-            return Ok(Self { name, native, native_strings, rules, downloads });
+            return Ok(Self {
+                name,
+                native,
+                native_strings,
+                rules,
+                downloads,
+            });
         }
         Err(Error::custom("Failed to deserialize Library Index."))
+    }
+}
+
+impl MinecraftPredicate for Library {
+    fn of(&self) -> bool {
+        let mut rule_allowed = false;
+        if let Some(rules) = &self.rules {
+            for rule in rules {
+                rule_allowed |= rule.of();
+            }
+        }
+        if !rule_allowed {
+            return false;
+        }
+        let lwjgl3_regex = regex::Regex::new("org.lwjgl:lwjgl(-[a-z._.\\-.0-9]*)?:3.[0-9].[0-9](-[a-z.0-9._.\\-]*)?:([a-z._.\\-.0-9]*)?").unwrap();
+        let lwjgl3 = lwjgl3_regex.is_match(&self.name);
+        
+        true
     }
 }
 
@@ -333,4 +460,31 @@ pub struct LoggingFile {
     pub sha1: String,
     pub size: i64,
     pub url: String,
+}
+
+#[derive(Clone)]
+pub struct GamePath {
+    pub path: PathBuf,
+}
+
+impl FromStr for GamePath {
+    type Err = NovaError;
+    
+    fn from_str(s: &str) -> Result<Self, Self::Err> {
+        let path = PathBuf::from(s);
+        Ok(Self { path })
+    }
+}
+
+impl ToString for GamePath {
+    fn to_string(&self) -> String {
+        self.path.to_str().unwrap_or("").to_string()
+    }
+}
+
+impl GamePath {
+    pub fn init(&self) -> Result<(), NovaError> {
+        
+        Ok(())
+    }
 }
