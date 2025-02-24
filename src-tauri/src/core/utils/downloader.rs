@@ -1,12 +1,12 @@
 use reqwest::header::HeaderValue;
-use tokio::io::AsyncWriteExt;
 use std::sync::Mutex;
+use tokio::io::AsyncWriteExt;
 
 use crate::core::minecraft::NovaError;
 
 use super::net;
-use std::{path::PathBuf, str::FromStr, sync::atomic::AtomicU64};
 use futures_util::stream::StreamExt;
+use std::{path::PathBuf, str::FromStr, sync::atomic::AtomicU64};
 
 // 字符串切割适配多平台
 #[cfg(unix)]
@@ -16,7 +16,7 @@ use std::os::windows::ffi::OsStrExt;
 
 type Progresser = Box<dyn Fn(Option<u64>, Option<u64>, Option<u64>) -> bool>;
 
-pub struct Downloader{
+pub struct Downloader {
     url: String,
     dest: PathBuf,
     concurrency: u64,
@@ -25,19 +25,20 @@ pub struct Downloader{
     downloaded_bytes: AtomicU64,
     max_retries: u16,
     pub terminated: bool,
-    progresser: Mutex<Progresser>
+    progresser: Mutex<Progresser>,
 }
 
 impl Downloader {
     pub fn new<S: ToString + ?Sized, F>(
-        url: &S, 
+        url: &S,
         dest: &S,
         mut concurrency: u64,
         retries: u16,
         timeout: u16,
-        progresser: Option<F>
-    ) -> Self 
-    where F: Fn(Option<u64>, Option<u64>, Option<u64>) -> bool + 'static
+        progresser: Option<F>,
+    ) -> Self
+    where
+        F: Fn(Option<u64>, Option<u64>, Option<u64>) -> bool + 'static,
     {
         let tokio_runtime =
             tokio::runtime::Runtime::new().expect("Failed to create tokio runtime.");
@@ -52,15 +53,14 @@ impl Downloader {
                 .send()
                 .await
                 .expect("Failed to get header.");
-            let length = response
-                .content_length();
+            let length = response.content_length();
             return length;
         });
         if total_bytes == None {
             concurrency = 1;
             total_bytes = Some(0);
         }
-        let default_progresser = |_: Option<u64> ,_: Option<u64>, _: Option<u64> | false;
+        let default_progresser = |_: Option<u64>, _: Option<u64>, _: Option<u64>| false;
         Self {
             url: url.to_string().clone(),
             dest: PathBuf::from_str(dest.to_string().as_str())
@@ -74,7 +74,7 @@ impl Downloader {
             progresser: match progresser {
                 Some(p) => Mutex::new(Box::new(p)),
                 None => Mutex::new(Box::new(default_progresser)),
-            }
+            },
         }
     }
 
@@ -105,17 +105,26 @@ impl Downloader {
                 .await
                 .expect("Bad request.");
             if response.status().as_u16() < 400 {
-                let mut stream = response
-                .bytes_stream();
-                while let Some(buffer) = stream.next().await { // it should work
+                let mut stream = response.bytes_stream();
+                while let Some(buffer) = stream.next().await {
+                    // it should work
                     let buffer_ = &buffer.expect("Failed to read buffer.");
-                    file.write(&buffer_).await
+                    file.write(&buffer_)
+                        .await
                         .expect("Failed to write data into file.");
-                    self.downloaded_bytes.fetch_add(buffer_.len() as u64, std::sync::atomic::Ordering::SeqCst);
+                    self.downloaded_bytes
+                        .fetch_add(buffer_.len() as u64, std::sync::atomic::Ordering::SeqCst);
                     match self.progresser.lock() {
                         Ok(p) => {
-                          p(Some(self.downloaded_bytes.load(std::sync::atomic::Ordering::SeqCst)), Some(self.total_bytes), Some(buffer_.len() as u64));  
-                        },
+                            p(
+                                Some(
+                                    self.downloaded_bytes
+                                        .load(std::sync::atomic::Ordering::SeqCst),
+                                ),
+                                Some(self.total_bytes),
+                                Some(buffer_.len() as u64),
+                            );
+                        }
                         Err(_) => (),
                     }
                 }
@@ -128,6 +137,4 @@ impl Downloader {
     async fn download_multi_thread(&mut self) -> Result<(), NovaError> {
         Ok(())
     }
-
-
 }

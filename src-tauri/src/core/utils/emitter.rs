@@ -1,3 +1,1 @@
-pub struct Emitter {
-    
-}
+pub struct Emitter {}

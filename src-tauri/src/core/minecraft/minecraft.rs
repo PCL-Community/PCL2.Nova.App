@@ -41,7 +41,8 @@ impl OnlineFetch for VersionManifestOverall {
             .await
         {
             Ok(data) => {
-                let list: VersionManifestOverall = serde_json::from_str(&data.body.unwrap()).unwrap();
+                let list: VersionManifestOverall =
+                    serde_json::from_str(&data.body.unwrap()).unwrap();
                 Ok(list)
             }
             Err(e) => Err(NovaError::msg(&e.to_string())),
@@ -437,12 +438,22 @@ impl MinecraftPredicate for Library {
         if cfg!(target_os = "windows") {
             if cfg!(target_arch = "x86") {
                 if lwjgl3 {
-                    matched_natives = vec![NativeString::NativesWindows, NativeString::NativesWindows32, NativeString::NativesWindowsArch]
+                    matched_natives = vec![
+                        NativeString::NativesWindows,
+                        NativeString::NativesWindows32,
+                        NativeString::NativesWindowsArch,
+                    ]
                 } else {
-                    matched_natives = vec![NativeString::NativesWindows32, NativeString::NativesWindowsArch]
+                    matched_natives = vec![
+                        NativeString::NativesWindows32,
+                        NativeString::NativesWindowsArch,
+                    ]
                 }
             } else if cfg!(target_arch = "x86_64") {
-                matched_natives = vec![NativeString::NativesWindows, NativeString::NativesWindowsArch]
+                matched_natives = vec![
+                    NativeString::NativesWindows,
+                    NativeString::NativesWindowsArch,
+                ]
             } else if cfg!(target_arch = "aarch64") {
                 matched_natives = vec![NativeString::NativesWindowsArm64]
             }
@@ -508,7 +519,7 @@ pub struct GamePath {
 
 impl FromStr for GamePath {
     type Err = NovaError;
-    
+
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let path = PathBuf::from(s);
         Ok(Self { path })
@@ -523,7 +534,6 @@ impl ToString for GamePath {
 
 impl GamePath {
     pub fn init(&self) -> Result<(), NovaError> {
-        
         Ok(())
     }
 }
