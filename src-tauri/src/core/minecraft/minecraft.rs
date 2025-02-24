@@ -97,13 +97,14 @@ impl FromStr for VersionType {
     }
 }
 
-impl ToString for VersionType {
-    fn to_string(&self) -> String {
+
+impl Display for VersionType {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            VersionType::OldAlpha => "old_alpha".to_string(),
-            VersionType::OldBeta => "old_beta".to_string(),
-            VersionType::Snapshot => "snapshot".to_string(),
-            VersionType::Release => "release".to_string(),
+            VersionType::OldAlpha => write!(f, "old_alpha"),
+            VersionType::OldBeta => write!(f, "old_beta"),
+            VersionType::Snapshot => write!(f, "snapshot"),
+            VersionType::Release => write!(f, "release"),
         }
     }
 }
@@ -162,13 +163,13 @@ impl<'de> Deserialize<'de> for AssetObjects {
                 size: value["size"].as_u64().unwrap_or(0),
             });
         }
-        return Ok(Self { vec: arr });
+        Ok(Self { vec: arr })
     }
 }
 
 impl AssetObjects {
     pub fn iter(&self) -> AssetObjectIterator {
-        return AssetObjectIterator::new(self);
+        AssetObjectIterator::new(self)
     }
 }
 
@@ -191,16 +192,16 @@ impl Iterator for AssetObjectIterator {
 
     fn next(&mut self) -> Option<Self::Item> {
         self.ptr += 1;
-        if self.ptr > self.value.vec.len().try_into().unwrap() {
+        if self.ptr > self.value.vec.len() {
             return None;
         }
-        return Some(self.value.vec[self.ptr - 1].clone());
+        Some(self.value.vec[self.ptr - 1].clone())
     }
 }
 
 impl MinecraftPredicate for Asset {
     fn of(&self) -> bool {
-        return true;
+        true
     }
 }
 
@@ -277,9 +278,9 @@ impl MinecraftPredicate for Rule {
                 let current_os_version = sysinfo::System::os_version().unwrap();
                 return target_os_version == current_os_version;
             }
-            return allowed ^ (current_os == target_os.get("name").unwrap().to_string());
+            return allowed ^ (current_os == *target_os.get("name").unwrap());
         }
-        return false;
+        false
     }
 }
 
@@ -471,7 +472,7 @@ impl MinecraftPredicate for Library {
                 matched_natives = vec![NativeString::NativesLinuxAarch64]
             }
         }
-        if matched_natives.len() == 0 {
+        if matched_natives.is_empty() {
             return false;
         }
 
@@ -482,7 +483,7 @@ impl MinecraftPredicate for Library {
                 }
             }
         }
-        return false;
+        false
     }
 }
 
