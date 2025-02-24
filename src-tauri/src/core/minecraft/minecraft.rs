@@ -4,6 +4,7 @@ use crate::utils::net;
 use serde::{Deserialize, Deserializer, Serialize, de::Error};
 use std::collections::HashMap;
 
+use std::fmt::Display;
 use std::path::PathBuf;
 use std::str::FromStr;
 use std::vec::Vec;
@@ -526,9 +527,9 @@ impl FromStr for GamePath {
     }
 }
 
-impl ToString for GamePath {
-    fn to_string(&self) -> String {
-        self.path.to_str().unwrap_or("").to_string()
+impl Display for GamePath {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.path.to_str().unwrap_or(""))
     }
 }
 
