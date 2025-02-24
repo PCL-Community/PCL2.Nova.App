@@ -1,6 +1,6 @@
 use super::NovaError;
 use super::download::OnlineFetch;
-use crate::core::utils::net;
+use crate::utils::net;
 use serde::{Deserialize, Deserializer, Serialize, de::Error};
 use std::collections::HashMap;
 

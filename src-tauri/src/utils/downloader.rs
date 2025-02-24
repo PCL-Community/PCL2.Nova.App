@@ -1,10 +1,8 @@
-use reqwest::header::HeaderValue;
 use std::sync::Mutex;
 use tokio::io::AsyncWriteExt;
 
 use crate::core::minecraft::NovaError;
 
-use super::net;
 use futures_util::stream::StreamExt;
 use std::{path::PathBuf, str::FromStr, sync::atomic::AtomicU64};
 
@@ -53,8 +51,7 @@ impl Downloader {
                 .send()
                 .await
                 .expect("Failed to get header.");
-            let length = response.content_length();
-            return length;
+            response.content_length()
         });
         if total_bytes == None {
             concurrency = 1;

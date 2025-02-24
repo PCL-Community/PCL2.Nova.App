@@ -34,7 +34,7 @@ impl HttpClient {
     pub async fn head(&self, url: &str) -> Result<HttpResponse, Box<dyn Error>> {
         let response = self.client.head(url).send().await?;
         let header = response.headers().clone();
-        let status = response.status().clone();
+        let status = response.status();
         Ok(HttpResponse {
             status,
             body: None,
@@ -45,7 +45,7 @@ impl HttpClient {
     pub async fn post(&self, url: &str, data: &str) -> Result<HttpResponse, Box<dyn Error>> {
         let response = self.client.post(url).body(data.to_string()).send().await?;
         let header = response.headers().clone();
-        let status = response.status().clone();
+        let status = response.status();
         let body = response.text().await?;
         Ok(HttpResponse {
             status,
