@@ -1,7 +1,6 @@
 use reqwest::header::HeaderMap;
 use reqwest::{Client, StatusCode};
 use std::error::Error;
-use tauri::http::response;
 
 pub struct HttpClient {
     client: Client,
@@ -9,7 +8,7 @@ pub struct HttpClient {
 
 pub struct HttpResponse {
     pub status: StatusCode,
-    pub body: String,
+    pub body: Option<String>,
     pub header: HeaderMap,
 }
 
@@ -27,7 +26,18 @@ impl HttpClient {
         let body = response.text().await?;
         Ok(HttpResponse {
             status,
-            body,
+            body: Some(body),
+            header,
+        })
+    }
+
+    pub async fn head(&self, url: &str) -> Result<HttpResponse, Box<dyn Error>> {
+        let response = self.client.head(url).send().await?;
+        let header = response.headers().clone();
+        let status = response.status().clone();
+        Ok(HttpResponse {
+            status,
+            body: None,
             header,
         })
     }
@@ -39,7 +49,7 @@ impl HttpClient {
         let body = response.text().await?;
         Ok(HttpResponse {
             status,
-            body,
+            body: Some(body),
             header,
         })
     }

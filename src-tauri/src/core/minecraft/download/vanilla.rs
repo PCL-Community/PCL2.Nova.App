@@ -31,7 +31,7 @@ impl Downloader for VanillaDownloader {
         for i in manifest.versions.iter() { 
             if i.id == self.version {
                 found = true;
-                version = serde_json::from_str(&http_client.get(&i.url).await.expect("Failed to fetch version json file.").body)
+                version = serde_json::from_str(&http_client.get(&i.url).await.expect("Failed to fetch version json file.").body.unwrap())
                     .expect("Failed to fetch version json file.");
                 break;
             }

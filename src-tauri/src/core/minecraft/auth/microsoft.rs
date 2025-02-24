@@ -19,7 +19,7 @@ pub async fn device_auth() -> Result<CodePair, String> {
     let client = HttpClient::new();
     match client.post(&request_uri, &request_body).await {
         Ok(response) => {
-            match serde_json::from_str::<CodePair>(&response.body) {
+            match serde_json::from_str::<CodePair>(&response.body.unwrap()) {
                 Ok(data) => return Ok(data),
                 Err(err) => {
                     return Err(format!("Json 解析出错{}", err));

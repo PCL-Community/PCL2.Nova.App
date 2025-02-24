@@ -41,7 +41,7 @@ impl OnlineFetch for VersionManifestOverall {
             .await
         {
             Ok(data) => {
-                let list: VersionManifestOverall = serde_json::from_str(&data.body).unwrap();
+                let list: VersionManifestOverall = serde_json::from_str(&data.body.unwrap()).unwrap();
                 Ok(list)
             }
             Err(e) => Err(NovaError::msg(&e.to_string())),
@@ -106,7 +106,7 @@ impl ToString for VersionType {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+#[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
 pub enum NativeString {
     #[serde(rename = "natives-linux")]
     NativesLinux,
@@ -419,19 +419,58 @@ impl<'de> Deserialize<'de> for Library {
 
 impl MinecraftPredicate for Library {
     fn of(&self) -> bool {
-        let mut rule_allowed = false;
+        if !self.native {
+            return true;
+        }
+        let mut rule_allowed = true;
         if let Some(rules) = &self.rules {
             for rule in rules {
-                rule_allowed |= rule.of();
+                rule_allowed &= rule.of();
             }
         }
         if !rule_allowed {
             return false;
         }
-        let lwjgl3_regex = regex::Regex::new("org.lwjgl:lwjgl(-[a-z._.\\-.0-9]*)?:3.[0-9].[0-9](-[a-z.0-9._.\\-]*)?:([a-z._.\\-.0-9]*)?").unwrap();
+        let lwjgl3_regex = regex::Regex::new("org.lwjgl:lwjgl(-[a-z._.\\-.0-9]*)?:3.[0-9]*.[0-9]*(-[a-z.0-9._.\\-]*)?:([a-z._.\\-.0-9]*)?").unwrap();
         let lwjgl3 = lwjgl3_regex.is_match(&self.name);
-        
-        true
+        let mut matched_natives: Vec<NativeString> = Vec::new();
+        if cfg!(target_os = "windows") {
+            if cfg!(target_arch = "x86") {
+                if lwjgl3 {
+                    matched_natives = vec![NativeString::NativesWindows, NativeString::NativesWindows32, NativeString::NativesWindowsArch]
+                } else {
+                    matched_natives = vec![NativeString::NativesWindows32, NativeString::NativesWindowsArch]
+                }
+            } else if cfg!(target_arch = "x86_64") {
+                matched_natives = vec![NativeString::NativesWindows, NativeString::NativesWindowsArch]
+            } else if cfg!(target_arch = "aarch64") {
+                matched_natives = vec![NativeString::NativesWindowsArm64]
+            }
+        } else if cfg!(target_os = "macos") {
+            if cfg!(target_arch = "x86_64") {
+                matched_natives = vec![NativeString::NativesMacOS, NativeString::NativesMacOSPatch]
+            } else if cfg!(target_arch = "aarch64") {
+                matched_natives = vec![NativeString::NativesMacOSArm64]
+            }
+        } else if cfg!(target_os = "linux") {
+            if cfg!(target_arch = "x86_64") {
+                matched_natives = vec![NativeString::NativesLinux, NativeString::NativesLinux64]
+            } else if cfg!(target_arch = "aarch64") {
+                matched_natives = vec![NativeString::NativesLinuxAarch64]
+            }
+        }
+        if matched_natives.len() == 0 {
+            return false;
+        }
+
+        for target in self.native_strings.iter() {
+            for current in matched_natives.iter() {
+                if *target == *current {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
 
