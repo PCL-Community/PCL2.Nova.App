@@ -3,7 +3,7 @@ use std::str::FromStr;
 use anyhow::Error;
 
 pub mod minecraft;
-pub mod utils;
+
 
 #[derive(Debug)]
 pub struct NovaError {

@@ -3,7 +3,7 @@ const CLIENT_ID: &str = "391fbcc2-29ef-4c2f-82e1-2ed757b47f3c";
 
 use serde::{Deserialize, Serialize};
 
-use crate::core::{utils::net::HttpClient, NovaError};
+use crate::{utils::net::HttpClient, NovaError};
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct CodePair {

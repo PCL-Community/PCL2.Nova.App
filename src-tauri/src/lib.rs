@@ -1,4 +1,5 @@
 pub mod core;
+pub mod utils;
 
 use core::minecraft::auth::{device_auth, user_login};
 

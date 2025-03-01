@@ -1,11 +1,11 @@
-use crate::core::utils::net;
 use std::str::FromStr;
 
-use super::{Downloader, OnlineFetch};
+use crate::core::minecraft::download::{Downloader, OnlineFetch};
 use crate::core::{
     NovaError,
     minecraft::{GamePath, MinecraftVersion, VersionManifestOverall},
 };
+use crate::utils::net;
 
 struct VanillaDownloader {
     game_path: GamePath,
