@@ -3,7 +3,7 @@ const CLIENT_ID: &str = "391fbcc2-29ef-4c2f-82e1-2ed757b47f3c";
 
 use serde::{Deserialize, Serialize};
 
-use crate::{utils::net::HttpClient, NovaError};
+use crate::{utils::net::HttpClient, core::NovaError};
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct CodePair {
@@ -57,9 +57,9 @@ pub async fn user_auth(device_code: String, interval: Option<u64>) -> Result<Tok
             continue;
         } // Polling
         if response_text.contains("access_token") {
-            return Ok(serde_json::from_str(&response_text.as_str()).map_err(|e| {
+            return serde_json::from_str(response_text.as_str()).map_err(|e| {
                 NovaError::msg(&e.to_string())
-            })?);
+            });
         }
         break;
     }
@@ -67,5 +67,5 @@ pub async fn user_auth(device_code: String, interval: Option<u64>) -> Result<Tok
 }
 
 pub async fn refresh() -> Result<String, String> {
-    return Ok("".to_string());
+    Ok("".to_string())
 }

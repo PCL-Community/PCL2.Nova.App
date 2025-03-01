@@ -111,18 +111,15 @@ impl Downloader {
                         .expect("等 nova err 实现好点再说");
                     self.downloaded_bytes
                         .fetch_add(buffer_.len() as u64, std::sync::atomic::Ordering::SeqCst);
-                    match self.progresser.lock() {
-                        Ok(p) => {
-                            p(
-                                Some(
-                                    self.downloaded_bytes
-                                        .load(std::sync::atomic::Ordering::SeqCst),
-                                ),
-                                Some(self.total_bytes),
-                                Some(buffer_.len() as u64),
-                            );
-                        }
-                        Err(_) => (),
+                    if let Ok(p) = self.progresser.lock() {
+                        p(
+                            Some(
+                                self.downloaded_bytes
+                                    .load(std::sync::atomic::Ordering::SeqCst),
+                            ),
+                            Some(self.total_bytes),
+                            Some(buffer_.len() as u64),
+                        );
                     }
                     
                 }
