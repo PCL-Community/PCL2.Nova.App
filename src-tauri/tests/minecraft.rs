@@ -3,7 +3,7 @@ use serde_json::json;
 
 #[test]
 fn asset_deserializer() {
-    use crate::minecraft::minecraft::AssetObjects;
+    use crate::minecraft::AssetObjects;
     let obj: AssetObjects = serde_json::from_value(
         json!(
             {
@@ -37,7 +37,7 @@ fn asset_deserializer() {
 
 #[test]
 fn library_deserializer() {
-    use crate::minecraft::minecraft::Library;
+    use crate::minecraft::Library;
     let obj1: Library = serde_json::from_value(json!(
         {
             "downloads": {

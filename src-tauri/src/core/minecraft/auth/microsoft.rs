@@ -1,11 +1,11 @@
 #[allow(dead_code)]
-const CLIENT_ID: &str = "";
+const CLIENT_ID: &str = "391fbcc2-29ef-4c2f-82e1-2ed757b47f3c";
 
-use serde::Deserialize;
+use serde::{Deserialize, Serialize};
 
-use crate::core::utils::net::HttpClient;
+use crate::core::{utils::net::HttpClient, NovaError};
 
-#[derive(Deserialize, Debug)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct CodePair {
     pub user_code: Option<String>,
     pub device_code: Option<String>,
@@ -13,31 +13,35 @@ pub struct CodePair {
     pub error: Option<String>,
 }
 
-pub async fn device_auth() -> Result<CodePair, String> {
+#[derive(Deserialize, Serialize, Clone)]
+pub struct Token {
+    pub token_type: String,
+    pub scope: String,
+    pub expires_in: u32,
+    pub access_token: String,
+    pub refresh_token: String,
+}
+
+pub async fn device_auth() -> Result<CodePair, NovaError> {
     let request_uri = "https://login.microsoftonline.com/consumers/oauth2/v2.0/devicecode";
-    let request_body = format!("client_id={}&scope=xbox.signin%20offlice_access", CLIENT_ID);
+    let request_body = format!("client_id={}&scope=XboxLive.signin%20offline_access", CLIENT_ID);
     let client = HttpClient::new();
     match client.post(&request_uri, &request_body).await {
-        Ok(response) => {
+        Ok(response) => 
             match serde_json::from_str::<CodePair>(&response.body.unwrap()) {
-                Ok(data) => return Ok(data),
-                Err(err) => {
-                    return Err(format!("Json 解析出错{}", err));
-                }
-            };
-        }
-        Err(response) => {
-            return Err("Failed to get CodePair".to_string());
-        }
+                Ok(data) => Ok(data),
+                Err(err) => Err(NovaError::msg(&format!("Json 解析出错{}", err)))
+            }
+        Err(_) => Err(NovaError::msg("Failed to get CodePair."))
     }
 }
 
-pub async fn user_auth(device_code: &String, interval: Option<u64>) -> Result<String, String> {
+pub async fn user_auth(device_code: String, interval: Option<u64>) -> Result<Token, NovaError> {
     let request_uri = "https://login.microsoftonline.com/consumers/oauth2/v2.0/token".to_string();
     let request_body = [
         ("grant_type", "urn:ietf:params:oauth:grant-type:device_code"),
         ("client_id", CLIENT_ID),
-        ("device_code", device_code),
+        ("device_code", &device_code),
     ];
     let http_client = reqwest::Client::new();
     loop {
@@ -51,13 +55,15 @@ pub async fn user_auth(device_code: &String, interval: Option<u64>) -> Result<St
         if response_text.contains("authorization_pending") {
             std::thread::sleep(std::time::Duration::from_secs(interval.unwrap_or(5)));
             continue;
-        }
+        } // Polling
         if response_text.contains("access_token") {
-            return Ok(response_text);
+            return Ok(serde_json::from_str(&response_text.as_str()).map_err(|e| {
+                NovaError::msg(&e.to_string())
+            })?);
         }
         break;
     }
-    return Err("Loop request failed.".to_string());
+    Err(NovaError::msg("Polling failed."))
 }
 
 pub async fn refresh() -> Result<String, String> {

@@ -2,7 +2,7 @@ use crate::core::utils::net;
 use std::str::FromStr;
 
 use super::{Downloader, OnlineFetch};
-use crate::core::minecraft::{
+use crate::core::{
     NovaError,
     minecraft::{GamePath, MinecraftVersion, VersionManifestOverall},
 };
@@ -16,7 +16,7 @@ struct VanillaDownloader {
 impl VanillaDownloader {
     fn new<S: ToString + ?Sized>(game_path: &S, name: &S, version: &S) -> Self {
         Self {
-            game_path: GamePath::from_str(&game_path.to_string().as_str())
+            game_path: GamePath::from_str(game_path.to_string().as_str())
                 .expect("Failed to create game path."),
             name: name.to_string(),
             version: version.to_string(),

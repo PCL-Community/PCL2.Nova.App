@@ -1,5 +1,10 @@
+pub mod auth;
+pub mod download;
+pub mod file_struct;
+pub mod launch;
+
 use super::NovaError;
-use super::download::OnlineFetch;
+use download::OnlineFetch;
 use crate::core::utils::net;
 use serde::{Deserialize, Deserializer, Serialize, de::Error};
 use std::collections::HashMap;

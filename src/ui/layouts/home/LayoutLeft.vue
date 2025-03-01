@@ -4,6 +4,7 @@
     import CompInput from "../../components/CompInput.vue";
     import CompSkin from "../../components/CompSkin.vue";
     import CompButton from "../../components/CompButton.vue";
+    import { invoke } from "@tauri-apps/api/core";
 
     const comp_config = ref<{
         is_multi_login: boolean;
@@ -37,6 +38,22 @@
         email: "",
         password: "",
     });
+
+    interface CodePair {
+        device_code?: string,
+        error?: string, 
+        user_code?: string
+        interval?: number
+    }
+
+    async function login() {
+        let auth = await invoke('device_auth') as CodePair;
+        console.log(auth);
+        if(auth.device_code) {
+            let user_login = await invoke('user_login', { codePair: auth });
+            console.log(user_login);
+        }
+    }
 </script>
 
 <template>
@@ -82,7 +99,7 @@
                             <li><a>添加新账号</a></li>
                         </ul>
                     </div>
-                    <CompButton class="btn-sm" highlight>登录</CompButton>
+                    <CompButton class="btn-sm" highlight @click="login()">登录</CompButton>
                 </section>
             </section>
             <section v-if="comp_config.login_method == `legacy`" class="flex flex-col items-center gap-8">

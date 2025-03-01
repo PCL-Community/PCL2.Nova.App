@@ -12,6 +12,14 @@ pub struct HttpResponse {
     pub header: HeaderMap,
 }
 
+impl Default for HttpClient {
+    fn default() -> Self {
+        HttpClient {
+            client: Client::new(),
+        }
+    }
+}
+
 impl HttpClient {
     pub fn new() -> Self {
         HttpClient {
@@ -22,7 +30,7 @@ impl HttpClient {
     pub async fn get(&self, url: &str) -> Result<HttpResponse, Box<dyn Error>> {
         let response = self.client.get(url).send().await?;
         let header = response.headers().clone();
-        let status = response.status().clone();
+        let status = response.status();
         let body = response.text().await?;
         Ok(HttpResponse {
             status,
@@ -34,7 +42,7 @@ impl HttpClient {
     pub async fn head(&self, url: &str) -> Result<HttpResponse, Box<dyn Error>> {
         let response = self.client.head(url).send().await?;
         let header = response.headers().clone();
-        let status = response.status().clone();
+        let status = response.status();
         Ok(HttpResponse {
             status,
             body: None,
@@ -45,7 +53,7 @@ impl HttpClient {
     pub async fn post(&self, url: &str, data: &str) -> Result<HttpResponse, Box<dyn Error>> {
         let response = self.client.post(url).body(data.to_string()).send().await?;
         let header = response.headers().clone();
-        let status = response.status().clone();
+        let status = response.status();
         let body = response.text().await?;
         Ok(HttpResponse {
             status,
