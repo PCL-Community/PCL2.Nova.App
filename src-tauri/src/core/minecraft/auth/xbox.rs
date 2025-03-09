@@ -13,12 +13,12 @@ pub struct XboxToken {
     #[serde(rename = "Token")]
     token: String,
     #[serde(rename = "DisplayClaims")]
-    display_claims: HashMap<String, Vec<Uhs>>
+    display_claims: HashMap<String, Vec<Uhs>>,
 }
 
 #[derive(Deserialize, Serialize, Clone)]
 pub struct Uhs {
-    uhs: String
+    uhs: String,
 }
 
 pub async fn xbox_live_auth(access_token: &String) -> anyhow::Result<XboxToken> {

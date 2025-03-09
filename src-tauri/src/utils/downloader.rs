@@ -1,11 +1,22 @@
-use std::sync::{Arc, Mutex};
-use tokio::{io::AsyncWriteExt, task::JoinHandle};
+use std::{
+    path::PathBuf,
+    str::FromStr,
+    sync::{
+        Arc,
+        atomic::{AtomicBool, AtomicU64, Ordering},
+    },
+};
+use tokio::{
+    fs::File,
+    io::{AsyncReadExt, AsyncWriteExt},
+    sync::Mutex,
+    task::JoinHandle,
+};
 
 use crate::core::NovaError;
 
 use futures_util::stream::StreamExt;
-use std::{path::PathBuf, str::FromStr, sync::atomic::AtomicU64};
-
+use reqwest::header;
 use uuid::Uuid;
 
 // 字符串切割适配多平台
@@ -14,18 +25,19 @@ use std::os::unix::ffi::OsStrExt;
 #[cfg(windows)]
 use std::os::windows::ffi::OsStrExt;
 
-type Progresser = Box<dyn Fn(Option<u64>, Option<u64>, Option<u64>) -> bool>;
+type Progresser = Box<dyn Fn(Option<u64>, Option<u64>, Option<u64>) -> bool + Send + Sync>;
 
 pub struct Downloader {
     url: String,
     dest: PathBuf,
     concurrency: u64,
-    client: reqwest::Client,
-    total_bytes: u64,
-    downloaded_bytes: AtomicU64,
+    client: Arc<reqwest::Client>,
+    total_bytes: Arc<AtomicU64>,
+    downloaded_bytes: Arc<AtomicU64>,
     max_retries: u16,
-    pub terminated: bool,
-    progresser: Mutex<Progresser>,
+    timeout: Arc<AtomicU64>,
+    pub terminated: Arc<AtomicBool>,
+    progresser: Arc<tokio::sync::Mutex<Progresser>>,
 }
 
 impl Downloader {
@@ -38,7 +50,7 @@ impl Downloader {
         progresser: Option<F>,
     ) -> Self
     where
-        F: Fn(Option<u64>, Option<u64>, Option<u64>) -> bool + 'static,
+        F: Fn(Option<u64>, Option<u64>, Option<u64>) -> bool + Send + Sync + 'static,
     {
         let tokio_runtime =
             tokio::runtime::Runtime::new().expect("Failed to create tokio runtime.");
@@ -65,21 +77,26 @@ impl Downloader {
             dest: PathBuf::from_str(dest.to_string().as_str())
                 .expect("Failed to create PathBuf from String."),
             concurrency,
-            client,
-            total_bytes: total_bytes.unwrap(),
-            downloaded_bytes: AtomicU64::new(0),
+            client: Arc::new(client),
+            total_bytes: Arc::new(AtomicU64::new(total_bytes.unwrap())),
+            timeout: Arc::new(AtomicU64::new(timeout as u64)),
+            downloaded_bytes: Arc::new(AtomicU64::new(0)),
             max_retries: retries,
-            terminated: false,
-            progresser: match progresser {
-                Some(p) => Mutex::new(Box::new(p)),
-                None => Mutex::new(Box::new(default_progresser)),
-            },
+            terminated: Arc::new(AtomicBool::from(false)),
+            progresser: Arc::new(Mutex::new(match progresser {
+                Some(p) => Box::new(p) as Progresser,
+                None => Box::new(default_progresser) as Progresser,
+            })),
         }
     }
 
     /// Start whole downloader process.
-    pub fn start(&mut self) -> Result<(), NovaError> {
-        todo!()
+    pub async fn start(&'static mut self) -> Result<(), NovaError> {
+        if self.concurrency == 1 || self.total_bytes.load(Ordering::SeqCst) == 0 {
+            self.download_single_thread().await
+        } else {
+            self.download_multi_thread(self.concurrency as usize).await
+        }
     }
 
     async fn download_single_thread(&mut self) -> Result<(), NovaError> {
@@ -111,17 +128,15 @@ impl Downloader {
                         .expect("等 nova err 实现好点再说");
                     self.downloaded_bytes
                         .fetch_add(buffer_.len() as u64, std::sync::atomic::Ordering::SeqCst);
-                    if let Ok(p) = self.progresser.lock() {
-                        p(
-                            Some(
-                                self.downloaded_bytes
-                                    .load(std::sync::atomic::Ordering::SeqCst),
-                            ),
-                            Some(self.total_bytes),
-                            Some(buffer_.len() as u64),
-                        );
-                    }
-                    
+                    let p = self.progresser.lock().await;
+                    p(
+                        Some(
+                            self.downloaded_bytes
+                                .load(std::sync::atomic::Ordering::SeqCst),
+                        ),
+                        Some(self.total_bytes.load(Ordering::SeqCst)),
+                        Some(buffer_.len() as u64),
+                    );
                 }
                 return Ok(());
             }
@@ -129,130 +144,231 @@ impl Downloader {
         Err(NovaError::msg("Bad requests."))
     }
 
-    async fn download_multi_thread(&self, concurrency: usize) -> Result<(), NovaError> {
-        // 创建目标目录和文件（异步版本）
-        let path = self.dest.to_str()
-            .ok_or_else(|| NovaError::msg("Invalid destination path"))?;
-        
-        // 异步创建目录
-        if let Some(parent) = self.dest.parent() {
-            tokio::fs::create_dir_all(parent)
-                .await
-                .map_err(|e| NovaError::msg("Failed to create directory"))?;
-        }
-        
-        // 异步创建文件
-        tokio::fs::File::create(&self.dest)
-            .await
-            .map_err(|e| NovaError::msg("Failed to create file"))?;
+    async fn download_multi_thread(&mut self, concurrency: usize) -> Result<(), NovaError> {
+        // // 创建缓存目录
+        // let cache_dir = dirs_next::cache_dir()
+        //     .unwrap_or_else(|| PathBuf::from(".cache"))
+        //     .join("Nova")
+        //     .join(Uuid::new_v4().to_string());
+
+        // tokio::fs::create_dir_all(&cache_dir)
+        //     .await
+        //     .map_err(|e| NovaError::msg(&e.to_string()))?;
+
+        // // 创建目标文件
+        // File::create(&self.dest)
+        //     .await
+        //     .map_err(|e| NovaError::msg(&e.to_string()))?;
+
+        // let total_bytes = self.total_bytes.load(Ordering::SeqCst);
+        // let chunk_size = self.total_bytes.load(Ordering::SeqCst) / concurrency as u64;
+        // let mut handles = Vec::with_capacity(concurrency);
+
+        // let download_chunk = async |
+        //     borrowed: &Self,
+        //     url: String,
+        //     start: u64,
+        //     end: u64,
+        //     part_num: usize,
+        //     cache_dir: PathBuf,
+        // | -> Result<(), NovaError> {
+        //     let temp_path = cache_dir.join(format!("part_{}", part_num));
+        //     let mut file = File::options()
+        //         .create(true)
+        //         .append(true)
+        //         .open(&temp_path)
+        //         .await
+        //         .map_err(|e| NovaError::msg(&e.to_string()))?;
     
-        // 准备缓存目录
-        let cache_dir = dirs_next::cache_dir()
-            .unwrap_or_else(|| PathBuf::from(".cache"))
-            .join("PCL-Nova")
-            .join("cache")
-            .join("downloads")
-            .join(Uuid::new_v4().to_string());
-        
-        tokio::fs::create_dir_all(&cache_dir)
-            .await
-            .map_err(|e| NovaError::msg("Failed to create cache directory"))?;
+        //     let mut retries = 0;
+        //     while retries < borrowed.max_retries {
+        //         if borrowed.terminated.load(Ordering::SeqCst) {
+        //             return Err(NovaError::msg("Download terminated"));
+        //         }
     
-        let chunk_size = self.total_bytes / concurrency as u64;
-        let mut handles = vec![];
+        //         let response = match reqwest::ClientBuilder::new()
+        //             .read_timeout(std::time::Duration::from_millis(borrowed.timeout.load(Ordering::SeqCst)))
+        //             //.default_headers(headers)
+        //             .build()
+        //             .expect("Failed to build network client.")
+        //             .get(url.clone())
+        //             .header(header::RANGE, format!("bytes={}-{}", start, end))
+        //             .send()
+        //             .await
+        //         {
+        //             Ok(r) => r,
+        //             Err(_) => {
+        //                 retries += 1;
+        //                 continue;
+        //             }
+        //         };
     
-        // 使用Arc包装self（需要结构体实现Sync+Send）
-        let self_arc = Arc::new(self);
-        let shared_cache_dir = Arc::new(cache_dir);
+        //         if !response.status().is_success() {
+        //             retries += 1;
+        //             continue;
+        //         }
     
-        for i in 0..concurrency {
-            let self_clone = Arc::clone(&self_arc);
-            let cache_dir = Arc::clone(&shared_cache_dir);
+        //         let mut stream = response.bytes_stream();
+        //         while let Some(chunk) = stream.next().await {
+        //             let chunk = chunk.map_err(|e| NovaError::msg(&e.to_string()))?;
+        //             file.write_all(&chunk)
+        //                 .await
+        //                 .map_err(|e| NovaError::msg(&e.to_string()))?;
+    
+        //             // 更新进度
+        //             borrowed.downloaded_bytes
+        //                 .fetch_add(chunk.len() as u64, Ordering::SeqCst);
+        //             let progress = borrowed.progresser.lock().await;
+        //             progress(
+        //                 Some(borrowed.downloaded_bytes.load(Ordering::SeqCst)),
+        //                 Some(borrowed.total_bytes.load(Ordering::SeqCst)),
+        //                 Some(chunk.len() as u64),
+        //             );
+        //         }
+        //         return Ok(());
+        //     }
+    
+        //     Err(NovaError::msg(&format!(
+        //         "Failed after {} retries",
+        //         self.max_retries
+        //     )))
+        // };
+
+
+        // for i in 0..concurrency {
+        //     let start = i as u64 * chunk_size;
+        //     let end = if i == concurrency - 1 {
+        //         self.total_bytes.load(Ordering::SeqCst) - 1
+        //     } else {
+        //         (i + 1) as u64 * chunk_size - 1
+        //     };
+
+        //     let cache_dir: Arc<PathBuf> = Arc::new(cache_dir.clone());
             
-            let start = i as u64 * chunk_size;
-            let end = if i == concurrency - 1 {
-                self.total_bytes - 1
-            } else {
-                (i + 1) as u64 * chunk_size - 1
-            };
-    
-            let handle = tokio::task::spawn(async move {
-                let temp_file = cache_dir.join(format!("part_{}", i));
-    
-                // 异步获取文件元数据
-                let downloaded = match tokio::fs::metadata(&temp_file).await {
-                    Ok(meta) => meta.len(),
-                    Err(e) if e.kind() == std::io::ErrorKind::NotFound => 0,
-                    Err(e) => return Err(NovaError::msg(&e.to_string())),
-                };
-    
-                // 验证下载范围
-                let expected_size = end - start + 1;
-                if downloaded > expected_size {
-                    return Err(NovaError::msg("Corrupted temporary file"));
-                }
-    
-                // 执行分块下载
-                // self_clone.download_chunk(
-                //     start + downloaded,
-                //     end,
-                //     cache_dir
-                // ).await?;
-    
-                Ok(())
-            });
-    
-            handles.push(handle);
-        }
-    
-        // 启动每个块线程
-        for handle in handles {
-            handle
-                .await
-                .map_err(|e| NovaError::msg("Bad thread"))??;
-        }
-    
-        // 合并文件（需要确保self实现了Sync）
-        //self.merge_files().await?;
-    
-        Ok(())
+        //     handles.push(tokio::spawn(
+        //         download_chunk(self, self.url.clone(), start, end, i, cache_dir.clone().to_path_buf())
+        //     ));
+        // }
+
+        // // 等待所有任务完成
+        // let mut results = Vec::with_capacity(handles.len());
+        // for handle in handles {
+        //     results.push(handle.await.map_err(|e| NovaError::msg(&e.to_string()))??);
+        // }
+
+        // // 合并文件
+        // (&mut *self).merge_files(&cache_dir).await?;
+
+        // // 清理缓存
+        // /* tokio::fs::remove_dir_all(&cache_dir)
+        // .await
+        // .map_err(|e| NovaError::io_error(e))?; */
+
+        // Ok(())
+        todo!()
     }
 
     /// 下载文件块
-    async fn download_chunk(
+    async fn download_chunk<'chunk: 'static>(
         &mut self,
         start: u64,
         end: u64,
-        // &cache_path: Arc<PathBuf>, //我先注释一下
+        part_num: usize,
+        cache_dir: &PathBuf,
     ) -> Result<(), NovaError> {
-        todo!();
-        // let mut file = File::options().create(true).append(true).open(cache_path)?;
-        // let mut response = client
-        //     .get(url)
-        //     .header(header::RANGE, format!("bytes={}-{}", start, end))
-        //     .send()
-        //     .await
-        //     .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?;
+        let temp_path = cache_dir.join(format!("part_{}", part_num));
+        let mut file = File::options()
+            .create(true)
+            .append(true)
+            .open(&temp_path)
+            .await
+            .map_err(|e| NovaError::msg(&e.to_string()))?;
 
-        // while let Some(chunk) = response
-        //     .chunk()
-        //     .await
-        //     .map_err(|e| io::Error::new(io::ErrorKind::Other, e))?
-        // {
-        //     file.write_all(&chunk)?;
+        let mut retries = 0;
+        while retries < self.max_retries {
+            if self.terminated.load(Ordering::Relaxed) {
+                return Err(NovaError::msg("Download terminated"));
+            }
 
-        //     let mut prog = progress.lock().unwrap();
-        //     prog.downloaded_bytes += chunk.len() as u64;
-        // }
+            let response = match self
+                .client
+                .get(&self.url)
+                .header(header::RANGE, format!("bytes={}-{}", start, end))
+                .send()
+                .await
+            {
+                Ok(r) => r,
+                Err(_) => {
+                    retries += 1;
+                    continue;
+                }
+            };
 
-        // Ok(())
+            if !response.status().is_success() {
+                retries += 1;
+                continue;
+            }
+
+            let mut stream = response.bytes_stream();
+            while let Some(chunk) = stream.next().await {
+                let chunk = chunk.map_err(|e| NovaError::msg(&e.to_string()))?;
+                file.write_all(&chunk)
+                    .await
+                    .map_err(|e| NovaError::msg(&e.to_string()))?;
+
+                // 更新进度
+                self.downloaded_bytes
+                    .fetch_add(chunk.len() as u64, Ordering::SeqCst);
+                let progress = self.progresser.lock().await;
+                progress(
+                    Some(self.downloaded_bytes.load(Ordering::SeqCst)),
+                    Some(self.total_bytes.load(Ordering::SeqCst)),
+                    Some(chunk.len() as u64),
+                );
+            }
+            return Ok(());
+        }
+
+        Err(NovaError::msg(&format!(
+            "Failed after {} retries",
+            self.max_retries
+        )))
     }
 
-    async fn merge_files(&mut self) {
-        todo!()
+    async fn merge_files(&mut self, cache_dir: &PathBuf) -> Result<(), NovaError> {
+        let mut dest_file = File::options()
+            .write(true)
+            .open(&self.dest)
+            .await
+            .map_err(|e| NovaError::msg(&e.to_string()))?;
+
+        for i in 0..self.concurrency {
+            let part_path = cache_dir.join(format!("part_{}", i));
+            let mut part_file = File::open(&part_path)
+                .await
+                .map_err(|e| NovaError::msg(&e.to_string()))?;
+
+            let mut content = Vec::new();
+            part_file
+                .read_to_end(&mut content)
+                .await
+                .map_err(|e| NovaError::msg(&e.to_string()))?;
+
+            dest_file
+                .write_all(&content)
+                .await
+                .map_err(|e| NovaError::msg(&e.to_string()))?;
+
+            tokio::fs::remove_file(part_path)
+                .await
+                .map_err(|e| NovaError::msg(&e.to_string()))?;
+        }
+
+        Ok(())
     }
 
-    pub fn terminate(&mut self) {
-        todo!()
+    /// 终止下载
+    pub fn terminate(&self) {
+        self.terminated.store(true, Ordering::SeqCst);
     }
 }

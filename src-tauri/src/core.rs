@@ -4,10 +4,9 @@ use anyhow::Error;
 
 pub mod minecraft;
 
-
 #[derive(Debug)]
 pub struct NovaError {
-    msg: String 
+    msg: String,
 }
 
 impl std::fmt::Display for NovaError {
@@ -30,17 +29,18 @@ impl FromStr for NovaError {
 impl From<Error> for NovaError {
     fn from(value: Error) -> Self {
         Self {
-            msg: value.to_string()
+            msg: value.to_string(),
         }
     }
 }
 
-
 impl NovaError {
-    pub fn msg<S>(msg: &S) -> Self 
-    where S: ToString + ?Sized 
+    pub fn msg<S>(msg: &S) -> Self
+    where
+        S: ToString + ?Sized,
     {
-        Self { msg: msg.to_string() }
+        Self {
+            msg: msg.to_string(),
+        }
     }
 }
-

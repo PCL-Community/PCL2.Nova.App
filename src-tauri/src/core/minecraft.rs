@@ -4,8 +4,8 @@ pub mod file_struct;
 pub mod launch;
 
 use super::NovaError;
-use download::OnlineFetch;
 use crate::utils::net;
+use download::OnlineFetch;
 use serde::{Deserialize, Deserializer, Serialize, de::Error};
 use std::collections::HashMap;
 
@@ -34,6 +34,7 @@ pub trait MinecraftPredicate {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+#[allow(dead_code)]
 pub struct VersionManifestOverall {
     pub latest: VersionManifestLatest,
     pub versions: Vec<VersionManifest>,
@@ -57,12 +58,14 @@ impl OnlineFetch for VersionManifestOverall {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+#[allow(dead_code)]
 pub struct VersionManifestLatest {
     pub release: String,
     pub snapshot: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+#[allow(dead_code)]
 pub struct VersionManifest {
     pub id: String,
     #[serde(rename = "type")]
@@ -74,6 +77,7 @@ pub struct VersionManifest {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+#[allow(dead_code)]
 pub enum VersionType {
     #[serde(rename = "old_alpha")]
     OldAlpha,
@@ -102,7 +106,6 @@ impl FromStr for VersionType {
     }
 }
 
-
 impl Display for VersionType {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
@@ -115,6 +118,7 @@ impl Display for VersionType {
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy, PartialEq)]
+#[allow(dead_code)]
 pub enum NativeString {
     #[serde(rename = "natives-linux")]
     NativesLinux,
@@ -141,6 +145,7 @@ pub enum NativeString {
 }
 
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct Asset {
     pub path: String,
     pub hash: String,
@@ -148,6 +153,7 @@ pub struct Asset {
 }
 
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct AssetObjects {
     pub vec: Vec<Asset>,
 }
@@ -212,6 +218,7 @@ impl MinecraftPredicate for Asset {
 
 #[derive(Debug, Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[allow(dead_code)]
 pub struct MinecraftVersion {
     pub arguments: Arguments,
     pub asset_index: AssetIndex,
@@ -231,6 +238,7 @@ pub struct MinecraftVersion {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[allow(dead_code)]
 pub struct Arguments {
     pub game: Vec<Argument>,
     pub jvm: Vec<Argument>,
@@ -238,6 +246,7 @@ pub struct Arguments {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
+#[allow(dead_code)]
 pub enum Argument {
     Simple(String),
     Conditional { rules: Vec<Rule>, value: ValueData },
@@ -245,6 +254,7 @@ pub enum Argument {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(untagged)]
+#[allow(dead_code)]
 pub enum ValueData {
     Simple(String),
     Conditional(Vec<String>),
@@ -252,6 +262,7 @@ pub enum ValueData {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[allow(dead_code)]
 pub struct Rule {
     pub action: String,
     pub features: Option<HashMap<String, bool>>,
@@ -291,6 +302,7 @@ impl MinecraftPredicate for Rule {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[allow(dead_code)]
 pub struct OsRule {
     pub name: Option<String>,
     pub arch: Option<String>,
@@ -298,6 +310,7 @@ pub struct OsRule {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[allow(dead_code)]
 pub struct AssetIndex {
     pub id: String,
     pub sha1: String,
@@ -307,6 +320,7 @@ pub struct AssetIndex {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct Downloads {
     pub client: DownloadArtifact,
     pub client_mappings: Option<DownloadArtifact>,
@@ -315,6 +329,7 @@ pub struct Downloads {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct DownloadArtifact {
     pub sha1: String,
     pub size: i64,
@@ -324,12 +339,14 @@ pub struct DownloadArtifact {
 
 #[derive(Debug, Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
+#[allow(dead_code)]
 pub struct JavaVersion {
     pub component: String,
     pub major_version: i32,
 }
 
 #[derive(Debug)]
+#[allow(dead_code)]
 pub struct Library {
     pub name: String,
     pub native: bool,
@@ -493,17 +510,20 @@ impl MinecraftPredicate for Library {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct LibraryDownloads {
     pub artifact: Option<DownloadArtifact>,
     pub classifiers: Option<HashMap<String, DownloadArtifact>>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct Logging {
     pub client: LoggingClient,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct LoggingClient {
     pub argument: String,
     pub file: LoggingFile,
@@ -512,6 +532,7 @@ pub struct LoggingClient {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+#[allow(dead_code)]
 pub struct LoggingFile {
     pub id: String,
     pub sha1: String,
@@ -520,6 +541,7 @@ pub struct LoggingFile {
 }
 
 #[derive(Clone)]
+#[allow(dead_code)]
 pub struct GamePath {
     pub path: PathBuf,
 }
