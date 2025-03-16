@@ -1,10 +1,5 @@
-pub mod download;
-pub mod file_struct;
-pub mod launch;
-
-use super::NovaError;
-use crate::utils::net;
-use download::OnlineFetch;
+use super::NovaMCoreError;
+use super::download::OnlineFetch;
 use serde::{Deserialize, Deserializer, Serialize, de::Error};
 use std::collections::HashMap;
 
@@ -40,18 +35,35 @@ pub struct VersionManifestOverall {
 }
 
 impl OnlineFetch for VersionManifestOverall {
-    async fn fetch() -> Result<Self, NovaError> {
-        let client = net::HttpClient::new();
+    async fn fetch() -> Result<Self, NovaMCoreError> {
+        let mut default_headers = reqwest::header::HeaderMap::new();
+        default_headers.insert(
+            reqwest::header::USER_AGENT, 
+            reqwest::header::HeaderValue::from_str("PCL2 Nova MCore/0.0.0")
+                .map_err(|e| {
+                    NovaMCoreError::msg(&e.to_string())
+                })?
+            );
+        let client = reqwest::ClientBuilder::new()
+            .default_headers(default_headers)
+            .build()
+            .map_err(|e| {
+                NovaMCoreError::msg(&e.to_string())
+            })?;
         match client
             .get("https://launchermeta.mojang.com/mc/game/version_manifest_v2.json")
+            .send()
+            .await
+            .expect("Failed to fetch version manifest.")
+            .text()
             .await
         {
             Ok(data) => {
                 let list: VersionManifestOverall =
-                    serde_json::from_str(&data.body.unwrap()).unwrap();
+                    serde_json::from_str(&data).unwrap();
                 Ok(list)
             }
-            Err(e) => Err(NovaError::msg(&e.to_string())),
+            Err(e) => Err(NovaMCoreError::msg(&e.to_string())),
         }
     }
 }
@@ -89,7 +101,7 @@ pub enum VersionType {
 }
 
 impl FromStr for VersionType {
-    type Err = NovaError;
+    type Err = NovaMCoreError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         match s {
@@ -97,7 +109,7 @@ impl FromStr for VersionType {
             "old_beta" => Ok(VersionType::OldBeta),
             "snapshot" => Ok(VersionType::Snapshot),
             "release" => Ok(VersionType::Release),
-            _ => Err(NovaError::msg(&format!(
+            _ => Err(NovaMCoreError::msg(&format!(
                 "Unknown minecraft version type: {}",
                 s
             ))),
@@ -546,7 +558,7 @@ pub struct GamePath {
 }
 
 impl FromStr for GamePath {
-    type Err = NovaError;
+    type Err = NovaMCoreError;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
         let path = PathBuf::from(s);
@@ -561,7 +573,7 @@ impl Display for GamePath {
 }
 
 impl GamePath {
-    pub fn init(&self) -> Result<(), NovaError> {
+    pub fn init(&self) -> Result<(), NovaMCoreError> {
         Ok(())
     }
 }

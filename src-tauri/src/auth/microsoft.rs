@@ -3,7 +3,7 @@ const CLIENT_ID: &str = "391fbcc2-29ef-4c2f-82e1-2ed757b47f3c";
 
 use serde::{Deserialize, Serialize};
 
-use crate::{core::NovaError, utils::net::HttpClient};
+use crate::core::NovaError;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct CodePair {
@@ -28,9 +28,26 @@ pub async fn device_auth() -> Result<CodePair, NovaError> {
         "client_id={}&scope=XboxLive.signin%20offline_access",
         CLIENT_ID
     );
-    let client = HttpClient::new();
-    match client.post(&request_uri, &request_body).await {
-        Ok(response) => match serde_json::from_str::<CodePair>(&response.body.unwrap()) {
+    let mut default_headers = reqwest::header::HeaderMap::new();
+    default_headers.insert(
+        reqwest::header::USER_AGENT, 
+        reqwest::header::HeaderValue::from_str("PCL2 Nova MCore/0.0.0")
+            .map_err(|e| {
+                NovaError::msg(&e.to_string())
+            })?
+        );
+    let client = reqwest::ClientBuilder::new()
+        .default_headers(default_headers)
+        .build()
+        .map_err(|e| {
+            NovaError::msg(&e.to_string())
+            })?;
+    match client.post(request_uri).body(request_body).send().await {
+        Ok(response) => match serde_json::from_str::<CodePair>(
+            &response.text().await.map_err(|e| {
+                NovaError::msg(&e.to_string())
+            })?
+        ) {
             Ok(data) => Ok(data),
             Err(err) => Err(NovaError::msg(&format!("Json 解析出错{}", err))),
         },

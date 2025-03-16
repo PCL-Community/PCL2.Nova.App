@@ -1,5 +1,5 @@
-use crate::core::minecraft::auth::microsoft::{self, CodePair};
-use crate::core::minecraft::auth::xbox::{self, XboxToken};
+use crate::auth::microsoft::{self, CodePair};
+use crate::auth::xbox::{self, XboxToken};
 
 //use futures_util::TryFutureExt;
 use tauri::{AppHandle, Url, WebviewUrl, WebviewWindowBuilder};

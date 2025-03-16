@@ -1,7 +1,7 @@
 pub mod config;
 pub mod core;
 pub mod ipc;
-pub mod utils;
+pub mod auth;
 
 use crate::ipc::login::{device_auth, user_login};
 use crate::ipc::config::*;

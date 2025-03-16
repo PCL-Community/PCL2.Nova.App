@@ -1,24 +1,26 @@
+pub mod base;
+pub mod launch;
+pub mod download;
+
 use std::str::FromStr;
 
 use anyhow::Error;
 
-// pub mod minecraft;
-
 #[derive(Debug)]
-pub struct NovaError {
+pub struct NovaMCoreError {
     msg: String,
 }
 
-impl std::fmt::Display for NovaError {
+impl std::fmt::Display for NovaMCoreError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "[PCL2 Nova] [ERROR] {}", self.msg).expect("Faild to format content.");
+        write!(f, "[PCL2 Nova Minecraft Core] [ERROR] {}", self.msg).expect("Faild to format content.");
         Ok(())
     }
 }
 
-impl std::error::Error for NovaError {}
+impl std::error::Error for NovaMCoreError {}
 
-impl FromStr for NovaError {
+impl FromStr for NovaMCoreError {
     type Err = Self;
 
     fn from_str(s: &str) -> Result<Self, Self::Err> {
@@ -26,7 +28,7 @@ impl FromStr for NovaError {
     }
 }
 
-impl From<Error> for NovaError {
+impl From<Error> for NovaMCoreError {
     fn from(value: Error) -> Self {
         Self {
             msg: value.to_string(),
@@ -34,7 +36,7 @@ impl From<Error> for NovaError {
     }
 }
 
-impl NovaError {
+impl NovaMCoreError {
     pub fn msg<S>(msg: &S) -> Self
     where
         S: ToString + ?Sized,
