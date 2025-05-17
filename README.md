@@ -17,3 +17,4 @@
 3. 如果你的系统是类似于MacOS或者Linux的话，请试图从Actions当中下载可用的二进制文件。。
 4. 欢迎随时随地收看来自老作者**MoYuan-CN**的新项目[NovaCL](https://github.com/NEXORA-Studios/NovaCL)！！
 5. 如果你还不认识这位新作者的话，你随时可以参阅[作者的博客](https://xphost008.github.io)。
+6. 在下载时，请务必查阅一次我们的[合作者/贡献者](./CONTRIBUTION.md)名单，并对我们的原作者以及原贡献者进行深深的敬意！！
