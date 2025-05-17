@@ -1,0 +1,39 @@
+* {
+    margin: 0;
+    padding: 0;
+    user-select: none;
+    font-synthesis: none;
+    /* overflow: hidden; */
+}
+@font-face {
+    font-family: 'PCL';
+    src: url('../fonts/PCL-English.ttf');
+}
+.font-pcl {
+    font-family: 'PCL', serif;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
+.side-icon {
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    left: 13px;
+    top: 10px;
+}
+*::-webkit-scrollbar-track {
+    border-radius: 10px;
+    background-color: rgba(0, 0, 0, 0.2);
+}
+*::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.3);
+    border-radius: 10px;
+}
+*::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.4);
+}
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 5px;
+}
