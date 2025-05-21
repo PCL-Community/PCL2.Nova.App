@@ -2,7 +2,7 @@ name: Wails build
 
 on:
   push:
-    branches: [dev]
+    branches: [dev, main]
 
 env:
   NODE_OPTIONS: "--max-old-space-size=4096"
