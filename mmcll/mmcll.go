@@ -39,8 +39,8 @@ func NewMMCLLError(code int32, msg string) *MMCLLError {
 
 // LaunchMethod.go
 
-// LaunchAccount 用来登录账号所需要的所有键，仅能new一次，后续无法修改。
-type LaunchAccount struct {
+// launchAccount 用来登录账号所需要的所有键，仅能new一次，后续无法修改。
+type launchAccount struct {
 	// name 账户名字
 	name string
 	// uuid 账号UUID
@@ -58,8 +58,8 @@ type LaunchAccount struct {
 }
 
 // NewLaunchAccountOffline 新建一个离线登录模块
-func NewLaunchAccountOffline(name string, uuid string) LaunchAccount {
-	return LaunchAccount{
+func NewLaunchAccountOffline(name string, uuid string) launchAccount {
+	return launchAccount{
 		name:        name,
 		uuid:        uuid,
 		accessToken: uuid,
@@ -71,8 +71,8 @@ func NewLaunchAccountOffline(name string, uuid string) LaunchAccount {
 }
 
 // NewLaunchAccountMicrosoft 新建一个微软登录模块
-func NewLaunchAccountMicrosoft(name string, uuid string, accessToken string) LaunchAccount {
-	return LaunchAccount{
+func NewLaunchAccountMicrosoft(name string, uuid string, accessToken string) launchAccount {
+	return launchAccount{
 		name:        name,
 		uuid:        uuid,
 		accessToken: accessToken,
@@ -84,8 +84,8 @@ func NewLaunchAccountMicrosoft(name string, uuid string, accessToken string) Lau
 }
 
 // NewLaunchAccountThirdParty 新建一个外置登录模块
-func NewLaunchAccountThirdParty(name string, uuid string, accessToken string, base string, url string) LaunchAccount {
-	return LaunchAccount{
+func NewLaunchAccountThirdParty(name string, uuid string, accessToken string, base string, url string) launchAccount {
+	return launchAccount{
 		name:        name,
 		uuid:        uuid,
 		accessToken: accessToken,
@@ -95,31 +95,31 @@ func NewLaunchAccountThirdParty(name string, uuid string, accessToken string, ba
 		online:      3,
 	}
 }
-func (a LaunchAccount) GetName() string {
+func (a launchAccount) GetName() string {
 	return a.name
 }
-func (a LaunchAccount) GetUUID() string {
+func (a launchAccount) GetUUID() string {
 	return a.uuid
 }
-func (a LaunchAccount) GetAccessToken() string {
+func (a launchAccount) GetAccessToken() string {
 	return a.accessToken
 }
-func (a LaunchAccount) GetAtype() string {
+func (a launchAccount) GetAtype() string {
 	return a.atype
 }
-func (a LaunchAccount) GetBase() string {
+func (a launchAccount) GetBase() string {
 	return a.base
 }
-func (a LaunchAccount) GetUrl() string {
+func (a launchAccount) GetUrl() string {
 	return a.url
 }
-func (a LaunchAccount) GetOnline() int8 {
+func (a launchAccount) GetOnline() int8 {
 	return a.online
 }
 
-// LaunchOption 启动设置类（新建后无法修改account、javaPath、rootPath、versionPath几个必填项。）
-type LaunchOption struct {
-	account        LaunchAccount
+// launchOption 启动设置类（新建后无法修改account、javaPath、rootPath、versionPath几个必填项。）
+type launchOption struct {
+	Account        launchAccount
 	javaPath       string
 	rootPath       string
 	versionPath    string
@@ -134,9 +134,9 @@ type LaunchOption struct {
 }
 
 // NewLaunchOption 新建一个启动设置类。（以下非必填的可以直接链式调用设置初始值）
-func NewLaunchOption(account LaunchAccount, javaPath string, rootPath string, versionPath string, gamePath string) *LaunchOption {
-	return &LaunchOption{
-		account:        account,
+func NewLaunchOption(account launchAccount, javaPath string, rootPath string, versionPath string, gamePath string) *launchOption {
+	return &launchOption{
+		Account:        account,
 		javaPath:       javaPath,
 		rootPath:       rootPath,
 		versionPath:    versionPath,
@@ -150,74 +150,74 @@ func NewLaunchOption(account LaunchAccount, javaPath string, rootPath string, ve
 		additionalGame: "",
 	}
 }
-func (opt *LaunchOption) SetWindowWidth(windowWidth uint32) *LaunchOption {
+func (opt *launchOption) SetWindowWidth(windowWidth uint32) *launchOption {
 	opt.windowWidth = windowWidth
 	return opt
 }
-func (opt *LaunchOption) SetWindowHeight(windowHeight uint32) *LaunchOption {
+func (opt *launchOption) SetWindowHeight(windowHeight uint32) *launchOption {
 	opt.windowHeight = windowHeight
 	return opt
 }
-func (opt *LaunchOption) SetMinMemory(minMemory uint32) *LaunchOption {
+func (opt *launchOption) SetMinMemory(minMemory uint32) *launchOption {
 	opt.minMemory = minMemory
 	return opt
 }
-func (opt *LaunchOption) SetMaxMemory(maxMemory uint32) *LaunchOption {
+func (opt *launchOption) SetMaxMemory(maxMemory uint32) *launchOption {
 	opt.maxMemory = maxMemory
 	return opt
 }
-func (opt *LaunchOption) SetCustomInfo(customInfo string) *LaunchOption {
+func (opt *launchOption) SetCustomInfo(customInfo string) *launchOption {
 	opt.customInfo = customInfo
 	return opt
 }
-func (opt *LaunchOption) SetAdditionalJvm(additionalJvm string) *LaunchOption {
+func (opt *launchOption) SetAdditionalJvm(additionalJvm string) *launchOption {
 	opt.additionalJvm = additionalJvm
 	return opt
 }
-func (opt *LaunchOption) SetAdditionalGame(additionalGame string) *LaunchOption {
+func (opt *launchOption) SetAdditionalGame(additionalGame string) *launchOption {
 	opt.additionalGame = additionalGame
 	return opt
 }
-func (opt *LaunchOption) GetAccount() LaunchAccount {
-	return opt.account
+func (opt *launchOption) GetAccount() launchAccount {
+	return opt.Account
 }
-func (opt *LaunchOption) GetJavaPath() string {
+func (opt *launchOption) GetJavaPath() string {
 	return opt.javaPath
 }
-func (opt *LaunchOption) GetRootPath() string {
+func (opt *launchOption) GetRootPath() string {
 	return opt.rootPath
 }
-func (opt *LaunchOption) GetVersionPath() string {
+func (opt *launchOption) GetVersionPath() string {
 	return opt.versionPath
 }
-func (opt *LaunchOption) GetGamePath() string {
+func (opt *launchOption) GetGamePath() string {
 	return opt.gamePath
 }
-func (opt *LaunchOption) GetWindowHeight() uint32 {
+func (opt *launchOption) GetWindowHeight() uint32 {
 	return opt.windowHeight
 }
-func (opt *LaunchOption) GetWindowWidth() uint32 {
+func (opt *launchOption) GetWindowWidth() uint32 {
 	return opt.windowWidth
 }
-func (opt *LaunchOption) GetMinMemory() uint32 {
+func (opt *launchOption) GetMinMemory() uint32 {
 	return opt.minMemory
 }
-func (opt *LaunchOption) GetMaxMemory() uint32 {
+func (opt *launchOption) GetMaxMemory() uint32 {
 	return opt.maxMemory
 }
-func (opt *LaunchOption) GetCustomInfo() string {
+func (opt *launchOption) GetCustomInfo() string {
 	return opt.customInfo
 }
-func (opt *LaunchOption) GetAdditionalJvm() string {
+func (opt *launchOption) GetAdditionalJvm() string {
 	return opt.additionalJvm
 }
-func (opt *LaunchOption) GetAdditionalGame() string {
+func (opt *launchOption) GetAdditionalGame() string {
 	return opt.additionalGame
 }
 
 // launchGame 正式启动游戏的类
 type launchGame struct {
-	account        LaunchAccount
+	account        launchAccount
 	javaPath       string
 	rootPath       string
 	versionPath    string
@@ -232,10 +232,10 @@ type launchGame struct {
 	callback       func([]string)
 }
 
-// newLaunchStart 初始化启动类
-func newLaunchStart(option LaunchOption, callback func([]string)) launchGame {
+// NewLaunchStart 初始化启动类
+func NewLaunchStart(option launchOption, callback func([]string)) launchGame {
 	ls := launchGame{
-		account:        option.account,
+		account:        option.Account,
 		javaPath:       option.javaPath,
 		rootPath:       option.rootPath,
 		versionPath:    option.versionPath,
@@ -340,8 +340,8 @@ func (lg launchGame) launch() error {
 // LaunchGame
 // 新增参数：isStrict，用于手动指定是否动用 MMCLL 的参数检查。
 // 如果你想自己在源代码里检查的话，你完全可以将该值设为 false 以跳过自带的 MMCLL 参数检查。
-func LaunchGame(option LaunchOption, isStrict bool, callback func([]string)) error {
-	ls := newLaunchStart(option, callback)
+func LaunchGame(option launchOption, isStrict bool, callback func([]string)) error {
+	ls := NewLaunchStart(option, callback)
 	if isStrict {
 		if err := ls.checkError(); err != nil {
 			return err

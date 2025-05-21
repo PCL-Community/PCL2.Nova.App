@@ -9,14 +9,14 @@ const dark = ref(dark_mode.value ? '#1a1a1a' : '#e6e6e6')
 watch(dark_mode, value => dark.value = value ? '#1a1a1a' : '#e6e6e6')
 onMounted(() => {
   document.addEventListener("contextmenu", (e) => {
-    e.preventDefault()
+    // e.preventDefault()
   })
 })
 </script>
 
 <template>
   <div id="all">
-    <NavBar id="nav-bar" data-tauri-drag-region/>
+    <NavBar id="nav-bar"/>
     <main id="main">
       <Body id="body"/>
     </main>

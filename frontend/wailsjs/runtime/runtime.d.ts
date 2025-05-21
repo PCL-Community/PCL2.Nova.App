@@ -99,7 +99,7 @@ export function WindowSetAlwaysOnTop(b: boolean): void;
 
 // [WindowSetSystemDefaultTheme](https://wails.io/docs/next/reference/runtime/window#windowsetsystemdefaulttheme)
 // *Windows only*
-// Sets window theme to info default (dark/light).
+// Sets window theme to system default (dark/light).
 export function WindowSetSystemDefaultTheme(): void;
 
 // [WindowSetLightTheme](https://wails.io/docs/next/reference/runtime/window#windowsetlighttheme)
@@ -203,11 +203,11 @@ export function WindowIsNormal(): Promise<boolean>;
 export function WindowSetBackgroundColour(R: number, G: number, B: number, A: number): void;
 
 // [ScreenGetAll](https://wails.io/docs/reference/runtime/window#screengetall)
-// Gets the all screens. Call this anew each time you want to refresh data from the underlying windowing info.
+// Gets the all screens. Call this anew each time you want to refresh data from the underlying windowing system.
 export function ScreenGetAll(): Promise<Screen[]>;
 
 // [BrowserOpenURL](https://wails.io/docs/reference/runtime/browser#browseropenurl)
-// Opens the given URL in the info browser.
+// Opens the given URL in the system browser.
 export function BrowserOpenURL(url: string): void;
 
 // [Environment](https://wails.io/docs/reference/runtime/intro#environment)

@@ -20,8 +20,8 @@ watch(dark_mode, value => {
   <div id="all-nav" style="--wails-draggable: drag">
     <div id="icon-title" class="font-pcl">
       PCL II
-      <div class="icon-next back-next font-pcl">Nova Imitation</div>
-      <div class="icon-next back-dev font-pcl">Dev</div>
+      <span class="icon-next back-next font-pcl">Nova</span>
+      <span class="icon-next back-dev font-pcl">Dev</span>
     </div>
     <div id="nav-button-group">
       <button :class="current_view == 'home' ? 'active-button' : ('nav-button cursor-pointer')"
@@ -161,7 +161,6 @@ watch(dark_mode, value => {
 
 #icon-title {
   margin-top: 9px;
-  display: flex;
   margin-left: 24px;
   float: left;
   font-size: 25px;
@@ -246,25 +245,24 @@ watch(dark_mode, value => {
 .nav-button:nth-child(4),
 .active-button:nth-child(4),
 .nav-button:nth-child(5),
-.active-button:nth-child(5)
-{
+.active-button:nth-child(5) {
   margin-left: 13px;
 }
 
 .icon-next {
   border-radius: 6px;
   box-shadow: 0 0 60px gray;
-  padding: 6px;
-  margin-top: 6px;
-  margin-left: 12px;
+  padding: 5px;
+  margin-top: 9px;
+  margin-left: 6px;
   font-size: 14px;
   font-weight: bold;
   text-align: center;
   line-height: 10px;
-  float: left;
   color: black;
   height: 12px;
-  vertical-align: middle;
+  position: relative;
+  top: -4px;
 }
 
 .back-next {

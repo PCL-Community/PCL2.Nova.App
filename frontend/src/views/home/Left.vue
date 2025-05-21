@@ -5,6 +5,7 @@ import Offline from './account/Offline.vue'
 import MyCheckButton from '../../components/button/MyCheckButton.vue';
 import MyNormalButton from '../../components/button/MyNormalButton.vue';
 import {current_account} from '../../logic/changeBody';
+import ThirdParty from "./account/ThirdParty.vue";
 
 const isTransitioning = ref(true)
 
@@ -55,6 +56,21 @@ function account_click(target: string) {
         </svg>
         离线
       </MyCheckButton>
+      <MyCheckButton :isChecked="current_account == 'ThirdParty'"
+                     :class="current_account == 'ThirdParty' ? 'login-button-active' : ('login-button-style cursor-pointer')"
+                     @click="account_click('ThirdParty')">
+        <svg
+            role="img"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            fill="none" :class="current_account == 'ThirdParty' ? 'login-button-icon-active' : 'login-button-icon'">
+          <path d="M1 18C1 15.75 4 15.75 5.5 14.25 6.25 13.5 4 13.5 4 9.75 4 7.25025 4.99975 6 7 6 9.00025 6 10 7.25025 10 9.75 10 13.5 7.75 13.5 8.5 14.25 10 15.75 13 15.75 13 18M12.7918114 15.7266684C13.2840551 15.548266 13.6874862 15.3832994 14.0021045 15.2317685 14.552776 14.9665463 15.0840574 14.6659426 15.5 14.25 16.25 13.5 14 13.5 14 9.75 14 7.25025 14.99975 6 17 6 19.00025 6 20 7.25025 20 9.75 20 13.5 17.75 13.5 18.5 14.25 20 15.75 23 15.75 23 18"/> <path stroke-linecap="round" d="M12,16 C12.3662741,15.8763472 12.6302112,15.7852366 12.7918114,15.7266684"/>
+        </svg>
+        外置
+      </MyCheckButton>
     </div>
     <div id="middle">
       <transition name="account" @after-leave="account_leave">
@@ -62,6 +78,9 @@ function account_click(target: string) {
       </transition>
       <transition name="account" @after-leave="account_leave">
         <Offline v-if="current_account == 'Offline' && isTransitioning" class="account-style"/>
+      </transition>
+      <transition name="account" @after-leave="account_leave">
+        <ThirdParty v-if="current_account == 'ThirdParty' && isTransitioning" class="account-style"/>
       </transition>
     </div>
     <div id="bottom">
@@ -97,6 +116,9 @@ function account_click(target: string) {
 #top {
   width: 100%;
   height: 100px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 }
 
 #middle {
@@ -154,42 +176,30 @@ function account_click(target: string) {
   font-size: 12px;
 }
 
-.login-button-style {
-  width: 90px;
-  height: 30px;
-  margin-top: 32px;
-}
-
+.login-button-style,
 .login-button-active {
-  width: 90px;
+  width: 80px;
   height: 30px;
-  margin-top: 32px;
+  margin: 32px 0 0 0;
 }
 
-.login-button-icon-active {
-  width: 16px;
-  height: 16px;
-  vertical-align: middle;
-  margin-right: 3px;
-  transition: all 0.2s;
+.login-button-style:first-child,
+.login-button-active:first-child{
+  margin-right: 16px;
 }
 
+.login-button-style:last-child,
+.login-button-active:last-child{
+  margin-left: 16px;
+}
+
+.login-button-icon-active,
 .login-button-icon {
   width: 16px;
   height: 16px;
   vertical-align: middle;
   margin-right: 3px;
   transition: all 0.2s;
-}
-
-.login-button-style:nth-child(1),
-.login-button-active:nth-child(1) {
-  margin-left: calc(50% - 100px);
-}
-
-.login-button-style:nth-child(2),
-.login-button-active:nth-child(2) {
-  margin-left: 30px;
 }
 
 @keyframes accountSlideIn {

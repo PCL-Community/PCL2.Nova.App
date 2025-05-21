@@ -2,7 +2,7 @@ name: Wails build
 
 on:
   push:
-    branches: [main]
+    branches: [dev]
 
 env:
   NODE_OPTIONS: "--max-old-space-size=4096"
@@ -13,13 +13,13 @@ jobs:
       fail-fast: false
       matrix:
         build:
-          - name: 'NovaImitation'
+          - name: 'PCL2.Nova.App'
             platform: 'linux/amd64'
             os: 'ubuntu-latest'
-          - name: 'NovaImitation'
+          - name: 'PCL2.Nova.App'
             platform: 'windows/amd64'
             os: 'windows-latest'
-          - name: 'NovaImitation'
+          - name: 'PCL2.Nova.App'
             platform: 'darwin/universal'
             os: 'macos-latest'
 
