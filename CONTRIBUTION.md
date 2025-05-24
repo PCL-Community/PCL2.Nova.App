@@ -8,6 +8,7 @@
 
 1. [EncVar](https://github.com/EncVar)
 2. [tangge233](https://github.com/tangge233)
+3. [shenjack](https://github.com/shenjackyuanjie)
 
 ## 现作者
 
