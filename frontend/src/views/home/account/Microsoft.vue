@@ -1,4 +1,4 @@
-+<script setup lang="ts">
+<script setup lang="ts">
 import MyNormalButton from "../../../components/button/MyNormalButton.vue";
 </script>
 <template>
