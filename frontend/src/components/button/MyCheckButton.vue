@@ -18,23 +18,21 @@ watch(dark_mode, value => {
   </button>
 </template>
 <style scoped>
-.button-style {
+.button-style, .button-active {
   font-weight: bold;
-  background-color: transparent;
-  border: 0;
   border-radius: 50px;
   transition: all 0.2s;
+}
+.button-style {
+  background-color: transparent;
+  border: 0;
   color: v-bind(light);
   stroke: v-bind(light);
 }
-
 .button-active {
-  font-weight: bold;
   background-color: rgb(19, 85, 206);
   border: 1px solid gray;
   box-shadow: 0 1px 3px gray;
-  border-radius: 50px;
-  transition: all 0.2s;
   color: #e6e6e6;
   stroke: #e6e6e6;
 }

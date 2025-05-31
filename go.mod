@@ -9,6 +9,7 @@ require (
 	github.com/shirou/gopsutil v3.21.11+incompatible
 	github.com/wailsapp/wails/v2 v2.10.1
 	golang.org/x/sys v0.30.0
+	gopkg.in/ini.v1 v1.67.0
 )
 
 require (

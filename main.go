@@ -7,6 +7,8 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -24,6 +26,27 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+}
+
+func (a *App) ReadConfig(path, section, key string) string {
+	conf := NewConfig(path)
+	if v, err := conf.Read(section, key); err == nil {
+		return v
+	} else {
+		return ""
+	}
+}
+
+func (a *App) WriteConfig(path, section, key, value string) {
+	conf := NewConfig(path)
+	_ = conf.Write(section, key, value)
+}
+
+func (a *App) GetConfigIniPath() string {
+	exePath, _ := os.Executable()
+	res := filepath.Join(filepath.Dir(exePath), "PCL.Nova", "config", "PCL2.Nova.ini")
+	_ = ensureConfigFile(res)
+	return res
 }
 
 func (a *App) StartDownload() {

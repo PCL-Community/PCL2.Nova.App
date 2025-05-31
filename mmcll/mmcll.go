@@ -1,3 +1,7 @@
+/*
+MMCLL 启动模块！
+以MIT协议开源在：https://github.com/xphost008/MMCLL
+*/
 package mmcll
 
 import (
@@ -18,20 +22,21 @@ import (
 // SomeConst.go
 
 const (
-	LauncherName           = "MMCLL"          // LauncherName 启动器名称（请自行修改）
-	LauncherVersion        = "0.0.1-Alpha-12" // LauncherVersion 启动器版本
-	LauncherUserAgent      = "MMCLL/0.0.1.12" // LauncherUserAgent 启动器UserAgent，用于在网络请求时的设置
-	ErrUserNameInvalid     = 1                // ErrUserNameInvalid 启动游戏时用户名输入不正确
-	ErrUserUUIDInvalid     = 2                // ErrUserUUIDInvalid 启动游戏时用户UUID输入不正确
-	ErrJavaPathInvalid     = 3                // ErrJavaPathInvalid Java路径错误
-	ErrRootPathInvalid     = 4                // ErrRootPathInvalid 游戏根路径错误
-	ErrVersionPathInvalid  = 5                // ErrVersionPathInvalid 游戏根路径错误
-	ErrGamePathInvalid     = 6                // ErrGamePathInvalid 游戏根路径错误
-	ErrWidthOutOfRange     = 7                // ErrWidthOutOfRange 窗口宽度超出范围
-	ErrHeightOutOfRange    = 8                // ErrHeightOutOfRange 窗口高度超出范围
-	ErrMinMemoryOutOfRange = 9                // ErrMinMemoryOutOfRange 最小内存超出范围
-	ErrMaxMemoryOutOfRange = 10               // ErrMaxMemoryOutOfRange 最大内存超出范围
-	ErrCustomInfoIsEmpty   = 11               // ErrCustomInfoIsEmpty 自定义信息为空
+	LauncherName      = "MMCLL"          // LauncherName 启动器名称（请自行修改）
+	LauncherVersion   = "0.0.1-Alpha-12" // LauncherVersion 启动器版本
+	LauncherUserAgent = "MMCLL/0.0.1.12" // LauncherUserAgent 启动器UserAgent，用于在网络请求时的设置
+	// 启动游戏检查
+	ErrUserNameInvalid     = 1  // ErrUserNameInvalid 启动游戏时用户名输入不正确
+	ErrUserUUIDInvalid     = 2  // ErrUserUUIDInvalid 启动游戏时用户UUID输入不正确
+	ErrJavaPathInvalid     = 3  // ErrJavaPathInvalid Java路径错误
+	ErrRootPathInvalid     = 4  // ErrRootPathInvalid 游戏根路径错误
+	ErrVersionPathInvalid  = 5  // ErrVersionPathInvalid 游戏根路径错误
+	ErrGamePathInvalid     = 6  // ErrGamePathInvalid 游戏根路径错误
+	ErrWidthOutOfRange     = 7  // ErrWidthOutOfRange 窗口宽度超出范围
+	ErrHeightOutOfRange    = 8  // ErrHeightOutOfRange 窗口高度超出范围
+	ErrMinMemoryOutOfRange = 9  // ErrMinMemoryOutOfRange 最小内存超出范围
+	ErrMaxMemoryOutOfRange = 10 // ErrMaxMemoryOutOfRange 最大内存超出范围
+	ErrCustomInfoIsEmpty   = 11 // ErrCustomInfoIsEmpty 自定义信息为空
 )
 
 // ErrorMMCLL 定义报错类型
@@ -134,13 +139,17 @@ func GetMCRealPath(versionPath, suffix string) (string, error) {
 }
 
 // findVanillaPath 通过原版键值准确找到原版游戏路径
-func findVanillaPath(versionPath, vanilla string) (string, error) {
+func FindVanillaPath(versionPath, vanilla string) (string, error) {
 	return "", nil
 }
 
 // getVanillaVersion 通过JSON获取到原版键值
 func getVanillaVersion(versionJson map[string]interface{}) (string, error) {
 	return "", nil
+}
+
+func MergeMCJson(jsonContent, realJsonContent map[string]interface{}) (map[string]interface{}, error) {
+	return nil, nil
 }
 
 // launchAccount 用来登录账号所需要的所有键，仅能new一次，后续无法修改。
@@ -442,16 +451,33 @@ func (lg launchGame) launch() error {
 	if err = json.Unmarshal([]byte(jsonContent), &jsonStruct); err != nil {
 		return err
 	}
-	//var inheritsJson string
-	//inheritsFrom, ok1 := jsonStruct["inheritsFrom"].(string)
-	//if ok1 {
-	//	vanillaPath, err := findVanillaPath(lg.versionPath, inheritsFrom)
-	//	if err != nil || vanillaPath == "" {
-	//		return err
-	//	}
-	//} else {
-	//	//inheritsJson = jsonPath
-	//}
+	var inheritsJson map[string]interface{}
+	inheritsFrom, ok1 := jsonStruct["inheritsFrom"].(string)
+	if ok1 {
+		vanillaPath, err := FindVanillaPath(lg.versionPath, inheritsFrom)
+		if err != nil || vanillaPath == "" {
+			return err
+		}
+		realJsonPath, err := GetMCRealPath(vanillaPath, ".json")
+		if err != nil || realJsonPath == "" {
+			return err
+		}
+		realJsonContent, err := GetFile(realJsonPath)
+		if err != nil {
+			return err
+		}
+		var realJsonStruct map[string]interface{}
+		if err = json.Unmarshal([]byte(realJsonContent), &realJsonStruct); err != nil {
+			return err
+		}
+		inheritsJson, err = MergeMCJson(jsonStruct, realJsonStruct)
+		if err != nil || inheritsJson == nil {
+			return err
+		}
+	} else {
+		inheritsJson = jsonStruct
+	}
+	fmt.Println(inheritsJson)
 	return nil
 }
 

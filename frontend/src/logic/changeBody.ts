@@ -1,6 +1,7 @@
 import {ref} from 'vue'
 
 export const dark_mode = ref(false)
+export const theme_mode = ref(1)
 export const current_view = ref('home')
 export const current_account = ref('Microsoft')
 export const current_download = ref('Auto-Install')

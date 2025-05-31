@@ -3,6 +3,7 @@ package main
 import (
 	"NovaImitation/mmcll"
 	"fmt"
+	"os"
 	"strings"
 	"testing"
 )
@@ -16,4 +17,9 @@ func TestMMCLL(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
+}
+
+func TestOther(t *testing.T) {
+	res, _ := os.Executable()
+	fmt.Println("This Execute Path is: " + res)
 }
