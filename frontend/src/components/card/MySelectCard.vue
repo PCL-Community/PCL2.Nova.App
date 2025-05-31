@@ -102,7 +102,6 @@ function changeProps() {
 .card-icon-expand {
   width: 20px;
   height: 20px;
-  stroke: black;
   vertical-align: middle;
   transition: all 0.2s;
   float: right;
