@@ -36,9 +36,9 @@ import {OpenCustomURL} from "../../../logic/functions";
           <MyNormalButton class="afdian" @click="OpenCustomURL('https://afdian.com/a/LTCat')">赞助原作者</MyNormalButton>
         </div>
         <div class="row">
-          <img src="../../../assets/images/Heads/lingyun.jpg" alt="原作者头像">
+          <img src="../../../assets/images/Heads/moyuan.jpg" alt="原作者头像">
           <div class="column">
-            <MyNormalLabel class="normal-label">凌云</MyNormalLabel>
+            <MyNormalLabel class="normal-label">墨渊</MyNormalLabel>
             <p style="font-size: 13px; color: #606060">Plain Craft Launcher II: Nova 的原作者</p>
           </div>
           <MyNormalButton class="afdian" @click="OpenCustomURL('https://afdian.com/a/NEXORA-Studios')">赞助原作者</MyNormalButton>
