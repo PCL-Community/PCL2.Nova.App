@@ -8,6 +8,8 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/options"
 	"github.com/wailsapp/wails/v2/pkg/options/assetserver"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
+	"os"
+	"path/filepath"
 	"time"
 )
 
@@ -26,6 +28,7 @@ func NewApp() *App {
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
+
 func (a *App) StartDownload() {
 	for progress := 10; progress <= 100; progress += 10 {
 		time.Sleep(time.Second)

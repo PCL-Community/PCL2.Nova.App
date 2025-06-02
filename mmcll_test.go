@@ -3,6 +3,7 @@ package main
 import (
 	"NovaImitation/mmcll"
 	"fmt"
+	"os"
 	"strings"
 	"testing"
 )
@@ -16,10 +17,4 @@ func TestMMCLL(t *testing.T) {
 	if err != nil {
 		t.Error(err)
 	}
-}
-func stringPtr(s string) *string {
-	return &s
-}
-func TestUIntPtr(t *testing.T) {
-
 }
