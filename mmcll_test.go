@@ -18,8 +18,3 @@ func TestMMCLL(t *testing.T) {
 		t.Error(err)
 	}
 }
-
-func TestOther(t *testing.T) {
-	res, _ := os.Executable()
-	fmt.Println("This Execute Path is: " + res)
-}

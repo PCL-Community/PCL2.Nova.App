@@ -1,6 +1,7 @@
 package main
 
 import (
+	"NovaImitation/launcher"
 	"context"
 	"embed"
 	"github.com/wailsapp/wails/v2"
@@ -28,27 +29,6 @@ func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
 }
 
-func (a *App) ReadConfig(path, section, key string) string {
-	conf := NewConfig(path)
-	if v, err := conf.Read(section, key); err == nil {
-		return v
-	} else {
-		return ""
-	}
-}
-
-func (a *App) WriteConfig(path, section, key, value string) {
-	conf := NewConfig(path)
-	_ = conf.Write(section, key, value)
-}
-
-func (a *App) GetConfigIniPath() string {
-	exePath, _ := os.Executable()
-	res := filepath.Join(filepath.Dir(exePath), "PCL.Nova", "config", "PCL2.Nova.ini")
-	_ = ensureConfigFile(res)
-	return res
-}
-
 func (a *App) StartDownload() {
 	for progress := 10; progress <= 100; progress += 10 {
 		time.Sleep(time.Second)
@@ -66,7 +46,7 @@ func main() {
 
 	// Create application with options
 	err := wails.Run(&options.App{
-		Title:     "NovaImitation",
+		Title:     "PCL2.Nova.App",
 		Width:     1024,
 		Height:    614,
 		MinWidth:  1024,
@@ -75,10 +55,13 @@ func main() {
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
-		BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
-		OnStartup:        app.startup,
+		//BackgroundColour: &options.RGBA{R: 27, G: 38, B: 54, A: 1},
+		OnStartup: app.startup,
 		Bind: []interface{}{
 			app,
+			&launcher.ReaderWriter{},
+			&launcher.MainMethod{},
+			&launcher.Account{},
 		},
 	})
 

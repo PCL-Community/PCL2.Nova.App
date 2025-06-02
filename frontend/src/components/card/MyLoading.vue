@@ -7,8 +7,8 @@ interface LoadingProps {
   state: number,
 }
 
-const dark = ref(dark_mode.value ? '#3142b7' : 'aliceblue')
-watch(dark_mode, value => dark.value = value ? 'black' : 'aliceblue')
+const dark = ref(dark_mode.value ? '#6287d7' : 'aliceblue')
+watch(dark_mode, value => dark.value = value ? '#6287d7' : 'aliceblue')
 const loading_props = withDefaults(defineProps<LoadingProps>(), {loading_text: '正在加载', state: 0})
 const loading_text_ref = ref('正在加载')
 const current_state = ref(0)

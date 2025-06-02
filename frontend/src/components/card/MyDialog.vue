@@ -17,7 +17,7 @@ const m_font_color = ref("#3142b7")
 const m_back_color = ref("#0000007f")
 watch(b_level, value => {
   m_font_color.value = value == 0 ? "#3142b7" : value == 1 ? "#c7ad2a" : "#ff4c4c"
-  m_back_color.value = value == 0 ? '#0000007f' : value == 1 ? '#7f7f007f' : '#7f00007f'
+  m_back_color.value = value == 0 ? '#0000005f' : value == 1 ? '#4f4f005f' : '#4f00005f'
 });
 const m_resolve = ref(0)
 
@@ -142,7 +142,7 @@ function buttonClick(index: number) {
 
 .back-class {
   background-color: v-bind(m_back_color);
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(3px);
   transition: all 0.33s;
 }
 

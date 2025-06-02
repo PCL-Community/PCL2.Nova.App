@@ -4,7 +4,7 @@ import MySelectCard from '../../../components/card/MySelectCard.vue'
 import MyToggleSwitch from '../../../components/button/MyToggleSwitch.vue'
 import {dark_mode, theme_mode} from '../../../logic/changeBody'
 import MyRadioButton from "../../../components/button/MyRadioButton.vue";
-import {GetConfigIniPath, WriteConfig} from "../../../../wailsjs/go/main/App";
+import {GetConfigIniPath, WriteConfig} from "../../../../wailsjs/go/launcher/ReaderWriter";
 import MyNormalLabel from "../../../components/input/MyNormalLabel.vue";
 import MyNormalButton from "../../../components/button/MyNormalButton.vue";
 import {OpenCustomURL} from "../../../logic/functions";
@@ -20,7 +20,7 @@ async function changeTheme(themeString: number) {
 </script>
 <template>
   <div style="display: flex; flex-direction: column;">
-    <MySelectCard :maxHeight="130" :isExpand="true" :title="'主题'" :isLast="false" style="position: relative">
+    <MySelectCard :maxHeight="130" :isExpand="false" :title="'主题'" :isLast="false" style="position: relative">
       <div style="margin: 10px; position: relative;">
         <div id="mask">
           <MyNormalLabel>请支持官方版本以使用主题功能</MyNormalLabel>
