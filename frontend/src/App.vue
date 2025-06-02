@@ -17,7 +17,7 @@ watch(dark_mode, value => {
   darkNav.value = DarkAndThemeToConst(dark_mode.value, theme_mode.value)
 })
 watch(theme_mode, value => {
-  darknav.value = DarkAndThemeToConst(dark_mode.value, theme_mode.value)
+  darkNav.value = DarkAndThemeToConst(dark_mode.value, theme_mode.value)
 })
 onMounted(async () => {
   dark_mode.value = await ReadConfig(await GetConfigIniPath(), "Misc", "DarkMode") === "1"
