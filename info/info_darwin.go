@@ -9,12 +9,12 @@ func GetWindowsVersion() bool {
 	return false
 }
 
-func GetHomeDir() string {
+func GetHomeDir() (string, error) {
 	// 获取当前用户
 	currentUser, err := user.Current()
 	if err != nil {
-		panic(err)
+		return "", err
 	}
 	return currentUser.HomeDir
-	return filepath.Join(currentUser.HomeDir, ".PCL.Nova")
+	return filepath.Join(currentUser.HomeDir, ".PCL.Nova"), nil
 }
