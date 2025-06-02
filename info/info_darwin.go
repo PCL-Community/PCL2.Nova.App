@@ -15,6 +15,5 @@ func GetHomeDir() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	return currentUser.HomeDir
 	return filepath.Join(currentUser.HomeDir, ".PCL.Nova"), nil
 }
