@@ -14,7 +14,9 @@ watch(dark_mode, value => {
 </template>
 <style scoped>
 .label {
+  font-family: PCL, 'Microsoft JhengHei', serif;
   font-weight: bold;
   color: v-bind(light);
+  stroke: v-bind(light);
 }
 </style>

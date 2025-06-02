@@ -1,9 +1,9 @@
 package main
 
 import (
+	"NovaImitation/launcher"
 	"NovaImitation/mmcll"
 	"fmt"
-	"os"
 	"strings"
 	"testing"
 )
@@ -18,8 +18,47 @@ func TestMMCLL(t *testing.T) {
 		t.Error(err)
 	}
 }
-
+func stringPtr(s string) *string {
+	return &s
+}
+func getAccessToken(a launcher.AccountType) string {
+	if a.AccessToken != nil {
+		return *a.AccessToken
+	}
+	return ""
+}
 func TestOther(t *testing.T) {
-	res, _ := os.Executable()
-	fmt.Println("This Execute Path is: " + res)
+	al := &launcher.AccountList{
+		Accounts: []launcher.AccountType{
+			{
+				Name:     "Steve",
+				UUID:     "1234567890",
+				AType:    "Offline",
+				HeadSkin: "123456",
+			},
+			{
+				Name:         "Steve",
+				UUID:         "1234567890",
+				AType:        "Microsoft",
+				HeadSkin:     "123456",
+				AccessToken:  stringPtr("AT"),
+				RefreshToken: stringPtr("RT"),
+			},
+			{
+				Name:        "Steve",
+				UUID:        "1234567890",
+				AType:       "Thirdparty",
+				HeadSkin:    "123456",
+				AccessToken: stringPtr("AT"),
+				ClientToken: stringPtr("CT"),
+				Server:      stringPtr("SV"),
+				BaseCode:    stringPtr("123456"),
+			},
+		},
+	}
+	at := launcher.Account{}
+	at.SetAccountConfig(*al)
+	for _, r := range at.GetAccountConfig().Accounts {
+		fmt.Println(r)
+	}
 }

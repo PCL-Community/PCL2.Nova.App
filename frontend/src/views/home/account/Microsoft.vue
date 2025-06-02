@@ -1,5 +1,8 @@
 <script setup lang="ts">
 import MyNormalButton from "../../../components/button/MyNormalButton.vue";
+import {current_account_page} from "../../../logic/changeBody";
+import MyTextInput from "../../../components/input/MyTextInput.vue";
+import {OpenCustomURL} from "../../../logic/functions";
 </script>
 <template>
   <div id="main-style">
@@ -16,18 +19,21 @@ import MyNormalButton from "../../../components/button/MyNormalButton.vue";
             d="M4,20 C4,17 8,17 10,15 C11,14 8,14 8,9 C8,5.667 9.333,4 12,4 C14.667,4 16,5.667 16,9 C16,14 13,14 14,15 C16,17 20,17 20,20"/>
       </svg>
       <br>
-      <MyNormalButton id="add-account">添加新账号</MyNormalButton>
+      <div style="display: flex; justify-content: space-around; width: calc(100% - 50px); margin-left: 25px">
+        <MyNormalButton class="create-return" @click="current_account_page = true">添加新账号</MyNormalButton>
+        <MyNormalButton class="create-return" style="width: 80px" @click="OpenCustomURL('https://www.xbox.com/zh-cn/games/store/minecraft-java-bedrock-edition-for-pc/9nxp44l49shj')">购买正版</MyNormalButton>
+        <MyNormalButton class="create-return" style="width: 50px" @click="current_account_page = true">返回</MyNormalButton>
+      </div>
     </div>
   </div>
 </template>
 <style scoped>
 #main-style {
   display: flex;
-  align-items: center
+  align-items: center;
 }
 
 #center-style {
-  height: 190px;
   width: 100%;
 }
 
@@ -39,11 +45,9 @@ import MyNormalButton from "../../../components/button/MyNormalButton.vue";
   height: 80px;
 }
 
-#add-account {
-  margin-top: 20px;
-  margin-left: 50px;
-  width: calc(100% - 100px);
-  height: 35px;
+.create-return {
+  width: 100px;
+  height: 30px;
   border: 1px solid skyblue;
 }
 </style>
