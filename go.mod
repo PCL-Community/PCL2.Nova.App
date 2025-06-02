@@ -15,7 +15,7 @@ require (
 require (
 	github.com/bep/debounce v1.2.1 // indirect
 	github.com/dblohm7/wingoes v0.0.0-20240820181039-f2b84150679e // indirect
-	github.com/ebitengine/purego v0.8.2 // indirect
+	github.com/ebitengine/purego v0.8.4 // indirect
 	github.com/gen2brain/shm v0.1.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
 	github.com/godbus/dbus/v5 v5.1.0 // indirect
