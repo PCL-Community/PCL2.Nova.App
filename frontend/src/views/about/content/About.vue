@@ -6,7 +6,7 @@ import {OpenCustomURL} from "../../../logic/functions";
 </script>
 <template>
   <div style="display: flex; flex-direction: column;">
-    <MySelectCard :maxHeight="130" :isExpand="false" :title="'关于'" :isLast="false">
+    <MySelectCard :isExpand="false" :title="'关于'" :isLast="false">
       <div style="margin: 10px">
         <div class="row">
           <img src="../../../assets/images/Heads/xphost.jpg" alt="现作者头像">
@@ -25,7 +25,7 @@ import {OpenCustomURL} from "../../../logic/functions";
         </div>
       </div>
     </MySelectCard>
-    <MySelectCard :maxHeight="130" :isExpand="false" :title="'鸣谢'" :isLast="false">
+    <MySelectCard :isExpand="false" :title="'鸣谢'" :isLast="false">
       <div style="margin: 10px">
         <div class="row">
           <img src="../../../assets/images/Heads/ltcatt.jpg" alt="PCL作者头像">
@@ -45,14 +45,14 @@ import {OpenCustomURL} from "../../../logic/functions";
         </div>
       </div>
     </MySelectCard>
-    <MySelectCard :maxHeight="160" :isExpand="true" :title="'版权'" :isLast="false">
+    <MySelectCard :isExpand="true" :title="'版权'" :isLast="false">
       <div style="margin: 10px; padding: 0 30px">
         <MyNormalLabel class="normal-label">PCL2.Nova.App 开源项目及其官方衍生程序均遵循 GNU General Public License 3.0 (GPLv3) 协议开源。本项目主导社区为 PCL-Community，任何人都可以提 Pull Request！</MyNormalLabel><br><br>
         <MyNormalButton class="normal-button" @click="OpenCustomURL('https://github.com/PCL-Community/PCL2.Nova.App')">查看源代码</MyNormalButton>&nbsp;&nbsp;&nbsp;
         <MyNormalButton class="normal-button" @click="OpenCustomURL('https://www.gnu.org/licenses/gpl-3.0.html')">查看许可证</MyNormalButton>
       </div>
     </MySelectCard>
-    <MySelectCard :maxHeight="300" :isExpand="true" :title="'许可与版权声明'" :isLast="true">
+    <MySelectCard :isExpand="true" :title="'许可与版权声明'" :isLast="true">
       <div style="margin: 10px; padding-left: 30px">
         <MyNormalLabel class="normal-label">PCL2.Nova.App</MyNormalLabel>
         <p class="normal-p">GNU GPL v3 <code data="url">https://github.com/PCL-Community/PCL2.Nova.App</code></p>

@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import {ref, watch} from 'vue'
+import {onMounted, onUnmounted, ref, watch} from 'vue'
 import {dark_mode} from '../../logic/changeBody'
 
 interface CheckButtonProps {
   isExpand: boolean,
-  maxHeight: number,
+  // maxHeight: number,
   title: string,
   isLast?: boolean,
 }
@@ -17,35 +17,48 @@ watch(dark_mode, value => {
 })
 const isCheckedProps = withDefaults(defineProps<CheckButtonProps>(), {
   isExpand: false,
-  maxHeight: 0,
+  // maxHeight: 0,
   title: "",
   isLast: false
 })
-const mh = ref(isCheckedProps.maxHeight + 'px')
-watch(() => isCheckedProps.maxHeight, value => mh.value = value + 'px')
+// const mh = ref(isCheckedProps.maxHeight + 'px')
+const cardHeight = ref(60)  // 默认标题区域高度
+// watch(() => isCheckedProps.maxHeight, value => mh.value = value + 'px')
 const isExpandComp = ref(!isCheckedProps.isExpand)
-const border = ref("6px")
+// const border = ref("6px")
 const isLastComp = ref(isCheckedProps.isLast ? "15px" : "0")
 const touchColor = ref(dark_mode.value ? '#0a0a0a' : '#d6d6d6')
 
+let observer: ResizeObserver | null = null
+const mycardInnerRef = ref<HTMLElement>()
 function style_cancel() {
-  border.value = isExpandComp.value ? "0" : "6px"
+  // border.value = isExpandComp.value ? "0" : "6px"
   let hovColor = dark_mode.value ? "#0a0a0a" : "#d6d6d6"
   let Color = dark_mode.value ? "#151515" : "#f8f8f8"
   touchColor.value = isExpandComp.value ? Color : hovColor
 }
 
 function changeProps() {
-  if (!isCheckedProps.isExpand) {
-    return
-  }
+  if (!isCheckedProps.isExpand) return;
   isExpandComp.value = !isExpandComp.value
-  border.value = "0"
+  // border.value = "0"
   touchColor.value = dark_mode.value ? "#151515" : "#f8f8f8"
+  if(!isExpandComp) cardHeight.value = 40
 }
+
+onMounted(() => {
+    observer = new ResizeObserver(() => {
+        // 为了方便使高度动画具有回弹动效，使用observer侦测内容来赋值而非让其自动撑开
+        cardHeight.value = mycardInnerRef.value!.offsetHeight + 26
+    })
+    observer.observe(mycardInnerRef.value!)
+})
+
+onUnmounted(() => observer?.disconnect())
 </script>
+
 <template>
-  <div>
+  <div class="card-container">
     <div :class="'grid' + (isCheckedProps.isExpand ? ' cursor-pointer' : '')"
          :isOpen="(isExpandComp ? 'expand' : 'close')" @click="changeProps">
       {{ isCheckedProps.title }}
@@ -61,20 +74,38 @@ function changeProps() {
         <polyline points="6 10 12 16 18 10"/>
       </svg>
     </div>
-    <div @transitionend="style_cancel()">
-      <slot/>
-    </div>
+    <Transition name="card-content">
+      <div @transitionend="style_cancel()" v-show="isExpandComp" ref="mycardInnerRef">
+        <slot/>
+      </div>
+    </Transition>
   </div>
 </template>
 <style scoped>
+.card-content-enter-active,
+.card-content-leave-active {
+    transition: opacity 0.2s;
+}
+
+.card-content-enter-from,
+.card-content-leave-to {
+    opacity: 0;
+}
+
+.card-container{
+  flex-shrink: 0;
+  height: v-bind("cardHeight +'px'");
+  background-color: v-bind(dark);
+  margin: 22px;
+  padding: 10px 20px;
+  border-radius: 6px;
+  transition: height 0.4s cubic-bezier(.4, 1.4, .6, 1);
+  overflow: hidden;
+}
+
 .grid[isOpen="close"],
 .grid[isOpen="expand"] {
-  margin-top: 15px;
-  background-color: v-bind(dark);
-  margin-left: 22px;
-  margin-right: 22px;
-  border-radius: 6px 6px v-bind(border) v-bind(border);
-  padding: 10px 20px;
+  /* background-color: v-bind(dark); */
   font-size: 16px;
   font-weight: bold;
   transition: all 0.2s;
@@ -86,13 +117,13 @@ function changeProps() {
 }
 
 .grid + div {
-  max-height: 0;
-  overflow: hidden;
-  border-bottom-left-radius: 6px;
-  border-bottom-right-radius: 6px;
-  margin-left: 22px;
-  margin-right: 22px;
-  background-color: v-bind(dark);
+  /* max-height: 0; */
+  /* overflow: hidden; */
+  /* border-bottom-left-radius: 6px; */
+  /* border-bottom-right-radius: 6px; */
+  /* margin-left: 22px;
+  margin-right: 22px; */
+  /* background-color: v-bind(dark); */
   transition: all 0.2s;
   margin-bottom: v-bind(isLastComp);
   color: v-bind(light);
@@ -113,6 +144,8 @@ function changeProps() {
 }
 
 .grid[isOpen="expand"] + div {
-  max-height: v-bind(mh);
+  height: fit-content;
+  /* max-height: 100%; */
+  /* max-height: v-bind(mh); */
 }
 </style>
