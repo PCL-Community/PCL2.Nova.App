@@ -43,12 +43,14 @@ function changeProps() {
   isExpandComp.value = !isExpandComp.value
   // border.value = "0"
   touchColor.value = dark_mode.value ? "#151515" : "#f8f8f8"
-  if(!isExpandComp) cardHeight.value = 60
+  // if(!isExpandComp) cardHeight.value = 60
+  cardHeight.value = isExpandComp.value ? (mycardInnerRef.value!.offsetHeight + 26) : 26;
 }
 
+// 如果不需要卡片内容变化时实时弹性动画的话，下面这部分observer可以删掉
 onMounted(() => {
     observer = new ResizeObserver(() => {
-        // 为了方便使高度动画具有回弹动效，使用observer侦测内容来赋值而非让其自动撑开
+        if(!isExpandComp.value) return
         cardHeight.value = mycardInnerRef.value!.offsetHeight + 26
     })
     observer.observe(mycardInnerRef.value!)
@@ -74,15 +76,15 @@ onUnmounted(() => observer?.disconnect())
         <polyline points="6 10 12 16 18 10"/>
       </svg>
     </div>
-    <Transition name="card-content">
-      <div @transitionend="style_cancel()" v-show="isExpandComp" ref="mycardInnerRef">
+    <!-- <Transition name="card-content"> -->
+      <div @transitionend="style_cancel()" ref="mycardInnerRef">
         <slot/>
       </div>
-    </Transition>
+    <!-- </Transition> -->
   </div>
 </template>
 <style scoped>
-.card-content-enter-active,
+/* .card-content-enter-active,
 .card-content-leave-active {
     transition: opacity 0.2s;
 }
@@ -90,7 +92,7 @@ onUnmounted(() => observer?.disconnect())
 .card-content-enter-from,
 .card-content-leave-to {
     opacity: 0;
-}
+} */
 
 .card-container{
   flex-shrink: 0;
