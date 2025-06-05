@@ -50,7 +50,7 @@ async function changeTheme(themeString: number) {
       </div>
     </MySelectCard>
     <MySelectCard :isExpand="true" :title="'个性化'" :isLast="true">
-      <div style="margin: 10px;">
+      <div style="margin: 10px; display: flex; justify-content: space-between;">
         <div id="dark-mode-title">
           暗色模式
         </div>
@@ -76,7 +76,8 @@ async function changeTheme(themeString: number) {
   justify-content: center;
 }
 #dark-mode-title {
-  float: left;
+  /* float: left; */
+  /* position: relative; */
   margin: 10px;
   font-weight: bold;
 }
@@ -87,6 +88,8 @@ async function changeTheme(themeString: number) {
 }
 #dark-mode-toggle {
   margin: 10px;
-  float: right;
+  /* position: relative; */
+  /* right: 0; */
+  /* float: right; */
 }
 </style>
