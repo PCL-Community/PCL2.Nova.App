@@ -22,7 +22,7 @@ const isCheckedProps = withDefaults(defineProps<CheckButtonProps>(), {
   isLast: false
 })
 // const mh = ref(isCheckedProps.maxHeight + 'px')
-const cardHeight = ref(60)  // 默认标题区域高度
+const cardHeight = ref(26)  // 默认标题区域高度
 // watch(() => isCheckedProps.maxHeight, value => mh.value = value + 'px')
 const isExpandComp = ref(!isCheckedProps.isExpand)
 // const border = ref("6px")
