@@ -43,7 +43,7 @@ function changeProps() {
   isExpandComp.value = !isExpandComp.value
   // border.value = "0"
   touchColor.value = dark_mode.value ? "#151515" : "#f8f8f8"
-  if(!isExpandComp) cardHeight.value = 40
+  if(!isExpandComp) cardHeight.value = 60
 }
 
 onMounted(() => {
