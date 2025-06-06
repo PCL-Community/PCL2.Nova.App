@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import {DarkAndThemeToConst} from "./logic/functions";
-const Theme = {
-  SKYBLUE: 'rgb(17, 111, 206)',
-  SKYBLUE_DARK: 'rgb(6, 66, 154)',
-}
 import NavBar from './views/NavBar.vue';
 import Body from './views/Body.vue'
 import {dark_mode, theme_mode} from './logic/changeBody'
-import {onBeforeMount, onMounted, ref, watch} from 'vue'
+import {onMounted, ref, watch} from 'vue'
 import MyDialog from './components/card/MyDialog.vue'
 import {GetConfigIniPath, ReadConfig} from "../wailsjs/go/launcher/ReaderWriter";
 const darkNav = ref(DarkAndThemeToConst(dark_mode.value, theme_mode.value))
@@ -46,15 +42,15 @@ onMounted(async () => {
   height: 100%;
   width: 100%;
 }
-
 #nav-bar {
   position: absolute;
   width: 100%;
   height: 56px;
   background: v-bind(darkNav);
+  background-size: 200%;
+  animation: LineAni 30s linear infinite;
   z-index: 100;
 }
-
 #main {
   position: absolute;
   width: 100%;
@@ -63,10 +59,20 @@ onMounted(async () => {
   transition: all 0.2s;
   background-color: v-bind(dark);
 }
-
 #body {
   position: absolute;
   width: 100%;
   height: calc(100%);
+}
+@keyframes LineAni {
+  0% {
+    background-position: 0 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
 }
 </style>

@@ -19,7 +19,7 @@ watch(dark_mode, value => {
 <template>
   <div id="all-nav" style="--wails-draggable: drag">
     <div id="icon-title" class="font-pcl">
-      PCL II
+      PCL
       <span class="icon-next back-next font-pcl">Nova</span>
       <span class="icon-next back-dev font-pcl">Dev</span>
     </div>

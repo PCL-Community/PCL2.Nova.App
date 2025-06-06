@@ -77,7 +77,6 @@ async function changeTheme(themeString: number) {
 }
 #dark-mode-title {
   /* float: left; */
-  /* position: relative; */
   margin: 10px;
   font-weight: bold;
 }
@@ -88,8 +87,6 @@ async function changeTheme(themeString: number) {
 }
 #dark-mode-toggle {
   margin: 10px;
-  /* position: relative; */
-  /* right: 0; */
   /* float: right; */
 }
 </style>
