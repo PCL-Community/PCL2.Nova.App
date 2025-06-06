@@ -3,6 +3,7 @@ build/**/*
 frontend/node_modules
 frontend/dist
 frontend/package-lock.json
+frontend/bun.lock
 frontend/package.json.md5
 .idea/
 go.sum
