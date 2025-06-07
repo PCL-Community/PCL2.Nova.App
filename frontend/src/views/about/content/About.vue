@@ -33,7 +33,7 @@ import {OpenCustomURL} from "../../../logic/functions";
         </div>
       </div>
     </MySelectCard>
-    <MySelectCard :isExpand="false" :title="'鸣谢'" :isLast="false">
+    <MySelectCard :isExpand="false" :title="'特别鸣谢'" :isLast="false">
       <div style="margin: 10px">
         <div class="about-row">
           <img src="../../../assets/images/Heads/ltcatt.jpg" alt="PCL作者头像">
