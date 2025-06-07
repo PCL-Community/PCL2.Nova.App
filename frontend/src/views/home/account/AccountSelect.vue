@@ -45,7 +45,7 @@ onMounted(async () => {
       <br>
       <div id="all-account">
         <template v-for="(atype, index) in AccountPart.accounts" :key="index">
-          <div class="a-account" :title="'玩家 ID: ' + atype.name + '\nUUID: ' + atype.uuid" @click="selectAccount(index)" :style="'border: ' + (index === current_select_account ? '1px solid skyblue;' : '0;') + ';'">
+          <div class="a-account" :title="'玩家 ID: ' + atype.name + '\nUUID: ' + atype.uuid" @click="selectAccount(index)" :style="'border: ' + (index === current_select_account ? '1px solid skyblue' : '0') + ';'">
             <img :src="'data:image/png;base64,' + atype.head_skin" alt="头像" class="a-avatar">
             <div>
               <MyNormalLabel class="a-name">{{atype.name}}</MyNormalLabel><br>

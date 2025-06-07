@@ -6,14 +6,22 @@ const isCheckedProps = withDefaults(defineProps<CheckButtonProps>(), {isChecked:
 import {dark_mode} from '../../logic/changeBody'
 import {ref, watch} from 'vue'
 
-const light = ref(dark_mode.value ? '#e6e6e6' : '#1a1a1a')
+const light = ref(dark_mode.value ? '#e6e6e6cf' : '#1a1a1acf')
 watch(dark_mode, value => {
-  light.value = value ? '#e6e6e6' : '#1a1a1a'
+  light.value = value ? '#e6e6e6cf' : '#1a1a1acf'
 })
 </script>
 
 <template>
-  <div :class="['radio', isCheckedProps.isChecked ? '' : 'cursor-pointer', isCheckedProps.isChecked ? 'button-active' : 'button-style']"><div class="circle"><div></div></div><div class="slot"><slot /></div></div>
+  <div :class="['radio', isCheckedProps.isChecked ? '' : 'cursor-pointer', isCheckedProps.isChecked ? 'button-active' : 'button-style']">
+    <div class="circle">
+      <div>
+      </div>
+    </div>
+    <div class="slot">
+      <slot />
+    </div>
+  </div>
 </template>
 
 <style scoped>
@@ -39,6 +47,15 @@ watch(dark_mode, value => {
   border: 1px solid deepskyblue;
   position: relative;
 }
+.button-style .circle {
+  border: 1px solid #A0A0A0;
+}
+.button-style:hover .circle {
+  border: 1px solid deepskyblue;
+}
+.button-style:active .circle {
+  transform: scale(86%);
+}
 .button-style .circle div {
   background-color: transparent;
   transition: background-color 0.2s;
@@ -52,14 +69,5 @@ watch(dark_mode, value => {
   width: 13px;
   height: 13px;
   transition: background-color 0.2s;
-}
-.button-style .circle {
-  border: 1px solid #A0A0A0;
-}
-.button-style:hover .circle {
-  border: 1px solid deepskyblue;
-}
-.button-style:active .circle {
-  transform: scale(86%);
 }
 </style>

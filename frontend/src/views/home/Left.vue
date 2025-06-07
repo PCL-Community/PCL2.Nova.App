@@ -91,14 +91,12 @@ watch(current_account_page, () => {
 
 #launch-title {
   background: linear-gradient(to right, rgb(63, 207, 255), rgb(96, 96, 255));
-  font-weight: normal;
   color: transparent;
   background-clip: text;
   font-size: 20px;
 }
 
 #launch-version {
-  font-weight: bold;
   font-size: 12px;
 }
 .account-enter-active {

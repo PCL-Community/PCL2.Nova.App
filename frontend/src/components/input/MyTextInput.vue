@@ -11,11 +11,11 @@ const props = withDefaults(defineProps<TextInputProps>(), {place_holder: '', mod
 const emit = defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
-const light = ref(dark_mode.value ? '#e6e6e6' : '#1a1a1a')
-const dark = ref(dark_mode.value ? '#1a1a1a' : '#e6e6e6')
+const light = ref(dark_mode.value ? '#e6e6e6cf' : '#1a1a1acf')
+const dark = ref(dark_mode.value ? '#1a1a1acf' : '#e6e6e6cf')
 watch(dark_mode, value => {
-  light.value = value ? '#e6e6e6' : '#1a1a1a'
-  dark.value = value ? '#1a1a1a' : '#e6e6e6'
+  light.value = value ? '#e6e6e6cf' : '#1a1a1acf'
+  dark.value = value ? '#1a1a1acf' : '#e6e6e6cf'
 })
 const handleInput = (e: Event) => {
   emit('update:modelValue', (e.target as HTMLInputElement).value)

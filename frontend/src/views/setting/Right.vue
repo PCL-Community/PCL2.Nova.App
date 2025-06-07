@@ -16,14 +16,13 @@ watch(current_setting, () => isTransitioning.value = false)
 <template>
   <div>
     <transition name="slide" @after-leave="control_leave">
-      <Game v-if="current_setting == 'Game' && isTransitioning" class="component" style="background-color: red;"/>
+      <Game v-if="current_setting == 'Game' && isTransitioning" class="component"/>
     </transition>
     <transition name="slide" @after-leave="control_leave">
       <Personalization v-if="current_setting == 'Personalization' && isTransitioning" class="component"/>
     </transition>
     <transition name="slide" @after-leave="control_leave">
-      <Launcher v-if="current_setting == 'Launcher' && isTransitioning" class="component"
-                style="background-color: green;"/>
+      <Launcher v-if="current_setting == 'Launcher' && isTransitioning" class="component"/>
     </transition>
   </div>
 </template>

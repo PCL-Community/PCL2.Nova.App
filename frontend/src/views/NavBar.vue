@@ -19,7 +19,7 @@ watch(dark_mode, value => {
 <template>
   <div id="all-nav" style="--wails-draggable: drag">
     <div id="icon-title" class="font-pcl">
-      PCL II
+      PCL
       <span class="icon-next back-next font-pcl">Nova</span>
       <span class="icon-next back-dev font-pcl">Dev</span>
     </div>
@@ -37,7 +37,7 @@ watch(dark_mode, value => {
           <path
               d="M12 2L12 11M18.363961 5.63603897C21.8786797 9.15075759 21.8786797 14.8492424 18.363961 18.363961 14.8492424 21.8786797 9.15075759 21.8786797 5.63603897 18.363961 2.12132034 14.8492424 2.12132034 9.15075759 5.63603897 5.63603897"/>
         </svg>
-        主页
+        启动
       </button>
       <button :class="current_view == 'download' ? 'active-button' : ('nav-button cursor-pointer')"
               @click="changeButtonState('download')">
@@ -251,7 +251,6 @@ watch(dark_mode, value => {
 
 .icon-next {
   border-radius: 6px;
-  box-shadow: 0 0 60px gray;
   padding: 5px;
   margin-top: 9px;
   margin-left: 6px;
@@ -267,10 +266,12 @@ watch(dark_mode, value => {
 
 .back-next {
   background-color: lightgray;
+  box-shadow: 0 0 60px gray;
 }
 
 .back-dev {
   background-color: orange;
+  box-shadow: 0 0 60px darkorange;
 }
 
 </style>

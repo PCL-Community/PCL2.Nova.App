@@ -5,21 +5,29 @@ import MyNormalButton from "../../../components/button/MyNormalButton.vue";
 import {OpenCustomURL} from "../../../logic/functions";
 </script>
 <template>
-  <div style="display: flex; flex-direction: column;">
+  <div style="display: flex; flex-direction: column; overflow-y: auto;">
     <MySelectCard :isExpand="false" :title="'关于'" :isLast="false">
       <div style="margin: 10px">
-        <div class="row">
+        <div class="about-row">
           <img src="../../../assets/images/Heads/xphost.jpg" alt="现作者头像">
-          <div class="column">
+          <div class="about-column">
             <MyNormalLabel class="normal-label">xphost008</MyNormalLabel>
             <p style="font-size: 13px; color: #606060">Plain Craft Launcher II: Nova 的现作者</p>
           </div>
         </div>
-        <div class="row">
+        <div class="about-row">
+          <img src="../../../assets/images/Heads/Comm.png" alt="Nova Logo">
+          <div class="about-column">
+            <MyNormalLabel class="normal-label">PCL Community</MyNormalLabel>
+            <p style="font-size: 13px; color: #606060">Plain Craft Launcher 社区开发团队</p>
+          </div>
+          <MyNormalButton class="afdian" @click="OpenCustomURL('https://github.com/PCL-Community/')">Github 主页</MyNormalButton>
+        </div>
+        <div class="about-row">
           <img src="../../../assets/images/PCLNova.Dev.png" alt="Nova Logo" style="border-radius: 0">
-          <div class="column">
+          <div class="about-column">
             <MyNormalLabel class="normal-label">Plain Craft Launcher II: Nova</MyNormalLabel>
-            <p style="font-size: 13px; color: #606060">当前版本：Dev 0.0.10</p>
+            <p style="font-size: 13px; color: #606060">当前版本：Dev 0.0.12</p>
           </div>
           <MyNormalButton class="afdian" @click="OpenCustomURL('https://github.com/PCL-Community/PCL2.Nova.App')">给项目点 Star</MyNormalButton>
         </div>
@@ -27,17 +35,17 @@ import {OpenCustomURL} from "../../../logic/functions";
     </MySelectCard>
     <MySelectCard :isExpand="false" :title="'鸣谢'" :isLast="false">
       <div style="margin: 10px">
-        <div class="row">
+        <div class="about-row">
           <img src="../../../assets/images/Heads/ltcatt.jpg" alt="PCL作者头像">
-          <div class="column">
+          <div class="about-column">
             <MyNormalLabel class="normal-label">龙腾猫跃</MyNormalLabel>
             <p style="font-size: 13px; color: #606060">Plain Craft Launcher II 的原作者</p>
           </div>
           <MyNormalButton class="afdian" @click="OpenCustomURL('https://afdian.com/a/LTCat')">赞助原作者</MyNormalButton>
         </div>
-        <div class="row">
+        <div class="about-row">
           <img src="../../../assets/images/Heads/moyuan.jpg" alt="原作者头像">
-          <div class="column">
+          <div class="about-column">
             <MyNormalLabel class="normal-label">墨渊</MyNormalLabel>
             <p style="font-size: 13px; color: #606060">Plain Craft Launcher II: Nova 的原作者</p>
           </div>
@@ -69,7 +77,7 @@ import {OpenCustomURL} from "../../../logic/functions";
   </div>
 </template>
 <style scoped>
-.row {
+.about-row {
   display: flex;
   flex-direction: row;
   width: 100%;
@@ -78,7 +86,7 @@ import {OpenCustomURL} from "../../../logic/functions";
   font-family: PCL, 'Microsoft JhengHei', serif;
   position: relative;
 }
-.row .afdian {
+.about-row .afdian {
   position: absolute;
   top: 5px;
   bottom: 5px;
@@ -86,14 +94,14 @@ import {OpenCustomURL} from "../../../logic/functions";
   width: 120px;
   height: 40px;
 }
-.row img {
+.about-row img {
   margin-left: 30px;
   margin-right: 10px;
   border-radius: 50%;
   width: 50px;
   height: 50px;
 }
-.column {
+.about-column {
   display: flex;
   flex-direction: column;
 }

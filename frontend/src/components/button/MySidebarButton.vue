@@ -7,11 +7,11 @@ const isCheckedProps = withDefaults(defineProps<CheckButtonProps>(), {isChecked:
 import {dark_mode} from '../../logic/changeBody'
 import {ref, watch} from 'vue'
 
-const light = ref(dark_mode.value ? '#e6e6e6' : '#1a1a1a')
-const dark = ref(dark_mode.value ? '#0a0a0a' : '#d6d6d6')
+const light = ref(dark_mode.value ? '#e6e6e6cf' : '#1a1a1acf')
+const dark = ref(dark_mode.value ? '#0a0a0acf' : '#d6d6d6cf')
 watch(dark_mode, value => {
-  light.value = value ? '#e6e6e6' : '#1a1a1a'
-  dark.value = value ? '#0a0a0a' : '#d6d6d6'
+  light.value = value ? '#e6e6e6cf' : '#1a1a1acf'
+  dark.value = value ? '#0a0a0acf' : '#d6d6d6cf'
 })
 </script>
 <template>

@@ -3,4 +3,6 @@
 
 export function GenerateBukkitUUID(arg1:string):Promise<string>;
 
+export function GetBackgroundImage(arg1:number):Promise<Array<string>>;
+
 export function UUIDToAvatar(arg1:string):Promise<number>;

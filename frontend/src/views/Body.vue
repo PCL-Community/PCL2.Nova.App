@@ -13,14 +13,14 @@ import settingRight from './setting/Right.vue'
 
 const isTransitioning = ref(true)
 
-const dark = ref(dark_mode.value ? '#151515' : '#f8f8f8')
+const dark = ref(dark_mode.value ? '#151515cf' : '#f8f8f8cf')
 
 function control_leave() {
   isTransitioning.value = true
 }
 
 watch(current_view, () => isTransitioning.value = false)
-watch(dark_mode, () => dark.value = dark_mode.value ? '#151515' : '#f8f8f8')
+watch(dark_mode, () => dark.value = dark_mode.value ? '#151515cf' : '#f8f8f8cf')
 </script>
 <template>
   <div id="body-all">

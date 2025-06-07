@@ -6,10 +6,14 @@ import {messagebox} from '../../logic/messagebox'
 import MyProgressBar from "../../components/input/MyProgressBar.vue";
 import {EventsOn} from "../../../wailsjs/runtime";
 import {StartDownload} from "../../../wailsjs/go/main/App";
+import MyToggleSwitch from "../../components/button/MyToggleSwitch.vue";
+import MyNormalLabel from "../../components/input/MyNormalLabel.vue";
+import MyCheckButton from "../../components/button/MyCheckButton.vue";
 
 const prog = ref(0)
 const stop = ref(0)
 const isLock = ref(false)
+const isFailure = ref(false)
 
 async function test_dialog() {
   console.log("召唤信息框之前")
@@ -27,7 +31,7 @@ EventsOn('download_progress', (progress) => {
   prog.value = progress
 })
 EventsOn('download_success', () => {
-  stop.value = 2
+  stop.value = isFailure.value ? 1 : 2
   isLock.value = false
 })
 
@@ -39,48 +43,33 @@ async function download_start() {
     await StartDownload()
   }
 }
+function toggleFailure() {
+  isFailure.value = !isFailure.value
+}
 </script>
 <template>
-  <div style="position: absolute;">
+  <div style="position: absolute; display: flex; flex-direction: column; align-items: center;">
+    <MyNormalLabel>进度条</MyNormalLabel>
     <MyProgressBar :max-value="100" :current-value="prog" width="100%" height="20px"/>
     <MyLoading :loading_text="stop == 1 ? '加载失败' + prog + '%' : stop == 0 ? '正在加载' + prog + '%' : '加载成功' + prog + '%'" :state="stop"
                class="ala"/>
-    <MyNormalButton id="test-button" @click="download_start">{{ "开始" }}</MyNormalButton>
-    <MyNormalButton id="test-dialog" @click="test_dialog">点我测试信息框</MyNormalButton>
+      <MyCheckButton :is-checked="isFailure" @click="toggleFailure">是否显示失😡败</MyCheckButton>
+<!--      <MyNormalLabel>是否显示失😡败</MyNormalLabel><MyToggleSwitch :is-checked="isFailure" @click="toggleFailure"/>-->
+    <MyNormalButton class="test-button" @click="download_start">{{ "开始" }}</MyNormalButton>
+    <MyNormalButton class="test-button" @click="test_dialog">点我测试信息框</MyNormalButton>
   </div>
 </template>
 <style scoped>
 .ala {
-  position: absolute;
-  margin: auto;
-  left: 0;
-  top: 0;
-  right: 0;
-  bottom: 0;
   width: 200px;
   height: 200px;
+  margin: 10px 0;
 }
 
-#test-button {
-  position: absolute;
-  margin: auto;
-  left: 0;
-  top: 260px;
-  right: 0;
-  bottom: 0;
+.test-button {
   width: 200px;
   height: 40px;
-}
-
-#test-dialog {
-  position: absolute;
-  margin: auto;
-  left: 0;
-  top: 380px;
-  right: 0;
-  bottom: 0;
-  width: 200px;
-  height: 40px;
+  margin-top: 10px;
 }
 </style>
 <script lang="ts">

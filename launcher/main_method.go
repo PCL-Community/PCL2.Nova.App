@@ -3,11 +3,15 @@ package launcher
 import (
 	"NovaImitation/info"
 	"NovaImitation/mmcll"
+	"encoding/base64"
+	"fmt"
 	"io/fs"
 	"math"
+	"math/rand"
 	"os"
 	"path/filepath"
 	"regexp"
+	"strings"
 )
 
 type ReaderWriter struct{}
@@ -59,13 +63,16 @@ func (rw *ReaderWriter) GetOtherIniPath() string {
 	}
 	return res
 }
-func (rw *ReaderWriter) GetConfigIniPath() string {
+func GetCurrentExeDir() string {
 	exePath, err := os.Executable()
 	if err != nil {
 		panic(err)
 	}
-	res := filepath.Join(filepath.Dir(exePath), "PCL.Nova", "config", "PCL2.Nova.ini")
-	err = EnsureConfigFile(res)
+	return filepath.Dir(exePath)
+}
+func (rw *ReaderWriter) GetConfigIniPath() string {
+	res := filepath.Join(GetCurrentExeDir(), "PCL.Nova", "config", "PCL2.Nova.ini")
+	err := EnsureConfigFile(res)
 	if err != nil {
 		panic(err)
 	}
@@ -163,4 +170,54 @@ func (mm *MainMethod) UUIDToAvatar(uuid string) int64 {
 		return ten
 	}
 	return -1
+}
+func (mm *MainMethod) GetBackgroundImage(index int) []string {
+	res := filepath.Join(GetCurrentExeDir(), "PCL.Nova", "BackgroundImage")
+	if err := os.MkdirAll(res, fs.ModePerm); err != nil {
+		panic(err)
+	}
+	files, err := os.ReadDir(res)
+	if err != nil {
+		panic(err)
+	}
+	var ind int
+	if len(files) > 0 {
+		if index < 0 || index > len(files)-1 {
+			ind = rand.Intn(len(files))
+		} else {
+			ind = index
+		}
+	} else {
+		return []string{}
+	}
+	i := 0
+	for _, file := range files {
+		// 跳过目录，只处理文件
+		if file.IsDir() {
+			continue
+		}
+
+		fileName := file.Name()
+		ext := strings.ToLower(filepath.Ext(fileName)) // 获取小写扩展名
+
+		// 检查是否为图片文件
+		if ext != ".png" && ext != ".jpg" {
+			continue
+		}
+		if i == ind {
+			fullPath := filepath.Join(res, fileName)
+			fileData, err := os.ReadFile(fullPath)
+			if err != nil {
+				fmt.Printf("读取文件 %s 失败: %v\n", fileName, err)
+				continue
+			}
+			base64Str := base64.StdEncoding.EncodeToString(fileData)
+			return []string{
+				base64Str,
+				ext,
+			}
+		}
+		i += 1
+	}
+	return []string{}
 }

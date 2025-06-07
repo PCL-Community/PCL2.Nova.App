@@ -3,20 +3,20 @@ import {ref, watch} from 'vue'
 import {b_button, b_content, b_level, b_resolve, b_show, b_show_all, b_title} from '../../logic/messagebox'
 import {dark_mode} from '../../logic/changeBody'
 
-const dark = ref(dark_mode.value ? '#1a1a1a' : '#f6f6f6')
-const light = ref(dark_mode.value ? '#f6f6f6' : '#1a1a1a')
-const hov = ref(dark_mode.value ? '#0a0a0a' : '#d6d6d6')
-const bc = ref(dark_mode.value ? "#282828" : "aliceblue")
+const dark = ref(dark_mode.value ? '#1a1a1acf' : '#f6f6f6cf')
+const light = ref(dark_mode.value ? '#f6f6f6cf' : '#1a1a1acf')
+const hov = ref(dark_mode.value ? '#0a0a0acf' : '#d6d6d6cf')
+const bc = ref(dark_mode.value ? "#282828cf" : "#f0f8ffcf")
 watch(dark_mode, value => {
-  dark.value = value ? '#1a1a1a' : '#e6e6e6'
-  light.value = value ? '#e6e6e6' : '#1a1a1a'
-  hov.value = value ? '#0a0a0a' : '#d6d6d6'
-  bc.value = value ? "#282828" : "aliceblue"
+  dark.value = value ? '#1a1a1acf' : '#e6e6e6cf'
+  light.value = value ? '#e6e6e6cf' : '#1a1a1acf'
+  hov.value = value ? '#0a0a0acf' : '#d6d6d6cf'
+  bc.value = value ? "#282828cf" : "#f0f8ffcf"
 })
-const m_font_color = ref("#3142b7")
+const m_font_color = ref("#3142b7cf")
 const m_back_color = ref("#0000007f")
 watch(b_level, value => {
-  m_font_color.value = value == 0 ? "#3142b7" : value == 1 ? "#c7ad2a" : "#ff4c4c"
+  m_font_color.value = value == 0 ? "#3142b7cf" : value == 1 ? "#c7ad2acf" : "#ff4c4ccf"
   m_back_color.value = value == 0 ? '#0000005f' : value == 1 ? '#4f4f005f' : '#4f00005f'
 });
 const m_resolve = ref(0)
