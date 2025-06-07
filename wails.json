@@ -1,13 +1,14 @@
 {
-  "$schema": "https://wails.io/schemas/config.v2.json",
-  "name": "PCL2.Nova.App",
-  "outputfilename": "PCL2.Nova.App",
-  "frontend:install": "npm install",
-  "frontend:build": "npm run build",
-  "frontend:dev:watcher": "npm run dev",
-  "frontend:dev:serverUrl": "auto",
-  "author": {
-    "name": "Xphost",
-    "email": "xphost@foxmail.com"
-  }
+    "$schema": "https://wails.io/schemas/config.v2.json",
+    "name": "PCL2.Nova.App",
+    "outputfilename": "PCL2.Nova.App",
+    "frontend:install": "pnpm i",
+    "frontend:build": "pnpm build",
+    "frontend:dev:watcher": "pnpm dev",
+    "frontend:dev:serverUrl": "auto",
+    "wailsjsdir": "frontend/src/modules",
+    "author": {
+        "name": "Xphost",
+        "email": "xphost@foxmail.com"
+    }
 }

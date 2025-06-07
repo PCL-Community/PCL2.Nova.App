@@ -1,9 +1,8 @@
 package main
 
 import (
-	"NovaImitation/mmcll"
+	"NovaImitation/core/mmcll"
 	"fmt"
-	"os"
 	"strings"
 	"testing"
 )
