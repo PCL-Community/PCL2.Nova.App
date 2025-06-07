@@ -44,10 +44,10 @@ watch(dark_mode, value => {
   position: absolute;
   content: '';
   width: 4px;
-  height: 0px;
+  height: 0;
   background-color: rgb(0, 186, 254);
   left: 0;
-  top: 0px;
+  top: 0;
   transition: all 0.2s;
 }
 
