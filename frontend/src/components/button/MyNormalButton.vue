@@ -6,13 +6,13 @@ interface NormalButtonProps {
 }
 const isDisabledProps = withDefaults(defineProps<NormalButtonProps>(), {isDisabled: false})
 
-const dark = ref(dark_mode.value ? '#1a1a1acc' : '#f6f6f6cc')
-const light = ref(dark_mode.value ? '#f6f6f6cc' : '#1a1a1acc')
-const hov = ref(dark_mode.value ? '#0a0a0acc' : '#d6d6d6cc')
+const dark = ref(dark_mode.value ? '#1a1a1acf' : '#f6f6f6cf')
+const light = ref(dark_mode.value ? '#f6f6f6cf' : '#1a1a1acf')
+const hov = ref(dark_mode.value ? '#0a0a0acf' : '#d6d6d6cf')
 watch(dark_mode, value => {
-  dark.value = value ? '#1a1a1acc' : '#e6e6e6cc'
-  light.value = value ? '#e6e6e6cc' : '#1a1a1acc'
-  hov.value = value ? '#0a0a0acc' : '#d6d6d6cc'
+  dark.value = value ? '#1a1a1acf' : '#e6e6e6cf'
+  light.value = value ? '#e6e6e6cf' : '#1a1a1acf'
+  hov.value = value ? '#0a0a0acf' : '#d6d6d6cf'
 })
 </script>
 <template>
@@ -25,7 +25,6 @@ watch(dark_mode, value => {
   background-color: v-bind(dark);
   border-radius: 6px;
   border: 1px solid v-bind(light);
-  font-weight: bold;
   transition: all 0.2s;
   color: v-bind(light)
 }

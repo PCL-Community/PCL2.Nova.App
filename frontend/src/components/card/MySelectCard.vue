@@ -9,11 +9,11 @@ interface CheckButtonProps {
   isLast?: boolean,
 }
 
-const light = ref(dark_mode.value ? '#f8f8f8' : '#151515')
-const dark = ref(dark_mode.value ? '#151515' : '#f8f8f8')
+const light = ref(dark_mode.value ? '#f8f8f8cf' : '#151515cf')
+const dark = ref(dark_mode.value ? '#151515cf' : '#f8f8f8cf')
 watch(dark_mode, value => {
-  light.value = value ? '#f8f8f8' : '#151515'
-  dark.value = value ? '#151515' : '#f8f8f8'
+  light.value = value ? '#f8f8f8cf' : '#151515cf'
+  dark.value = value ? '#151515cf' : '#f8f8f8cf'
 })
 const isCheckedProps = withDefaults(defineProps<CheckButtonProps>(), {
   isExpand: false,
@@ -22,46 +22,48 @@ const isCheckedProps = withDefaults(defineProps<CheckButtonProps>(), {
   isLast: false
 })
 // const mh = ref(isCheckedProps.maxHeight + 'px')
-const cardHeight = ref(26)  // 默认标题区域高度
+const cardHeight = ref("43px")
 // watch(() => isCheckedProps.maxHeight, value => mh.value = value + 'px')
 const isExpandComp = ref(!isCheckedProps.isExpand)
 // const border = ref("6px")
 const isLastComp = ref(isCheckedProps.isLast ? "15px" : "0")
-const touchColor = ref(dark_mode.value ? '#0a0a0a' : '#d6d6d6')
+const touchColor = ref(dark_mode.value ? '#0a0a0acf' : '#d6d6d6cf')
 
-let observer: ResizeObserver | null = null
-const mycardInnerRef = ref<HTMLElement>()
+const myCardInnerRef = ref<HTMLElement>()
+// let observer: ResizeObserver | null = null
+
 function style_cancel() {
   // border.value = isExpandComp.value ? "0" : "6px"
-  let hovColor = dark_mode.value ? "#0a0a0a" : "#d6d6d6"
-  let Color = dark_mode.value ? "#151515" : "#f8f8f8"
+  let hovColor = dark_mode.value ? "#0a0a0acf" : "#d6d6d6cf"
+  let Color = dark_mode.value ? "#151515cf" : "#f8f8f8cf"
   touchColor.value = isExpandComp.value ? Color : hovColor
 }
 
 function changeProps() {
-  if (!isCheckedProps.isExpand) return;
+  if (!isCheckedProps.isExpand) return
   isExpandComp.value = !isExpandComp.value
-  // border.value = "0"
-  touchColor.value = dark_mode.value ? "#151515" : "#f8f8f8"
-  // if(!isExpandComp) cardHeight.value = 60
-  cardHeight.value = isExpandComp.value ? (mycardInnerRef.value!.offsetHeight + 26) : 26;
+  touchColor.value = dark_mode.value ? "#151515cf" : "#f8f8f8cf"
+  cardHeight.value = isExpandComp.value ? (myCardInnerRef.value!.offsetHeight + 43) + "px" : "43px"
 }
-
-// 如果不需要卡片内容变化时实时弹性动画的话，下面这部分observer可以删掉
 onMounted(() => {
-    observer = new ResizeObserver(() => {
-        if(!isExpandComp.value) return
-        cardHeight.value = mycardInnerRef.value!.offsetHeight + 26
-    })
-    observer.observe(mycardInnerRef.value!)
+  if (!isCheckedProps.isExpand) {
+    cardHeight.value = (myCardInnerRef.value!.offsetHeight + 43) + "px"
+  }
 })
+// onMounted(() => {
+//   observer = new ResizeObserver(() => {
+//     if(!isExpandComp.value) return
+//     cardHeight.value = myCardInnerRef.value!.offsetHeight + 26
+//   })
+//   observer.observe(myCardInnerRef.value!)
+// })
+//
+// onUnmounted(() => observer?.disconnect())
 
-onUnmounted(() => observer?.disconnect())
 </script>
-
 <template>
   <div class="card-container">
-    <div :class="'grid' + (isCheckedProps.isExpand ? ' cursor-pointer' : '')"
+    <div :class="['grid', isCheckedProps.isExpand ? ' cursor-pointer' : '']"
          :isOpen="(isExpandComp ? 'expand' : 'close')" @click="changeProps">
       {{ isCheckedProps.title }}
       <svg
@@ -76,38 +78,29 @@ onUnmounted(() => observer?.disconnect())
         <polyline points="6 10 12 16 18 10"/>
       </svg>
     </div>
-    <!-- <Transition name="card-content"> -->
-      <div @transitionend="style_cancel()" ref="mycardInnerRef">
-        <slot/>
-      </div>
-    <!-- </Transition> -->
+    <div @transitionend="style_cancel()" ref="myCardInnerRef">
+      <slot/>
+    </div>
   </div>
 </template>
 <style scoped>
-/* .card-content-enter-active,
-.card-content-leave-active {
-    transition: opacity 0.2s;
-}
-
-.card-content-enter-from,
-.card-content-leave-to {
-    opacity: 0;
-} */
-
-.card-container{
+.card-container {
   flex-shrink: 0;
-  height: v-bind("cardHeight +'px'");
-  background-color: v-bind(dark);
-  margin: 22px;
-  padding: 10px 20px;
+  height: v-bind(cardHeight);
   border-radius: 6px;
-  transition: height 0.4s cubic-bezier(.4, 1.4, .6, 1);
+  transition: all 0.2s;
+  margin: 15px 22px 0 22px;
+  background-color: v-bind(dark);
   overflow: hidden;
 }
-
+.card-container:last-child {
+  margin-bottom: 15px;
+}
 .grid[isOpen="close"],
 .grid[isOpen="expand"] {
-  /* background-color: v-bind(dark); */
+  /* border-radius: 6px 6px v-bind(border) v-bind(border); */
+  border-radius: 6px;
+  padding: 10px 20px;
   font-size: 16px;
   font-weight: bold;
   transition: all 0.2s;
@@ -123,14 +116,13 @@ onUnmounted(() => observer?.disconnect())
   /* overflow: hidden; */
   /* border-bottom-left-radius: 6px; */
   /* border-bottom-right-radius: 6px; */
-  /* margin-left: 22px;
-  margin-right: 22px; */
+  /* margin-left: 22px; */
+  /* margin-right: 22px; */
   /* background-color: v-bind(dark); */
   transition: all 0.2s;
-  margin-bottom: v-bind(isLastComp);
   color: v-bind(light);
+  overflow: hidden;
 }
-
 .card-icon,
 .card-icon-expand {
   width: 20px;
@@ -147,7 +139,6 @@ onUnmounted(() => observer?.disconnect())
 
 .grid[isOpen="expand"] + div {
   height: fit-content;
-  /* max-height: 100%; */
   /* max-height: v-bind(mh); */
 }
 </style>

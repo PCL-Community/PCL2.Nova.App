@@ -6,6 +6,10 @@ export function GenerateBukkitUUID(arg1) {
   return window['go']['launcher']['MainMethod']['GenerateBukkitUUID'](arg1);
 }
 
+export function GetBackgroundImage(arg1) {
+  return window['go']['launcher']['MainMethod']['GetBackgroundImage'](arg1);
+}
+
 export function UUIDToAvatar(arg1) {
   return window['go']['launcher']['MainMethod']['UUIDToAvatar'](arg1);
 }

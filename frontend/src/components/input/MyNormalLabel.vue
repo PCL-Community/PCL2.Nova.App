@@ -2,9 +2,9 @@
 import {ref, watch} from 'vue'
 import {dark_mode} from '../../logic/changeBody'
 
-const light = ref(dark_mode.value ? '#e6e6e6' : '#1a1a1a')
+const light = ref(dark_mode.value ? '#e6e6e6cf' : '#1a1a1acf')
 watch(dark_mode, value => {
-  light.value = value ? '#e6e6e6' : '#1a1a1a'
+  light.value = value ? '#e6e6e6cf' : '#1a1a1acf'
 })
 </script>
 <template>

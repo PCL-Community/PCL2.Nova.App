@@ -12,9 +12,9 @@ const maxValue = ref(isCheckedProps.maxValue)
 import { ref, watch } from 'vue'
 import { dark_mode } from "../../logic/changeBody";
 const curwidth = ref("")
-const backcolor = ref(dark_mode.value ? '#303030' : 'lightgray')
+const backcolor = ref(dark_mode.value ? '#303030cf' : '#909090cf')
 watch(dark_mode, value => {
-  backcolor.value = value ? '#303030' : 'lightgray'
+  backcolor.value = value ? '#303030cf' : '#909090cf'
 })
 watch(() => isCheckedProps.currentValue, v => {
   curwidth.value = (v / maxValue.value) * parseInt(width.value) + "%"

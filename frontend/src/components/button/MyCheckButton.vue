@@ -2,51 +2,83 @@
 interface CheckButtonProps {
   isChecked?: boolean
 }
-
 const isCheckedProps = withDefaults(defineProps<CheckButtonProps>(), {isChecked: false})
 import {dark_mode} from '../../logic/changeBody'
 import {ref, watch} from 'vue'
 
-const light = ref(dark_mode.value ? '#e6e6e6' : '#1a1a1a')
+const light = ref(dark_mode.value ? '#e6e6e6cf' : '#1a1a1acf')
 watch(dark_mode, value => {
-  light.value = value ? '#e6e6e6' : '#1a1a1a'
+  light.value = value ? '#e6e6e6cf' : '#1a1a1acf'
 })
 </script>
+
 <template>
-  <button :class="isCheckedProps.isChecked ? 'button-active' : ('button-style cursor-pointer')">
-    <slot/>
-  </button>
+  <div :class="['check cursor-pointer', isCheckedProps.isChecked ? 'button-active' : 'button-style']">
+    <div class="correct">
+      <svg
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+          width="13"
+          height="13"
+          stroke="#00BFFFFF"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          fill="none">
+        <path d="M1.5 16.5 L7.5 22.5 M7.5 22.5 L22.5 7.5" />
+      </svg>
+    </div>
+    <div class="slot">
+      <slot />
+    </div>
+  </div>
 </template>
+
 <style scoped>
-.button-style, .button-active {
-  font-weight: bold;
-  border-radius: 50px;
-  transition: all 0.2s;
-}
-.button-style {
-  background-color: transparent;
-  border: 0;
+.check {
   color: v-bind(light);
-  stroke: v-bind(light);
+  height: 30px;
+  width: max-content;
+  display: flex;
+  align-items: center;
 }
-.button-active {
-  background-color: rgb(19, 85, 206);
-  border: 1px solid gray;
-  box-shadow: 0 1px 3px gray;
-  color: #e6e6e6;
-  stroke: #e6e6e6;
+.slot {
+  position: relative;
+  top: -1px;
 }
-
-.button-style:hover {
-  background-color: rgb(164, 191, 242);
-  box-shadow: 0 1px 3px gray;
+.correct {
+  margin-right: 5px;
+  transition: all 0.2s;
+  border-radius: 5px;
+  width: 17px;
+  height: 17px;
 }
-
-.button-style:active {
-  transform: scale(0.96);
+.button-active .correct {
+  border: 2px solid deepskyblue;
+  position: relative;
 }
-
-.button-active:hover {
-  background-color: rgb(0, 66, 187);
+.button-style .correct {
+  border: 2px solid #A0A0A0;
+}
+.button-style:hover .correct {
+  border: 2px solid deepskyblue;
+}
+.check:active .correct {
+  transform: scale(86%);
+}
+.correct svg {
+  position: absolute;
+  opacity: 0;
+  top: 2px;
+  left: 2px;
+  width: 13px;
+  height: 13px;
+  transition: opacity 0.2s;
+}
+.button-style .correct svg {
+  opacity: 0;
+}
+.button-active .correct svg {
+  opacity: 1;
 }
 </style>

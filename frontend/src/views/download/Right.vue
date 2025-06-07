@@ -19,28 +19,22 @@ watch(current_download, () => isTransitioning.value = false)
 <template>
   <div>
     <transition name="slide" @after-leave="control_leave">
-      <AutoInstall v-if="current_download == 'Auto-Install' && isTransitioning" class="component"
-                   style="background-color: red;"/>
+      <AutoInstall v-if="current_download == 'Auto-Install' && isTransitioning" class="component"/>
     </transition>
     <transition name="slide" @after-leave="control_leave">
-      <ManualInstall v-if="current_download == 'Manual-Install' && isTransitioning" class="component"
-                     style="background-color: blue;"/>
+      <ManualInstall v-if="current_download == 'Manual-Install' && isTransitioning" class="component"/>
     </transition>
     <transition name="slide" @after-leave="control_leave">
-      <ExtensionMod v-if="current_download == 'Extension-Mod' && isTransitioning" class="component"
-                    style="background-color: green;"/>
+      <ExtensionMod v-if="current_download == 'Extension-Mod' && isTransitioning" class="component"/>
     </transition>
     <transition name="slide" @after-leave="control_leave">
-      <ExtensionModpack v-if="current_download == 'Extension-Modpack' && isTransitioning" class="component"
-                        style="background-color: yellow;"/>
+      <ExtensionModpack v-if="current_download == 'Extension-Modpack' && isTransitioning" class="component"/>
     </transition>
     <transition name="slide" @after-leave="control_leave">
-      <ExtensionResourcepack v-if="current_download == 'Extension-Resourcepack' && isTransitioning" class="component"
-                             style="background-color: orange;"/>
+      <ExtensionResourcepack v-if="current_download == 'Extension-Resourcepack' && isTransitioning" class="component"/>
     </transition>
     <transition name="slide" @after-leave="control_leave">
-      <ExtensionShaderpack v-if="current_download == 'Extension-Shaderpack' && isTransitioning" class="component"
-                           style="background-color: purple;"/>
+      <ExtensionShaderpack v-if="current_download == 'Extension-Shaderpack' && isTransitioning" class="component"/>
     </transition>
   </div>
 </template>

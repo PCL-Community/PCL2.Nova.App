@@ -48,6 +48,17 @@
 1. 翻新账号部分！现在终于有CE那味了~~（虽然现在还暂时无法登录微软，不过可以登录离线登录啦！！）
 2. 调整了一下信息框的背景颜色，现在看起来应该会更柔和了一点吧~
 3. 稍微调整了一下加载框的暗色模式颜色。现在中间的镐子动画应该更加明显了。
-4. 为NormalButton新增了disabled属性！现在可以正常显示禁用的样式啦~（不过需要手动判断。。）
+4. 为NormalButton新增了disabled属性！现在可以正常显示禁用的样式啦~（不过正常的话需要手动判断此时是否处在禁用状态。。）
 5. 账号部分目前可以正常保存到外部文件了！【别轻易发给别人（】
 6. 为Nova添加了exe的图标啦！
+
+# 0.0.12
+
+1. 修改了MyLoading的样式，现在成功和失败时的左下角都会有一个图标了。
+2. 修正了一下MySelectCard组件，现在已经不用maxHeight了~ （[PR#27](https://github.com/PCL-Community/PCL2.Nova.App/pull/27)，[@AMagicPear](https://github.com/AMagicPear)）
+3. 新组件：MyCheckButton！（同时修改原来的MyCheckButton名称为MyNavButton）【与MyNavButton不同的是，该button选中时中间会打勾~】
+   1. 👆感觉完全可以被MyToggleSwitch代替（但是又转念一想，好像也可以（目前MyCheckButton仅在主界面有展示，在别的地方目前没有实用空间。。
+4. 初步设置透明度，并且现在已经支持设置背景图片啦！只需要将背景图片放到`{exe}\PCL.Nova\BackgroundImage`文件夹下，即可随机从中抽取一张背景图片展示！！
+5. 现在开始，所有**组件**均有透明度127了！不用担心遮挡住背景图片了！
+6. 稍微调亮了一点加载框成功时的颜色（
+7. 在关于与鸣谢部分新增了PCL Community!

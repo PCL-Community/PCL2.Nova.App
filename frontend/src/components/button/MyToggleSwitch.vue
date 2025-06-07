@@ -8,16 +8,16 @@ import {ref, watch} from 'vue'
 
 const check_value = ref(isCheckedProps.isChecked)
 import {dark_mode} from "../../logic/changeBody";
-const rdBack = ref(dark_mode.value ? "#303030" : "#fff")
-const ncBack = ref(dark_mode ? "#909090" : "lightgray")
+const rdBack = ref(dark_mode.value ? "#303030cf" : "#ffffffcf")
+const ncBack = ref(dark_mode ? "#909090cf" : "#909090cf")
 watch(dark_mode, v => {
-  rdBack.value = v ? "#303030" : "#fff"
+  rdBack.value = v ? "#303030cf" : "#ffffffcf"
 })
 watch(() => isCheckedProps.isChecked, v => check_value.value = v)
 const back = ref(ncBack)
 const left = ref("4px")
 watch(check_value, v => {
-  ncBack.value = dark_mode.value ? "#707070" : "lightgray"
+  ncBack.value = dark_mode.value ? "#707070cf" : "#909090cf"
   back.value = v ? "skyblue" : ncBack.value
   left.value = v ? "28px" : "4px"
 }, {immediate: true})

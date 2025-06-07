@@ -20,7 +20,7 @@ async function changeTheme(themeString: number) {
 </script>
 <template>
   <div style="display: flex; flex-direction: column;">
-    <MySelectCard :isExpand="false" :title="'主题'" :isLast="false" style="position: relative">
+    <MySelectCard :maxHeight="130" :isExpand="false" :title="'主题'" :isLast="false" style="position: relative">
       <div style="margin: 10px; position: relative;">
         <div id="mask">
           <MyNormalLabel>请支持官方版本以使用主题功能</MyNormalLabel>
@@ -49,7 +49,7 @@ async function changeTheme(themeString: number) {
         </div>
       </div>
     </MySelectCard>
-    <MySelectCard :isExpand="true" :title="'个性化'" :isLast="true">
+    <MySelectCard :maxHeight="60" :isExpand="true" :title="'个性化'" :isLast="true">
       <div style="margin: 10px; display: flex; justify-content: space-between;">
         <div id="dark-mode-title">
           暗色模式
@@ -77,7 +77,6 @@ async function changeTheme(themeString: number) {
 }
 #dark-mode-title {
   /* float: left; */
-  /* position: relative; */
   margin: 10px;
   font-weight: bold;
 }
@@ -88,8 +87,6 @@ async function changeTheme(themeString: number) {
 }
 #dark-mode-toggle {
   margin: 10px;
-  /* position: relative; */
-  /* right: 0; */
   /* float: right; */
 }
 </style>

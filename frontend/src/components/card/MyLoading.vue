@@ -7,8 +7,8 @@ interface LoadingProps {
   state: number,
 }
 
-const dark = ref(dark_mode.value ? '#6287d7' : 'aliceblue')
-watch(dark_mode, value => dark.value = value ? '#6287d7' : 'aliceblue')
+const dark = ref(dark_mode.value ? '#6287d7cf' : '#f0f8ffcf')
+watch(dark_mode, value => dark.value = value ? '#6287d7cf' : '#f0f8ffcf')
 const loading_props = withDefaults(defineProps<LoadingProps>(), {loading_text: '正在加载', state: 0})
 const loading_text_ref = ref('正在加载')
 const current_state = ref(0)
@@ -18,7 +18,7 @@ watch(() => loading_props.loading_text, value => {
 }, {immediate: true})
 watch(() => loading_props.state, value => {
   current_state.value = value
-  color.value = value == 1 ? "red" : value == 0 ? "blue" : "green"
+  color.value = value == 1 ? "red" : value == 0 ? "blue" : "#60df60"
 }, {immediate: true})
 </script>
 <template>
@@ -37,6 +37,8 @@ watch(() => loading_props.state, value => {
           d="M 80 120 Q 95 100 130 100 Q 140 80 150 100 Q 180 100 200 120 Q 150 100 145 110 L 145 190 L 135 190 L 135 110 M 80 120 Q 120 100 135 110"
           :class="current_state != 0 ? 'loading-stop' : 'loading'"/>
       <path d="M 30 190 L 90 190"/>
+      <path d="M 50 160 L 70 180 M 70 160 L 50 180" :class="current_state == 1 ? 'loading-icon' : 'loading-icon-hidden'"/>
+      <path d="M 45 170 L 55 180 M 75 160 L 55 180" :class="current_state == 2 ? 'loading-icon' : 'loading-icon-hidden'"/>
       <path d="M 50 180 L 40 170" :class="current_state != 0 ? 'loading-stop-bling' : 'loading-bling-1'"/>
       <path d="M 55 180 L 50 170" :class="current_state != 0 ? 'loading-stop-bling' : 'loading-bling-2'"/>
       <path d="M 65 180 L 70 170" :class="current_state != 0 ? 'loading-stop-bling' : 'loading-bling-3'"/>
@@ -60,7 +62,14 @@ watch(() => loading_props.state, value => {
   color: v-bind(color);
   transition: all 0.2s;
 }
-
+.loading-icon-hidden {
+  transition: opacity 0.2s;
+  opacity: 0;
+}
+.loading-icon {
+  transition: opacity 0.2s;
+  opacity: 1;
+}
 .loading {
   animation: loading 1s infinite;
   transform-origin: 140px 180px;
