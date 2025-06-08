@@ -6,7 +6,7 @@
 }
 
 @plugin "daisyui/theme" {
-    name: "novalight";
+    name: "NovaLight";
     default: true;
     prefersdark: false;
     color-scheme: "light";
@@ -16,7 +16,7 @@
     --color-base-content: oklch(21% 0.006 285.885);
     --color-primary: oklch(65.13% 0.144 248.47);
     --color-primary-content: oklch(13% 0.028 261.692);
-    --color-secondary: oklch(65.13% 0.144 257.98);
+    --color-secondary: oklch(68.99% 0.157 248.6);
     --color-secondary-content: oklch(13% 0.028 261.692);
     --color-accent: oklch(65.13% 0.144 277.21);
     --color-accent-content: oklch(13% 0.028 261.692);
@@ -41,7 +41,7 @@
 }
 
 @plugin "daisyui/theme" {
-    name: "novadark";
+    name: "NovaDark";
     default: false;
     prefersdark: true;
     color-scheme: "dark";
@@ -49,11 +49,11 @@
     --color-base-200: oklch(23.26% 0.014 253.1);
     --color-base-300: oklch(21.15% 0.012 254.09);
     --color-base-content: oklch(97.807% 0.029 256.847);
-    --color-primary: oklch(0.5397 0.1435 248.47);
+    --color-primary: oklch(53.97% 0.1435 248.47);
     --color-primary-content: oklch(97% 0.014 254.604);
-    --color-secondary: oklch(0.5397 0.1435 257.98);
+    --color-secondary: oklch(65.13% 0.157 248.6);
     --color-secondary-content: oklch(96% 0.018 272.314);
-    --color-accent: oklch(0.5397 0.1435 277.21);
+    --color-accent: oklch(53.97% 0.1435 277.21);
     --color-accent-content: oklch(96% 0.016 293.756);
     --color-neutral: oklch(14% 0.005 285.823);
     --color-neutral-content: oklch(92% 0.004 286.32);
@@ -84,4 +84,15 @@
 
 img {
     pointer-events: none;
+}
+
+*::-webkit-scrollbar {
+    position: absolute;
+    right: 0;
+    width: 4px;
+    background-color: transparent;
+}
+::-webkit-scrollbar-thumb {
+    background-color: var(--color-primary);
+    border-radius: 999px;
 }

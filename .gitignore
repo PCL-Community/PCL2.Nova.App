@@ -1,10 +1,13 @@
+# 构建产物
 build/**/*
 !build/appicon.png
-frontend/node_modules
-frontend/dist
-frontend/package-lock.json
-frontend/bun.lock
-frontend/package.json.md5
-.idea/
 go.sum
 
+# 前端
+frontend/package.json.md5
+
+# 编辑器
+.idea/
+
+# 缓存文件夹
+_*/ 

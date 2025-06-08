@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <div class="relative shadow-lg shadow-base-100/20" :class="`size-${size / 4}`">
+    <div class="relative shadow-[0_0_4px_var(--color-base-content)]">
         <div
             class="absolute inset-0 bg-no-repeat"
             style="image-rendering: pixelated"

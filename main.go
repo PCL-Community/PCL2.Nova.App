@@ -1,7 +1,9 @@
 package main
 
 import (
-	"NovaImitation/core/launcher"
+	"NovaImitation/core/account"
+	"NovaImitation/core/config"
+
 	"context"
 	"embed"
 	"time"
@@ -55,11 +57,10 @@ func main() {
 			Assets: assets,
 		},
 		OnStartup: app.startup,
-		Bind: []interface{}{
+		Bind: []any{
 			app,
-			&launcher.ReaderWriter{},
-			&launcher.MainMethod{},
-			&launcher.Account{},
+			&account.AccountBinding{},
+			&config.ConfigBinding{},
 		},
 	})
 

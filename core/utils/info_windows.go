@@ -1,9 +1,10 @@
-package info
+package utils
 
 import (
-	"golang.org/x/sys/windows"
 	"os/user"
 	"path/filepath"
+
+	"golang.org/x/sys/windows"
 )
 
 func GetWindowsVersion() bool {
