@@ -1,4 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
+import HomeLeft from "@/fragments/HomeLeft.vue";
+import DownloadLeft from "@/fragments/DownloadLeft.vue";
+import SettingsLeft from "@/fragments/SettingsLeft.vue";
+import MoreLeft from "@/fragments/MoreLeft.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -9,6 +13,9 @@ const router = createRouter({
             component: () => import("@/views/HomeView.vue"),
             meta: {
                 navbar_mode: "normal",
+                left_comp: HomeLeft,
+                left_width: "33%",
+                left_id: "E72035ED-F959-43A4-B01A-50E7A5606C37",
             },
         },
         {
@@ -20,6 +27,9 @@ const router = createRouter({
             },
             meta: {
                 navbar_mode: "normal",
+                left_comp: DownloadLeft,
+                left_width: "calc(var(--spacing)*36)",
+                left_id: "935475B0-D428-4D7A-9361-36AB29CEDFA1",
             },
             children: [
                 // Clients
@@ -91,6 +101,9 @@ const router = createRouter({
             },
             meta: {
                 navbar_mode: "normal",
+                left_comp: SettingsLeft,
+                left_width: "calc(var(--spacing)*28)",
+                left_id: "748EC7CE-65BE-4C20-B5F4-9B38BACD2C3E",
             },
             children: [
                 {
@@ -114,9 +127,32 @@ const router = createRouter({
             path: "/more",
             name: "more",
             component: () => import("@/views/MoreView.vue"),
+            redirect: {
+                name: "more-help",
+            },
             meta: {
                 navbar_mode: "normal",
+                left_comp: MoreLeft,
+                left_width: "calc(var(--spacing)*34)",
+                left_id: "8F73FEA2-847D-404E-990B-C9EC69B2B779",
             },
+            children: [
+                {
+                    path: "help",
+                    name: "more-help",
+                    component: () => import("@/views/more/Help.vue"),
+                },
+                {
+                    path: "credits",
+                    name: "more-credits",
+                    component: () => import("@/views/more/Credits.vue"),
+                },
+                {
+                    path: "tools",
+                    name: "more-tools",
+                    component: () => import("@/views/more/Tools.vue"),
+                },
+            ],
         },
     ],
 });
