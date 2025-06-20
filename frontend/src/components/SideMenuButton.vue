@@ -7,7 +7,7 @@
 
 <template>
     <div
-        class="relative w-full h-9 pl-3 flex items-center gap-2 border border-transparent hover:bg-primary/25 hover:border-secondary/25 transition-color ease-in-out duration-150"
+        class="relative w-full h-9 pl-3 flex items-center gap-2 border border-transparent hover:bg-primary/25 hover:border-secondary/25 transition-color ease-in-out duration-150 cursor-pointer"
         :class="{ 'text-secondary': $props.selected }">
         <Transition name="spring">
             <i class="absolute left-0 w-1 h-2/3 bg-primary rounded-[0_1.5px_1.5px_0]" v-if="$props.selected"></i>

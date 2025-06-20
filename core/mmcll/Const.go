@@ -1,4 +1,4 @@
-package mmcll;
+package mmcll
 
 const (
 	LauncherName      = "MMCLL"          // LauncherName 启动器名称（请自行修改）

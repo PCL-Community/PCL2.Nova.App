@@ -27,7 +27,7 @@
         }
         currentTheme.value = theme;
         configStore.config["Customize"]["Theme"]["Name"] = theme;
-        // configStore.config["Customize"]["Theme"]["Mode"] = mode;
+        configStore.config["Customize"]["Theme"]["Mode"] = String(mode);
         await configStore.saveConfig(); // save config
     });
 </script>

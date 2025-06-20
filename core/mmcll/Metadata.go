@@ -17,6 +17,7 @@ func NewLaunchOption(account launchAccount, javaPath, rootPath, versionPath, gam
 		additionalGame: "",
 	}
 }
+
 func (opt *launchOption) SetWindowWidth(windowWidth uint32) *launchOption {
 	opt.windowWidth = windowWidth
 	return opt
@@ -45,6 +46,7 @@ func (opt *launchOption) SetAdditionalGame(additionalGame string) *launchOption 
 	opt.additionalGame = additionalGame
 	return opt
 }
+
 func (opt *launchOption) GetAccount() launchAccount {
 	return opt.Account
 }

@@ -22,6 +22,7 @@ const router = createRouter({
                 navbar_mode: "normal",
             },
             children: [
+                // Clients
                 {
                     path: "client/auto",
                     name: "download-client-auto",
@@ -40,14 +41,7 @@ const router = createRouter({
                         comp_type: "mods",
                     },
                 },
-                {
-                    path: "comp/mods",
-                    name: "download-server-mods",
-                    component: () => import("@/views/download/Comps.vue"),
-                    meta: {
-                        comp_type: "mods",
-                    },
-                },
+                // Components
                 {
                     path: "comp/modpacks",
                     name: "download-server-modpacks",
@@ -80,7 +74,49 @@ const router = createRouter({
                         comp_type: "datapacks",
                     },
                 },
+                // Favorites
+                {
+                    path: "favorites",
+                    name: "download-favorites",
+                    component: () => import("@/views/download/Favorites.vue"),
+                },
             ],
+        },
+        {
+            path: "/settings",
+            name: "settings",
+            component: () => import("@/views/SettingsView.vue"),
+            redirect: {
+                name: "settings-launch",
+            },
+            meta: {
+                navbar_mode: "normal",
+            },
+            children: [
+                {
+                    path: "launch",
+                    name: "settings-launch",
+                    component: () => import("@/views/settings/Launch.vue"),
+                },
+                {
+                    path: "personalization",
+                    name: "settings-personalization",
+                    component: () => import("@/views/settings/Personalization.vue"),
+                },
+                {
+                    path: "others",
+                    name: "settings-others",
+                    component: () => import("@/views/settings/Others.vue"),
+                },
+            ],
+        },
+        {
+            path: "/more",
+            name: "more",
+            component: () => import("@/views/MoreView.vue"),
+            meta: {
+                navbar_mode: "normal",
+            },
         },
     ],
 });
