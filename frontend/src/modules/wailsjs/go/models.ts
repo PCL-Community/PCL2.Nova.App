@@ -63,6 +63,20 @@ export namespace account {
 
 export namespace config {
 	
+	export class ProfileFolder {
+	    Name: string;
+	    AbsPath: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new ProfileFolder(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.Name = source["Name"];
+	        this.AbsPath = source["AbsPath"];
+	    }
+	}
 	export class ThemeConfig {
 	    Name: string;
 	    Mode: string;
@@ -109,6 +123,7 @@ export namespace config {
 	}
 	export class Config {
 	    Customize: CustomizeConfig;
+	    ProfileFolder: ProfileFolder[];
 	
 	    static createFrom(source: any = {}) {
 	        return new Config(source);
@@ -117,6 +132,7 @@ export namespace config {
 	    constructor(source: any = {}) {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.Customize = this.convertValues(source["Customize"], CustomizeConfig);
+	        this.ProfileFolder = this.convertValues(source["ProfileFolder"], ProfileFolder);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
@@ -137,6 +153,7 @@ export namespace config {
 		    return a;
 		}
 	}
+	
 	
 
 }

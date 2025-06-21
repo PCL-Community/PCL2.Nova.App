@@ -5,7 +5,7 @@
 下一代 PCL 启动器，基于官方版 PCL2 的完全重构，采用 Web 技术和超高速并发的 Go 全新构建，这，就是 PCL II: Nova！
 <br><br>
 第一个可用（功能有限）发行版计划于 2026.7 之前推出，在此之前你可以自行下载代码编译运行，请确保安装 Node 21+ 和 GoLang
-你可以参阅[该网址](https://wails.io/docs/gettingstarted/installation)初始化项目，随后构建~
+你可以参阅 [该网址](https://wails.io/docs/gettingstarted/installation) 初始化项目，随后构建~
 <br><br>
 加入 PCL II Nova 交流 1 群，与开发者面对面交流，获取\
 最新资讯：https://qm.qq.com/q/nwBlYWMhHM

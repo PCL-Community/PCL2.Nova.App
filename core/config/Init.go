@@ -2,10 +2,13 @@ package config
 
 import (
 	"io/fs"
+	"log"
 	"os"
 	"path/filepath"
 
 	"github.com/pelletier/go-toml"
+
+	novafs "NovaImitation/core/fs"
 )
 
 func EnsureConfigFile(path string) error {
@@ -21,13 +24,13 @@ func EnsureConfigFile(path string) error {
 		return err
 	}
 	defer file.Close()
-	
+
 	defaultCfg := InitDefaultConfig()
 	data, err := toml.Marshal(defaultCfg)
 	if err != nil {
 		return err
 	}
-	
+
 	if _, err := file.Write(data); err != nil {
 		return err
 	}
@@ -38,6 +41,17 @@ func InitDefaultConfig() *Config {
 	cfg := &Config{}
 	cfg.Customize.Theme.Name = "Nova"
 	cfg.Customize.Theme.Mode = "Auto"
+	exePath, err := novafs.GetExecutableDir()
+	if err != nil {
+		log.Fatalf("无法获取可执行文件路径: %v", err)
+	}
+	if err := novafs.EnsureDir(filepath.Join(exePath, ".minecraft", "")); err != nil {
+		log.Fatalf("无法确保目录存在: %v", err)
+	}
+	cfg.ProfileFolder = append(cfg.ProfileFolder, ProfileFolder{
+		Name:    "当前文件夹",
+		AbsPath: filepath.Join(exePath, ".minecraft"),
+	})
 	return cfg
 }
 
