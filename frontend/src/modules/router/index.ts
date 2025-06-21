@@ -45,7 +45,7 @@ const router = createRouter({
                 },
                 {
                     path: "comp/mods",
-                    name: "download-server-mods",
+                    name: "download-mods",
                     component: () => import("@/views/download/Comps.vue"),
                     meta: {
                         comp_type: "mods",
@@ -54,7 +54,7 @@ const router = createRouter({
                 // Components
                 {
                     path: "comp/modpacks",
-                    name: "download-server-modpacks",
+                    name: "download-modpacks",
                     component: () => import("@/views/download/Comps.vue"),
                     meta: {
                         comp_type: "modpacks",
@@ -62,7 +62,7 @@ const router = createRouter({
                 },
                 {
                     path: "comp/resourcepacks",
-                    name: "download-server-resourcepacks",
+                    name: "download-resourcepacks",
                     component: () => import("@/views/download/Comps.vue"),
                     meta: {
                         comp_type: "resourcepacks",
@@ -70,7 +70,7 @@ const router = createRouter({
                 },
                 {
                     path: "comp/shaders",
-                    name: "download-server-shaders",
+                    name: "download-shaders",
                     component: () => import("@/views/download/Comps.vue"),
                     meta: {
                         comp_type: "shaders",
@@ -78,7 +78,7 @@ const router = createRouter({
                 },
                 {
                     path: "comp/datapacks",
-                    name: "download-server-datapacks",
+                    name: "download-datapacks",
                     component: () => import("@/views/download/Comps.vue"),
                     meta: {
                         comp_type: "datapacks",
@@ -102,7 +102,7 @@ const router = createRouter({
             meta: {
                 navbar_mode: "normal",
                 left_comp: SettingsLeft,
-                left_width: "calc(var(--spacing)*28)",
+                left_width: "calc(var(--spacing)*32)",
                 left_id: "748EC7CE-65BE-4C20-B5F4-9B38BACD2C3E",
             },
             children: [
@@ -133,7 +133,7 @@ const router = createRouter({
             meta: {
                 navbar_mode: "normal",
                 left_comp: MoreLeft,
-                left_width: "calc(var(--spacing)*34)",
+                left_width: "calc(var(--spacing)*42)",
                 left_id: "8F73FEA2-847D-404E-990B-C9EC69B2B779",
             },
             children: [
