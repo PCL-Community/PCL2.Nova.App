@@ -5,9 +5,9 @@
 
 <template>
     <ThemeControler />
-    <div class="w-screen h-screen bg-base-300">
+    <div class="w-screen h-screen max-h-screen overflow-y-hidden bg-base-300">
         <NavigatorBar />
-        <section class="flex w-full h-[calc(100vh-calc(var(--spacing)*12))]">
+        <section class="flex w-full h-[calc(100vh-calc(var(--spacing)*12))] max-h-[calc(100vh-calc(var(--spacing)*12))]">
             <aside
                 class="h-full bg-base-200 transition-[width] duration-250 ease-in-out overflow-hidden py-4"
                 :style="{width: ($route.meta['left_width'] as string)}">
@@ -17,7 +17,7 @@
                     </section>
                 </Transition>
             </aside>
-            <main class="w-2/3 h-full">
+            <main class="w-full max-h-[calc(100vh-calc(var(--spacing)*12))]">
                 <RouterView v-slot="{ Component }">
                     <Transition name="fade" mode="out-in">
                         <component :is="Component" />

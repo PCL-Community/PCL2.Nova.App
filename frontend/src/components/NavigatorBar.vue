@@ -30,7 +30,7 @@
                         style="--wails-draggable: no-drag"
                         :selected="$route.fullPath.startsWith('/settings')"
                         @click="$router.push('/settings')">
-                        <i class="icon-[material-symbols--settings] size-6 -ml-1 mr-1"></i>
+                        <i class="icon-[material-symbols--settings-outline-rounded] size-6 -ml-1 mr-1"></i>
                     </MenuButton>
                     <MenuButton
                         text="更多"

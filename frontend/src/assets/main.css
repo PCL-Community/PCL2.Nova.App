@@ -1,3 +1,16 @@
+* {
+    user-select: none;
+    font-family: Bahnschrift, sans-serif;
+}
+
+img {
+    pointer-events: none;
+}
+
+*::-webkit-scrollbar {
+    display: none;
+}
+
 @import "tailwindcss";
 
 @plugin "daisyui" {
@@ -76,23 +89,3 @@
 }
 
 @plugin "@iconify/tailwind4";
-
-* {
-    user-select: none;
-    font-family: Bahnschrift, sans-serif;
-}
-
-img {
-    pointer-events: none;
-}
-
-*::-webkit-scrollbar {
-    position: absolute;
-    right: 0;
-    width: 4px;
-    background-color: transparent;
-}
-::-webkit-scrollbar-thumb {
-    background-color: var(--color-primary);
-    border-radius: 999px;
-}

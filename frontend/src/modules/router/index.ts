@@ -14,7 +14,7 @@ const router = createRouter({
             meta: {
                 navbar_mode: "normal",
                 left_comp: HomeLeft,
-                left_width: "33%",
+                left_width: "calc(var(--spacing)*128)",
                 left_id: "E72035ED-F959-43A4-B01A-50E7A5606C37",
             },
         },
@@ -28,7 +28,7 @@ const router = createRouter({
             meta: {
                 navbar_mode: "normal",
                 left_comp: DownloadLeft,
-                left_width: "calc(var(--spacing)*36)",
+                left_width: "calc(var(--spacing)*40)",
                 left_id: "935475B0-D428-4D7A-9361-36AB29CEDFA1",
             },
             children: [
