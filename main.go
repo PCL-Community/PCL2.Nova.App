@@ -3,6 +3,7 @@ package main
 import (
 	"NovaImitation/core/account"
 	"NovaImitation/core/config"
+	"NovaImitation/core/network"
 
 	"context"
 	"embed"
@@ -59,6 +60,7 @@ func main() {
 		OnStartup: app.startup,
 		Bind: []any{
 			app,
+			&network.Network{},
 			&account.AccountBinding{},
 			&config.ConfigBinding{},
 		},
