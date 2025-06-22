@@ -16,6 +16,7 @@
         "vue-router": "^4.5.0"
     },
     "devDependencies": {
+        "@iconify-json/fluent-color": "^1.2.15",
         "@iconify-json/ic": "^1.2.2",
         "@iconify-json/icon-park-outline": "^1.2.2",
         "@iconify-json/ion": "^1.2.3",
@@ -29,6 +30,7 @@
         "@types/node": "^22.14.0",
         "@vitejs/plugin-vue": "^5.2.3",
         "@vue/tsconfig": "^0.7.0",
+        "axios": "^1.10.0",
         "daisyui": "^5.0.43",
         "npm-run-all2": "^7.0.2",
         "tailwindcss": "^4.1.8",

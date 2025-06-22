@@ -1,5 +1,5 @@
 <script setup lang="ts">
-    import Eventbus from "@/modules/eventbus";
+    import Eventbus from "@/modules/Eventbus";
     import { useConfigStore, ThemeMode } from "@/modules/stores/configStore";
     import { CError } from "@/modules/utils/logger";
     import { ref } from "vue";

@@ -1,6 +1,6 @@
 // Binding Store
 export * as BindingVersionInst from "./store/Version";
-export * as BidingLoaderInst from "./store/Loader";
+export * as BindingLoaderInst from "./store/Loader";
 export * as BindingCategoryInst from "./store/Category";
 export * as BindingFeatureInst from "./store/Features";
 export * as BindingMoreInst from "./store/More";

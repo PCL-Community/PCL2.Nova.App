@@ -29,7 +29,7 @@ func BaseRequest(url string, reqMethod string, header map[string]string, data []
 		return nil, err
 	}
 	defer func(Body io.ReadCloser) {
-		err := Body.Close()
+		err = Body.Close()
 		if err != nil {
 			panic(err)
 		}

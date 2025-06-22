@@ -8,5 +8,5 @@
 ## 早期 PCL2.Nova.App 贡献者
 
 1. [EncVar](https://github.com/EncVar)
-2. [tangge233](https://github.com/tangge233)md 
+2. [tangge233](https://github.com/tangge233)md
 3. [shenjack](https://github.com/shenjackyuanjie)

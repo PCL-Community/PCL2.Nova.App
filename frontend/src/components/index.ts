@@ -1,4 +1,5 @@
 import Card from "./Card.vue";
+import CompItem from "./CompItem.vue";
 import CompSearchFilterItem from "./CompSearchFilterItem.vue";
 import CompSearchFilterToggle from "./CompSearchFilterToggle.vue";
 import CompSearchInput from "./CompSearchInput.vue";
@@ -14,6 +15,7 @@ import TextButton from "./TextButton.vue";
 
 export {
     Card,
+    CompItem,
     CompSearchFilterItem,
     CompSearchFilterToggle,
     CompSearchInput,

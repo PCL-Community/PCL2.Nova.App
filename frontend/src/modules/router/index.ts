@@ -48,7 +48,7 @@ const router = createRouter({
                     name: "download-mods",
                     component: () => import("@/views/download/Comps.vue"),
                     meta: {
-                        comp_type: "mods",
+                        comp_type: "mod",
                     },
                 },
                 // Components
@@ -57,7 +57,7 @@ const router = createRouter({
                     name: "download-modpacks",
                     component: () => import("@/views/download/Comps.vue"),
                     meta: {
-                        comp_type: "modpacks",
+                        comp_type: "modpack",
                     },
                 },
                 {
@@ -65,7 +65,7 @@ const router = createRouter({
                     name: "download-resourcepacks",
                     component: () => import("@/views/download/Comps.vue"),
                     meta: {
-                        comp_type: "resourcepacks",
+                        comp_type: "resourcepack",
                     },
                 },
                 {
@@ -73,7 +73,7 @@ const router = createRouter({
                     name: "download-shaders",
                     component: () => import("@/views/download/Comps.vue"),
                     meta: {
-                        comp_type: "shaders",
+                        comp_type: "shader",
                     },
                 },
                 {
@@ -81,7 +81,7 @@ const router = createRouter({
                     name: "download-datapacks",
                     component: () => import("@/views/download/Comps.vue"),
                     meta: {
-                        comp_type: "datapacks",
+                        comp_type: "datapack",
                     },
                 },
                 // Favorites
