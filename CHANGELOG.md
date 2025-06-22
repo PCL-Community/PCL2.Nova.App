@@ -89,4 +89,3 @@ refactor(ui): ui-next with daisyui [step 1]
 6. 稍微调亮了一点加载框成功时的颜色（
 7. 在关于与鸣谢部分新增了PCL Community!
 8. 将鸣谢改成特别鸣谢~
->>>>>>> 211a6b0638d73a496aba1b5de5e9deed150701e0
