@@ -48,6 +48,7 @@ refactor(ui): ui-next with daisyui [step 1]
 
 # 0.0.8
 
+<<<<<<< HEAD
 1. MyToggleSwitch 控件应用暗色模式！
 2. 扫雷游戏新增了【扣分模式】，此时扫雷如果踩中雷不会扣分，而是减 50 分。
 3. 2048 游戏新增【作弊生成】按钮，按下即可生成 256、512、1024 三种随机数字在场上。ps：该操作不扣分也不加分，不减步数也不加步数。
@@ -78,3 +79,14 @@ refactor(ui): ui-next with daisyui [step 1]
 1. 首次公开发布，用时两周
 2. 目前更新自定义控件：MyDialog（自定义信息框）、MyLoading（自定义加载框）、MySelectCard（自定义下拉卡片）等一系列自定义组件
 3. 更新了黑暗模式
+=======
+1. 修改了MyLoading的样式，现在成功和失败时的左下角都会有一个图标了。
+2. 修正了一下MySelectCard组件，现在已经不用maxHeight了~ （[PR#27](https://github.com/PCL-Community/PCL2.Nova.App/pull/27)，[@AMagicPear](https://github.com/AMagicPear)）
+3. 新组件：MyCheckButton！（同时修改原来的MyCheckButton名称为MyNavButton）【与MyNavButton不同的是，该button选中时中间会打勾~】
+   1. 👆感觉完全可以被MyToggleSwitch代替（但是又转念一想，好像也可以（目前MyCheckButton仅在主界面有展示，在别的地方目前没有实用空间。。
+4. 初步设置透明度，并且现在已经支持设置背景图片啦！只需要将背景图片放到`{exe}\PCL.Nova\BackgroundImage`文件夹下，即可随机从中抽取一张背景图片展示！！
+5. 现在开始，所有**组件**均有透明度127了！不用担心遮挡住背景图片了！
+6. 稍微调亮了一点加载框成功时的颜色（
+7. 在关于与鸣谢部分新增了PCL Community!
+8. 将鸣谢改成特别鸣谢~
+>>>>>>> 211a6b0638d73a496aba1b5de5e9deed150701e0
