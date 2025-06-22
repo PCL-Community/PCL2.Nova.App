@@ -15,8 +15,29 @@
         IDatapackCategoryKey,
         IShaderCategoryKey,
         IModpackCategoryKey,
+        // Feature Keys
+        IResourcespackFeatureKey,
+        IShaderFeatureKey,
+        // More Keys
+        IResolutionsKey,
+        IPerfKey,
     } from "@/types/SearchOptions";
-    import { BidingLoaderInst, BindingCategoryInst, BindingVersionInst, OptionCategoryInst, OptionLoaderInst, OptionVersionInst, handleUpdateInst } from "@/modules/comps";
+    import {
+        // Bindings
+        BidingLoaderInst,
+        BindingCategoryInst,
+        BindingFeatureInst,
+        BindingMoreInst,
+        BindingVersionInst,
+        // Filter Options
+        OptionCategoryInst,
+        OptionFeatureInst,
+        OptionLoaderInst,
+        OptionMoreInst,
+        OptionVersionInst,
+        // Handlers
+        handleUpdateInst,
+    } from "@/modules/comps";
 
     // Global
     const route = useRoute();
@@ -34,6 +55,12 @@
     const search_datapack_category = BindingCategoryInst.Datapack;
     const search_shader_category = BindingCategoryInst.Shader;
     const search_modpack_category = BindingCategoryInst.Modpack;
+    // Features 绑定
+    const search_resourcespack_feature = BindingFeatureInst.Resourcespack;
+    const search_shader_feature = BindingFeatureInst.Shader;
+    // More 绑定
+    const search_resolution = BindingMoreInst.Resolution;
+    const search_perf = BindingMoreInst.Perf;
 
     // Filter Options
     // Input 没有筛选器，写个注释让代码块长度一致 :D
@@ -48,11 +75,18 @@
     const category_datapack_filters = OptionCategoryInst.Datapack;
     const category_shader_filters = OptionCategoryInst.Shader;
     const category_modpack_filters = OptionCategoryInst.Modpack;
+    // Features 选项
+    const feature_resourcespack_filters = OptionFeatureInst.Resourcespack;
+    const feature_shader_filters = OptionFeatureInst.Shader;
+    // More 选项
+    const more_resolution_filters = OptionMoreInst.Resolution;
+    const more_perf_filters = OptionMoreInst.Perf;
 
     // Filter Toggling More
     // Input 没有啥可展开的，所以这里也不需要
     const toggle_version = ref<boolean>(false);
     const toggle_mod_loader = ref<boolean>(false);
+    // 剩下的也没有需要展开的了
 
     // Handlers
     // Version 的处理函数
@@ -68,6 +102,13 @@
     const handleDatapackCategoryUpdate = (type: "select" | "exclude", key: IDatapackCategoryKey, value: boolean) => handleUpdateInst(search_datapack_category, type, key, value);
     const handleShaderCategoryUpdate = (type: "select" | "exclude", key: IShaderCategoryKey, value: boolean) => handleUpdateInst(search_shader_category, type, key, value);
     const handleModpackCategoryUpdate = (type: "select" | "exclude", key: IModpackCategoryKey, value: boolean) => handleUpdateInst(search_modpack_category, type, key, value);
+    // Features 的处理函数们
+    const handleResourcespackFeatureUpdate = (type: "select" | "exclude", key: IResourcespackFeatureKey, value: boolean) =>
+        handleUpdateInst(search_resourcespack_feature, type, key, value);
+    const handleShaderFeatureUpdate = (type: "select" | "exclude", key: IShaderFeatureKey, value: boolean) => handleUpdateInst(search_shader_feature, type, key, value);
+    // More 的处理函数们
+    const handleMoreResolutionUpdate = (type: "select" | "exclude", key: IResolutionsKey, value: boolean) => handleUpdateInst(search_resolution, type, key, value);
+    const handleMorePerfUpdate = (type: "select" | "exclude", key: IPerfKey, value: boolean) => handleUpdateInst(search_perf, type, key, value);
 
     // Computed Properties
     const search_loader = computed(() => {
@@ -96,6 +137,16 @@
                 return category_datapack_filters;
         }
     });
+    const search_feature = computed(() => {
+        switch (route.meta["comp_type"]) {
+            case "resourcepacks":
+            default:
+                return feature_resourcespack_filters;
+            case "shaders":
+                return feature_shader_filters;
+        }
+    });
+
     // Computed Handlers
     const handleLoaderUpdate = computed(() => {
         switch (route.meta["comp_type"]) {
@@ -123,6 +174,24 @@
                 return handleDatapackCategoryUpdate;
         }
     });
+    const handleFeatureUpdate = computed(() => {
+        switch (route.meta["comp_type"]) {
+            case "resourcepacks":
+            default:
+                return handleResourcespackFeatureUpdate;
+            case "shaders":
+                return handleShaderFeatureUpdate;
+        }
+    });
+    const handleMoreUpdate = computed(() => {
+        switch (route.meta["comp_type"]) {
+            case "resourcepacks":
+            default:
+                return handleMoreResolutionUpdate;
+            case "shaders":
+                return handleMorePerfUpdate;
+        }
+    });
 
     // (perf) defer loading
     const show_filter = ref<boolean>(false);
@@ -136,7 +205,7 @@
 <template>
     <HintBar type="info">目前仅支持搜索和下载来自 Modrinth 的资源</HintBar>
     <CompSearchInput v-model="search_input" class="w-full mt-2" placeholder="搜索资源  ·  在输入框中按下 Enter 以进行搜索" />
-    <section class="w-full h-full grid grid-cols-[2fr_5fr] -m-1.25 mt-2">
+    <section class="w-full h-full grid grid-cols-[2fr_5fr] -m-1.25 mt-3">
         <FlowContainer class="ml-0 pb-21" v-if="show_filter">
             <Card title="游戏版本" class="mb-2 max-h-66" isSwapped>
                 <section class="w-full h-full flex flex-col gap-2">
@@ -154,38 +223,91 @@
                 </section>
             </Card>
             <Card title="加载器" class="mb-2" v-if="['mods', 'modpacks', 'shaders'].includes($route.meta['comp_type'] as string)">
-                <section class="mb-0.25" v-for="loader in search_loader">
+                <section class="mb-0.25" v-for="item in search_loader">
                     <!-- @vue-ignore -->
                     <CompSearchFilterItem
-                        v-if="loader.default || (!loader.default && toggle_mod_loader)"
-                        :key="loader.key"
+                        v-if="item.default || (!item.default && toggle_mod_loader)"
+                        :key="item.key"
                         excludeable
-                        :selected="search_loader[loader.key] === true"
-                        :selected-exclude="search_loader[loader.key] === false"
-                        @update:select="(e) => handleLoaderUpdate('select', loader.key, e)"
-                        @update:exclude="(e) => handleLoaderUpdate('exclude', loader.key, e)">
+                        :selected="search_loader[item.key] === true"
+                        :selected-exclude="search_loader[item.key] === false"
+                        @update:select="(e) => handleLoaderUpdate('select', item.key, e)"
+                        @update:exclude="(e) => handleLoaderUpdate('exclude', item.key, e)">
                         <div class="flex items-center gap-2">
-                            <component :is="loader.icon" class="size-4" />
-                            <span class="translate-y-0.25">{{ loader.name }}</span>
+                            <component :is="item.icon" class="size-4" />
+                            <span class="translate-y-0.25">{{ item.name }}</span>
                         </div>
                     </CompSearchFilterItem>
                 </section>
                 <CompSearchFilterToggle v-if="$route.name === 'download-mods'" :more="toggle_mod_loader" @click="toggle_mod_loader = !toggle_mod_loader" />
             </Card>
             <Card title="分类">
-                <section class="mb-0.25" v-for="loader in search_category">
+                <section class="mb-0.25" v-for="item in search_category">
                     <!-- @vue-ignore -->
                     <CompSearchFilterItem
-                        v-if="loader.default || (!loader.default && toggle_mod_loader)"
-                        :key="loader.key"
+                        v-if="item.default || (!item.default && toggle_mod_loader)"
+                        :key="item.key"
                         excludeable
-                        :selected="search_loader[loader.key] === true"
-                        :selected-exclude="search_loader[loader.key] === false"
-                        @update:select="(e) => handleCategoryUpdate('select', loader.key, e)"
-                        @update:exclude="(e) => handleCategoryUpdate('exclude', loader.key, e)">
+                        :selected="search_loader[item.key] === true"
+                        :selected-exclude="search_loader[item.key] === false"
+                        @update:select="(e) => handleCategoryUpdate('select', item.key, e)"
+                        @update:exclude="(e) => handleCategoryUpdate('exclude', item.key, e)">
                         <div class="flex items-center gap-2">
-                            <component :is="loader.icon" class="size-4" />
-                            <span class="translate-y-0.25">{{ loader.name }}</span>
+                            <component :is="item.icon" class="size-4" />
+                            <span class="translate-y-0.25">{{ item.name }}</span>
+                        </div>
+                    </CompSearchFilterItem>
+                </section>
+            </Card>
+            <Card title="特性" v-if="['resourcepacks', 'shaders'].includes($route.meta['comp_type'] as string)" class="mt-2">
+                <section class="mb-0.25" v-for="item in search_feature">
+                    <!-- @vue-ignore -->
+                    <CompSearchFilterItem
+                        v-if="item.default || (!item.default && toggle_mod_loader)"
+                        :key="item.key"
+                        excludeable
+                        :selected="search_loader[item.key] === true"
+                        :selected-exclude="search_loader[item.key] === false"
+                        @update:select="(e) => handleFeatureUpdate('select', item.key, e)"
+                        @update:exclude="(e) => handleFeatureUpdate('exclude', item.key, e)">
+                        <div class="flex items-center gap-2">
+                            <component :is="item.icon" class="size-4" />
+                            <span class="translate-y-0.25">{{ item.name }}</span>
+                        </div>
+                    </CompSearchFilterItem>
+                </section>
+            </Card>
+            <Card title="分辨率" v-if="$route.meta['comp_type'] === 'resourcepacks'" class="mt-2">
+                <section class="mb-0.25" v-for="item in more_resolution_filters">
+                    <!-- @vue-ignore -->
+                    <CompSearchFilterItem
+                        v-if="item.default || (!item.default && toggle_mod_loader)"
+                        :key="item.key"
+                        excludeable
+                        :selected="search_loader[item.key] === true"
+                        :selected-exclude="search_loader[item.key] === false"
+                        @update:select="(e) => handleMoreUpdate('select', item.key, e)"
+                        @update:exclude="(e) => handleMoreUpdate('exclude', item.key, e)">
+                        <div class="flex items-center gap-2">
+                            <span class="translate-y-0.25">{{ item.name }}</span>
+                        </div>
+                    </CompSearchFilterItem>
+                </section>
+            </Card>
+            <Card title="性能影响" v-if="$route.meta['comp_type'] === 'shaders'" class="mt-2">
+                <section class="mb-0.25" v-for="item in more_perf_filters">
+                    <!-- @vue-ignore -->
+                    <CompSearchFilterItem
+                        v-if="item.default || (!item.default && toggle_mod_loader)"
+                        :key="item.key"
+                        excludeable
+                        :selected="search_loader[item.key] === true"
+                        :selected-exclude="search_loader[item.key] === false"
+                        @update:select="(e) => handleMoreUpdate('select', item.key, e)"
+                        @update:exclude="(e) => handleMoreUpdate('exclude', item.key, e)">
+                        <div class="flex items-center gap-2">
+                            <component :is="item.icon" class="size-4" />
+                            <span class="translate-y-0.25">{{ item.name }}</span>
                         </div>
                     </CompSearchFilterItem>
                 </section>

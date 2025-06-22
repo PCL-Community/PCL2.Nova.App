@@ -18,7 +18,7 @@ export const Mod: IFilterItem<IModLoaderKey>[] = [
     { key: "legacyfabric", name: "Legacy Fabric", icon: LoaderIcon.LegacyFabric },
     { key: "liteloader", name: "LiteLoader", icon: LoaderIcon.LiteLoader },
     { key: "rml", name: "Risugami's ML", icon: LoaderIcon.RML },
-    { key: "nilloader", name: "NilLoader", icon: LoaderIcon.NilLoader },
+    { key: "nilloader", name: "Nilloader", icon: LoaderIcon.NilLoader },
     { key: "ornithe", name: "Ornithe", icon: LoaderIcon.Ornithe },
     { key: "rift", name: "Rift", icon: LoaderIcon.Rift },
 ];

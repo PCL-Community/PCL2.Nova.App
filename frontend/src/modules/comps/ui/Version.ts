@@ -1,6 +1,6 @@
-import { type IVersionKey } from "@/types/SearchOptions";
+import type { IBaseFilterItem, IVersionKey } from "@/types/SearchOptions";
 
-export const Default: { key: IVersionKey; default?: boolean }[] = [
+export const Default: IBaseFilterItem<IVersionKey>[] = [
     { key: "1.21.6", default: true },
     { key: "1.21.6-rc1", default: false },
     { key: "1.21.6-pre4", default: false },
