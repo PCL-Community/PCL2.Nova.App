@@ -30,6 +30,9 @@ jobs:
         with:
           submodules: recursive
 
+      - name: Setup Package Manager
+        run: npm install -g pnpm
+      
       - name: Build wails
         uses: dAppServer/wails-build-action@main
         id: build
