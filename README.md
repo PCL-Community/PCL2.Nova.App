@@ -1,4 +1,10 @@
-<img src="./build/appicon.png" alt="Logo" height="348" align="left">
+## 你应该看这里了！
+
+https://github.com/3TProject/PCL.Nova.Plus
+
+---
+
+<img src="./build/appicon.png" alt="Logo" height="348">
 
 # PCL2.Nova.App
 
@@ -9,9 +15,8 @@
 <br><br>
 加入 PCL II Nova 交流 1 群，与开发者面对面交流，获取\
 最新资讯：https://qm.qq.com/q/nwBlYWMhHM
-<br><br><br><br>
-目前，本项目有以下须知需要你查阅：
 <br><br>
+目前，本项目有以下须知需要你查阅：
 
 1. 目前，本项目由 [@xphost008](https://github.com/xphost008) 和 [@MoYuan-CN](https://github.com/MoYuan-CN) 进行维护，你可以随时随地查看本项目更新日志：[Changelog](./CHANGELOG.md)
 2. 如果你使用的操作系统是 Windows 系统！那么恭喜你，你可以直接从 [蓝奏云](https://wwdy.lanzoub.com/b0sx0e10h) 直接下载，密码：eim6
