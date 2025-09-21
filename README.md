@@ -1,6 +1,6 @@
-## 你应该看这里了！
+# 你应该看这里了！
 
-https://github.com/3TProject/PCL.Nova.Plus
+https://github.com/SupriseCandyShark/PCL.Nova.Plus
 
 ---
 
